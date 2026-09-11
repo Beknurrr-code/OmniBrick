@@ -47,19 +47,19 @@ const ACADEMY_LESSONS: AcademyLesson[] = [
     duration: "5 min",
     rewardBricks: 100,
     description: "Why mounting a mobile phone on a low-cost microcontroller disrupts traditional expensive robotics.",
-    summary: "Traditional robots require expensive onboard computers ($500+ NVIDIA Jetson or Raspberry Pi 5) that drain batteries quickly. Brain Brick turns this inside out: your smartphone already has high-definition vision cameras, microphones, stereo speakers, high-speed 5G/Wi-Fi, and a neural processing engine.",
+    summary: "Traditional robots require expensive onboard computers ($500+ NVIDIA Jetson or Raspberry Pi 5) that drain batteries quickly. OmniBrick turns this inside out: your smartphone already has high-definition vision cameras, microphones, stereo speakers, high-speed 5G/Wi-Fi, and a neural processing engine.",
     bulletPoints: [
       "The Smartphone acts as the Cognitive Brain (Perception, Vision, LLM, Speech).",
       "The Microcontroller (ESP32, Arduino, LEGO Spike) acts as the Spinal Reflex (Motor PWM, Sonar pins).",
       "Decoupled communication eliminates messy driver bugs and allows instant OTA updates.",
     ],
-    codeExample: `// Brain Brick Cognitive Split:
+    codeExample: `// OmniBrick Cognitive Split:
 Smartphone (Camera / NPU / Audio)
       │  (MCP Tool Commands over BLE / Virtual Bus)
       ▼
 Microcontroller (M1 Left Motor, M2 Right Motor, S1 Sonar)`,
     quiz: {
-      question: "What is the primary role of the microcontroller in Brain Brick's architecture?",
+      question: "What is the primary role of the microcontroller in OmniBrick's architecture?",
       options: [
         "Running heavy multimodal computer vision models",
         "Acting as the spinal reflex for low-level motor PWM and sensor reading",
@@ -78,7 +78,7 @@ Microcontroller (M1 Left Motor, M2 Right Motor, S1 Sonar)`,
     duration: "6 min",
     rewardBricks: 150,
     description: "Eliminating hardcoded pin numbers in favor of semantic roles like drive_left and gripper.",
-    summary: "Writing code with hardcoded pins (like 'digitalWrite(12, HIGH)') makes code brittle and non-portable. Brain Brick introduces the Hardware Manifest, where physical pins are bound to functional semantic roles.",
+    summary: "Writing code with hardcoded pins (like 'digitalWrite(12, HIGH)') makes code brittle and non-portable. OmniBrick introduces the Hardware Manifest, where physical pins are bound to functional semantic roles.",
     bulletPoints: [
       "Roles: drive_left, drive_right, arm_lift, gripper, head_pan.",
       "Hardware changes never break AI logic: if you swap pin M1 for M3, you only update the manifest.",
@@ -90,7 +90,7 @@ motors: [
   { port: "M2", role: "drive_right", maxPower: 100 }
 ]`,
     quiz: {
-      question: "Why does Brain Brick use semantic roles instead of raw pin numbers?",
+      question: "Why does OmniBrick use semantic roles instead of raw pin numbers?",
       options: [
         "To make robots heavier",
         "To decouple AI behavior from physical wiring so builds remain portable",
@@ -109,7 +109,7 @@ motors: [
     duration: "8 min",
     rewardBricks: 200,
     description: "Standardizing how autonomous AI agents discover and invoke physical robot tools.",
-    summary: "Model Context Protocol (MCP) is the universal bridge between AI reasoning and physical world actions. In Brain Brick, each capability is exposed as a standardized tool with structured inputs and outputs.",
+    summary: "Model Context Protocol (MCP) is the universal bridge between AI reasoning and physical world actions. In OmniBrick, each capability is exposed as a standardized tool with structured inputs and outputs.",
     bulletPoints: [
       "Tools: detect_object, drive_motors, turn_robot, stop_robot, speak_voice.",
       "Strict input validation guarantees motor speeds stay within safe bounds (-100 to +100%).",
@@ -122,7 +122,7 @@ const result = await mcp.execute("drive_motors", {
   durationMs: 1000
 });`,
     quiz: {
-      question: "What does MCP provide in Brain Brick?",
+      question: "What does MCP provide in OmniBrick?",
       options: [
         "A battery charging algorithm",
         "A standardized tool discovery and invocation interface for AI agents",
@@ -154,7 +154,7 @@ AI Reasoning → "Target locked, aligning heading"
       ↓
 MCP Tool Call → drive_motors(left=60, right=60)`,
     quiz: {
-      question: "What sequence represents the core autonomous cycle in Brain Brick?",
+      question: "What sequence represents the core autonomous cycle in OmniBrick?",
       options: [
         "Charge → Sleep → Restart",
         "Perceive → Reason → Decide → Act",
@@ -173,7 +173,7 @@ MCP Tool Call → drive_motors(left=60, right=60)`,
     duration: "6 min",
     rewardBricks: 180,
     description: "Connecting the Robot Inventor STM32 hub directly via Web Bluetooth LWP3 without custom firmware.",
-    summary: "LEGO Robot Inventor 51515 and SPIKE Prime hubs run an STM32F413 processor with official LEGO Wireless Protocol v3 (LWP3). Brain Brick communicates with the hub directly over Bluetooth Low Energy, streaming motor speeds to Ports A & B and displaying pixel faces on the 5x5 LED matrix.",
+    summary: "LEGO Robot Inventor 51515 and SPIKE Prime hubs run an STM32F413 processor with official LEGO Wireless Protocol v3 (LWP3). OmniBrick communicates with the hub directly over Bluetooth Low Energy, streaming motor speeds to Ports A & B and displaying pixel faces on the 5x5 LED matrix.",
     bulletPoints: [
       "Official LWP3 service UUID: 00001623-1212-efde-1623-785feabcd123.",
       "Zero flashing required: the robot operates with stock firmware out-of-the-box.",
@@ -186,7 +186,7 @@ legoAdapter.driveMotors({
   durationMs: 800
 });`,
     quiz: {
-      question: "Does LEGO Mindstorms 51515 require flashing custom third-party firmware for Brain Brick?",
+      question: "Does LEGO Mindstorms 51515 require flashing custom third-party firmware for OmniBrick?",
       options: [
         "Yes, you must solder an ESP32 chip onto the motherboard",
         "No, it connects natively via Web Bluetooth using official LEGO Wireless Protocol v3 (LWP3)",
@@ -194,7 +194,7 @@ legoAdapter.driveMotors({
         "No, it only connects using an HDMI cable",
       ],
       correctIndex: 1,
-      explanation: "Brain Brick speaks standard LEGO LWP3 protocol directly over Web Bluetooth, keeping your LEGO hub completely stock.",
+      explanation: "OmniBrick speaks standard LEGO LWP3 protocol directly over Web Bluetooth, keeping your LEGO hub completely stock.",
     },
     starterBuildId: "build-red-cube-hunter",
   },
@@ -204,8 +204,8 @@ legoAdapter.driveMotors({
     title: "RevenueCat Paywalls & Bricks Economy",
     duration: "5 min",
     rewardBricks: 150,
-    description: "How Brain Brick implements in-app purchases, entitlement gating, and creator royalties for Shipathon 2026.",
-    summary: "For the RevenueCat Shipathon 2026, Brain Brick combines subscription tiers with an in-app Bricks 🧱 economy. Entitlements gate advanced features like Unlimited Multimodal Cloud Vision, while Bricks reward learning and empower community marketplace trade.",
+    description: "How OmniBrick implements in-app purchases, entitlement gating, and creator royalties for Shipathon 2026.",
+    summary: "For the RevenueCat Shipathon 2026, OmniBrick combines subscription tiers with an in-app Bricks 🧱 economy. Entitlements gate advanced features like Unlimited Multimodal Cloud Vision, while Bricks reward learning and empower community marketplace trade.",
     bulletPoints: [
       "RevenueCat Purchases SDK gates 'pro_features' and 'neural_nexus_pro' entitlements.",
       "Bricks 🧱 are earned by completing Academy quizzes and publishing popular builds.",
@@ -215,7 +215,7 @@ legoAdapter.driveMotors({
 const { customerInfo } = await Purchases.getCustomerInfo();
 const isPro = customerInfo.entitlements.active["pro_features"] !== undefined;`,
     quiz: {
-      question: "How do creators earn Bricks 🧱 in the Brain Brick ecosystem?",
+      question: "How do creators earn Bricks 🧱 in the OmniBrick ecosystem?",
       options: [
         "By manually clicking the battery indicator 10,000 times",
         "By publishing builds to the Marketplace where other pilots fork them with 70% royalty share",
@@ -235,7 +235,7 @@ export default function AcademyPage() {
   const [selectedLesson, setSelectedLesson] = useState<AcademyLesson | null>(null);
   const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(() => {
     try {
-      const saved = localStorage.getItem("brainbrick_completed_lessons");
+      const saved = localStorage.getItem("omnibrick_completed_lessons");
       return saved ? new Set(JSON.parse(saved)) : new Set();
     } catch {
       return new Set();
@@ -270,7 +270,7 @@ export default function AcademyPage() {
     addBricks(l.rewardBricks);
     const updated = new Set(completedLessonIds).add(l.id);
     setCompletedLessonIds(updated);
-    localStorage.setItem("brainbrick_completed_lessons", JSON.stringify(Array.from(updated)));
+    localStorage.setItem("omnibrick_completed_lessons", JSON.stringify(Array.from(updated)));
     alert(`🎉 Congratulations! You earned +${l.rewardBricks} Bricks 🧱! Your wallet has been updated.`);
   };
 

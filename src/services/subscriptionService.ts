@@ -2,21 +2,21 @@ import { Capacitor } from "@capacitor/core";
 import { Purchases } from "@revenuecat/purchases-capacitor";
 import type { UserSubscriptionState, SubscriptionTier, PilotProfile } from "../types";
 
-const SUB_STORAGE_KEY = "brainbrick_subscription_v1";
-const PROFILE_STORAGE_KEY = "brainbrick_pilot_profile_v1";
+const SUB_STORAGE_KEY = "omnibrick_subscription_v1";
+const PROFILE_STORAGE_KEY = "omnibrick_pilot_profile_v1";
 
 export const getRevenueCatApiKey = (): string => {
   if (Capacitor.getPlatform() === "android") {
-    return import.meta.env.VITE_REVENUECAT_ANDROID_KEY || "goog_BrainBricksShipathon2026Key";
+    return import.meta.env.VITE_REVENUECAT_ANDROID_KEY || "goog_OmniBricksShipathon2026Key";
   }
   if (Capacitor.getPlatform() === "ios") {
-    return import.meta.env.VITE_REVENUECAT_IOS_KEY || "appl_BrainBricksShipathon2026Key";
+    return import.meta.env.VITE_REVENUECAT_IOS_KEY || "appl_OmniBricksShipathon2026Key";
   }
   return import.meta.env.VITE_REVENUECAT_API_KEY || "test_JYKrCLHXORsLhlcsKDMeGdSdurN";
 };
 
 export const REVENUECAT_API_KEY = getRevenueCatApiKey();
-export const PRO_ENTITLEMENT = "BrainBricks Pro";
+export const PRO_ENTITLEMENT = "OmniBricks Pro";
 export const HARDWARE_ENTITLEMENT = "hardware_unlocked";
 
 export interface IAPProductPackage {
@@ -36,7 +36,7 @@ export const AVAILABLE_IAP_PACKAGES: IAPProductPackage[] = [
   // 1. Subscriptions
   {
     id: "monthly_pro",
-    name: "Brain Brick PRO Monthly",
+    name: "OmniBrick PRO Monthly",
     price: "$9.99",
     priceNum: 9.99,
     period: "month",
@@ -53,7 +53,7 @@ export const AVAILABLE_IAP_PACKAGES: IAPProductPackage[] = [
   },
   {
     id: "annual_pro",
-    name: "Brain Brick PRO Annual",
+    name: "OmniBrick PRO Annual",
     price: "$79.99",
     priceNum: 79.99,
     period: "year",
@@ -143,7 +143,7 @@ export const AVAILABLE_IAP_PACKAGES: IAPProductPackage[] = [
     period: "lifetime",
     category: "lifetime",
     badge: "👑 Limited Edition",
-    description: "Все функции Brain Brick PRO и драйверы железа навсегда.",
+    description: "Все функции OmniBrick PRO и драйверы железа навсегда.",
     bricksIncluded: 3000,
     features: [
       "Все Pro-функции навсегда без подписок",
@@ -165,7 +165,7 @@ const DEFAULT_PROFILE: PilotProfile = {
   id: "pilot-beknur-01",
   username: "Beknur",
   callsign: "Cortex Lead",
-  email: "beknur@brainbrick.ai",
+  email: "beknur@omnibrick.ai",
   bricksBalance: 750,
   missionsCompleted: 14,
   rank: "Master Architect",
@@ -210,7 +210,7 @@ export class SubscriptionService {
   saveProfile(profile: PilotProfile): void {
     localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile));
     if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("brainbrick:profile_updated", { detail: profile }));
+      window.dispatchEvent(new CustomEvent("omnibrick:profile_updated", { detail: profile }));
     }
   }
 
@@ -280,7 +280,7 @@ export class SubscriptionService {
       this.addBricks(pkg.bricksIncluded || 500);
       return {
         success: true,
-        message: "Brain Brick PRO (1 месяц) активирован! +500 🧱 начислено на баланс.",
+        message: "OmniBrick PRO (1 месяц) активирован! +500 🧱 начислено на баланс.",
         isPro: true,
         bricksAdded: 500,
       };
@@ -291,7 +291,7 @@ export class SubscriptionService {
       this.addBricks(pkg.bricksIncluded || 2000);
       return {
         success: true,
-        message: "Brain Brick PRO (1 год) активирован! +2,000 🧱 начислено на баланс.",
+        message: "OmniBrick PRO (1 год) активирован! +2,000 🧱 начислено на баланс.",
         isPro: true,
         bricksAdded: 2000,
       };
@@ -372,7 +372,7 @@ export class SubscriptionService {
     };
     localStorage.setItem(SUB_STORAGE_KEY, JSON.stringify(state));
     if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("brainbrick:subscription_updated", { detail: state }));
+      window.dispatchEvent(new CustomEvent("omnibrick:subscription_updated", { detail: state }));
     }
   }
 }

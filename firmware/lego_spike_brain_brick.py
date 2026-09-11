@@ -1,15 +1,15 @@
 # ==============================================================================
-# Brain Brick — LEGO Mindstorms Robot Inventor (51515) / SPIKE Prime MicroPython Script
+# OmniBrick — LEGO Mindstorms Robot Inventor (51515) / SPIKE Prime MicroPython Script
 # ==============================================================================
 # Creator: Beknur (15 y.o., Astana, Kazakhstan)
-# Project: Brain Brick for RevenueCat Shipathon 2026
+# Project: OmniBrick for RevenueCat Shipathon 2026
 #
 # INSTRUCTIONS:
 # 1. Open the official LEGO Mindstorms app or LEGO SPIKE app on your computer/tablet.
 # 2. Create a new Python project.
 # 3. Paste this script into the project and click RUN (or Download to Hub slot 0).
 # 4. Turn on your Hub.
-# 5. Open Brain Brick on your Android phone in Chrome (or Capacitor app).
+# 5. Open OmniBrick on your Android phone in Chrome (or Capacitor app).
 # 6. In Mission Control, switch mode to [🧱 LEGO 51515] and tap "Connect Link"!
 # ==============================================================================
 
@@ -26,7 +26,7 @@ import hub
 # Port D: Gripper / Arm motor (optional)
 # ------------------------------------------------------------------------------
 
-print("[BrainBrick] Initializing LEGO Robot Inventor 51515 Hub...")
+print("[OmniBrick] Initializing LEGO Robot Inventor 51515 Hub...")
 
 # Light up smiling face on 5x5 LED Matrix
 hub.display.show(hub.Image.HAPPY)
@@ -44,13 +44,13 @@ if hasattr(hub.port.C, "device"):
 # ------------------------------------------------------------------------------
 # 2. Main Autonomous Safety & Telemetry Loop
 # ------------------------------------------------------------------------------
-# When connected via Bluetooth BLE to the Brain Brick mobile app,
+# When connected via Bluetooth BLE to the OmniBrick mobile app,
 # the app transmits LWP3 speed commands to ports A and B.
 # This script runs a local reflex loop: if distance < 18cm, it auto-brakes!
 # ------------------------------------------------------------------------------
 
 def run_safety_loop():
-    print("[BrainBrick] Safety reflex monitor active. Awaiting AI commands...")
+    print("[OmniBrick] Safety reflex monitor active. Awaiting AI commands...")
     
     while True:
         try:
@@ -75,7 +75,7 @@ def run_safety_loop():
             
             time.sleep(0.05) # 20Hz loop
         except Exception as e:
-            print("[BrainBrick] Loop warning:", e)
+            print("[OmniBrick] Loop warning:", e)
             time.sleep(0.1)
 
 # Start safety monitor

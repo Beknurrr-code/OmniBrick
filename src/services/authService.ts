@@ -1,4 +1,4 @@
-// Ultra-minimal, real working Authentication Service for Brain Brick
+// Ultra-minimal, real working Authentication Service for OmniBrick
 // Handles persistent registration, login, and session state.
 
 export interface AuthUser {
@@ -12,8 +12,8 @@ export interface AuthResponse {
   user?: AuthUser;
 }
 
-const USERS_STORAGE_KEY = "brainbrick_users_v1";
-const SESSION_STORAGE_KEY = "brainbrick_auth_session_v1";
+const USERS_STORAGE_KEY = "omnibrick_users_v1";
+const SESSION_STORAGE_KEY = "omnibrick_auth_session_v1";
 
 interface StoredUser {
   username: string;

@@ -1,8 +1,8 @@
-# Brain Brick — Complete Platform Walkthrough (Shipathon 2026 Edition)
+# OmniBrick — Complete Platform Walkthrough (Shipathon 2026 Edition)
 
 > **Creator:** Beknur (15 y.o., Astana, Kazakhstan)  
 > **Event:** RevenueCat Shipathon 2026 (Next Gen Award)  
-> **Repository Directory:** `C:\Users\Beknur\projects\brain-brick-by-antigravity`  
+> **Repository Directory:** `C:\Users\Beknur\projects\omnibrick-by-antigravity`  
 > **Live Dev Server:** [http://localhost:5180](http://localhost:5180)  
 > **Production Build:** `tsc -b && vite build` $\to$ **0 errors, built in 1.67s**
 

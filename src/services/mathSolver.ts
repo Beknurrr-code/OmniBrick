@@ -1,5 +1,5 @@
 /**
- * Instant Math & Logic Evaluator for Brain Brick Robotics.
+ * Instant Math & Logic Evaluator for OmniBrick Robotics.
  * Parses natural language arithmetic (Russian & English, digits & words)
  * and returns calculated solution without needing cloud roundtrip or motor movement.
  */

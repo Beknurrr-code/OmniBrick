@@ -92,7 +92,7 @@ export default function CommunityPage() {
   const [activeTab, setActiveTab] = useState<"feed" | "pilots">("feed");
   const [posts, setPosts] = useState<CommunityPost[]>(() => {
     try {
-      const saved = localStorage.getItem("brainbrick_community_posts_v2");
+      const saved = localStorage.getItem("omnibrick_community_posts_v2");
       return saved ? JSON.parse(saved) : INITIAL_POSTS;
     } catch {
       return INITIAL_POSTS;
@@ -115,7 +115,7 @@ export default function CommunityPage() {
     setPosts(prev => {
       const updated = updater(prev);
       try {
-        localStorage.setItem("brainbrick_community_posts_v2", JSON.stringify(updated));
+        localStorage.setItem("omnibrick_community_posts_v2", JSON.stringify(updated));
       } catch {
         // ignore
       }

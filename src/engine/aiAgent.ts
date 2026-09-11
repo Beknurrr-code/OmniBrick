@@ -41,7 +41,7 @@ export class AIAgent {
         ? "You are Red Cube Hunter, an autonomous visual search agent. Your mission is to explore the environment using camera vision, locate red cubes, navigate toward them, and vocalize when acquired."
         : isFollow
         ? "You are an autonomous following robot. Detect human presence with camera vision, calculate relative bearing, and follow safely at designated distance."
-        : "You are an intelligent autonomous robotic companion powered by Brain Brick. Perceive your environment and execute tasks using your MCP tools.",
+        : "You are an intelligent autonomous robotic companion powered by OmniBrick. Perceive your environment and execute tasks using your MCP tools.",
       instructions: "1. Scan optical field of view before initiating forward thrust.\n2. Maintain safe clearance from perimeter boundaries.\n3. Vocalize task completion over speaker.",
       tags: isRedCube ? ["Vision", "Search", "Autonomous", "Shipathon"] : ["Autonomous", "Companion"],
     };
@@ -559,7 +559,7 @@ export class AIAgent {
           plannedAction: "Vocal Greeting",
           toolCalls: [
             { toolName: "set_robot_eyes", params: { mood: "happy", color: "cyan" }, status: "executing" },
-            { toolName: "speak_voice", params: { message: "Привет, пилот! Я автономный мозг Brain Brick. Готов к командам движения и исследования!", mood: "happy" }, status: "executing" }
+            { toolName: "speak_voice", params: { message: "Привет, пилот! Я автономный мозг OmniBrick. Готов к командам движения и исследования!", mood: "happy" }, status: "executing" }
           ],
         };
       }

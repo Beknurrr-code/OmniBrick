@@ -134,7 +134,7 @@ export default function MainMenuPage() {
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <h2 className="text-sm sm:text-base font-black text-white">
-                    Приветствуем в Brain Brick, новый пилот!
+                    Приветствуем в OmniBrick, новый пилот!
                   </h2>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
                     +500 🧱 Бонус
@@ -185,14 +185,14 @@ export default function MainMenuPage() {
                   <Link
                     to="/landing"
                     className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 transition-all flex items-center gap-1 cursor-pointer"
-                    title="Открыть промо-лендинг Brain Brick"
+                    title="Открыть промо-лендинг OmniBrick"
                   >
                     <Globe className="w-3 h-3 text-cyan-400" />
                     <span>Промо-лендинг</span>
                   </Link>
                 </div>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-white mt-2">
-                  Центр управления <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-indigo-400">Brain Brick</span>
+                  Центр управления <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-300 to-indigo-400">OmniBrick</span>
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mt-1 leading-relaxed">
                   Платформа автономного воплощенного интеллекта: смартфон выступает когнитивным NPU-мозгом, а LEGO Mindstorms 51515 — физическим шасси на колесах.

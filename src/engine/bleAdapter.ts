@@ -6,10 +6,10 @@ type BluetoothDevice = any;
 type BluetoothRemoteGATTServer = any;
 type BluetoothRemoteGATTCharacteristic = any;
 
-// Brain Brick Standard BLE GATT UUIDs
-export const BRAIN_BRICK_SERVICE_UUID = "19b10000-e8f2-537e-4f6c-d104768a1214";
-export const BRAIN_BRICK_COMMAND_CHAR_UUID = "19b10001-e8f2-537e-4f6c-d104768a1214";
-export const BRAIN_BRICK_TELEMETRY_CHAR_UUID = "19b10002-e8f2-537e-4f6c-d104768a1214";
+// OmniBrick Standard BLE GATT UUIDs
+export const OMNI_BRICK_SERVICE_UUID = "19b10000-e8f2-537e-4f6c-d104768a1214";
+export const OMNI_BRICK_COMMAND_CHAR_UUID = "19b10001-e8f2-537e-4f6c-d104768a1214";
+export const OMNI_BRICK_TELEMETRY_CHAR_UUID = "19b10002-e8f2-537e-4f6c-d104768a1214";
 
 export class BleRobotAdapter implements IRobotAdapter {
   id: string = "ble-esp32-robot";
@@ -54,8 +54,8 @@ export class BleRobotAdapter implements IRobotAdapter {
     try {
       // 1. Scan and request pairing
       this.device = await nav.bluetooth.requestDevice({
-        filters: [{ namePrefix: "BrainBrick" }],
-        optionalServices: [BRAIN_BRICK_SERVICE_UUID],
+        filters: [{ namePrefix: "OmniBrick" }],
+        optionalServices: [OMNI_BRICK_SERVICE_UUID],
       });
 
       this.device.addEventListener("gattserverdisconnected", () => {
@@ -69,9 +69,9 @@ export class BleRobotAdapter implements IRobotAdapter {
       this.server = await this.device.gatt.connect();
 
       // 3. Obtain Service & Characteristics
-      const service = await this.server.getPrimaryService(BRAIN_BRICK_SERVICE_UUID);
-      this.commandChar = await service.getCharacteristic(BRAIN_BRICK_COMMAND_CHAR_UUID);
-      this.telemetryChar = await service.getCharacteristic(BRAIN_BRICK_TELEMETRY_CHAR_UUID);
+      const service = await this.server.getPrimaryService(OMNI_BRICK_SERVICE_UUID);
+      this.commandChar = await service.getCharacteristic(OMNI_BRICK_COMMAND_CHAR_UUID);
+      this.telemetryChar = await service.getCharacteristic(OMNI_BRICK_TELEMETRY_CHAR_UUID);
 
       // 4. Subscribe to Telemetry Notifications from ESP32
       await this.telemetryChar.startNotifications();

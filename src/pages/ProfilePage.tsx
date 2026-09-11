@@ -166,8 +166,8 @@ export default function ProfilePage() {
   };
 
   const handleResetOnboarding = () => {
-    localStorage.removeItem("brainbrick_onboarding_v2");
-    sessionStorage.removeItem("brainbrick_guest_dismissed");
+    localStorage.removeItem("omnibrick_onboarding_v2");
+    sessionStorage.removeItem("omnibrick_guest_dismissed");
     nav("/onboarding");
   };
 
@@ -638,7 +638,7 @@ export default function ProfilePage() {
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-cyan-400" />
                   <span className="font-mono text-xs uppercase tracking-widest text-cyan-300 font-bold">
-                    Brain Brick • Shipathon Pass
+                    OmniBrick • Shipathon Pass
                   </span>
                 </div>
                 <h3 className="text-xl sm:text-2xl font-black text-white">

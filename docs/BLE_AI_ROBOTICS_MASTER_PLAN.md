@@ -1,7 +1,7 @@
-# Brain Brick — End-to-End Master Plan: Mobile Registration to BLE & AI Tool-Using
+# OmniBrick — End-to-End Master Plan: Mobile Registration to BLE & AI Tool-Using
 
 **Author**: Beknur (15 y.o., Astana, Kazakhstan)  
-**Project**: Brain Brick (AI-First Robotics Platform) for **RevenueCat Shipathon 2026** (Next Gen Award)  
+**Project**: OmniBrick (AI-First Robotics Platform) for **RevenueCat Shipathon 2026** (Next Gen Award)  
 **Stack**: React 19 + TypeScript + Vite + Tailwind CSS v4 + Capacitor + RevenueCat + ESP32 C++ BLE Firmware + Multimodal Gemini Vision + MCP (Model Context Protocol)
 
 ---
@@ -11,7 +11,7 @@
 ```mermaid
 flowchart TD
     subgraph MobileApp ["Mobile Device (User's Phone mounted on Robot)"]
-        UI["Brain Brick Web / Capacitor App"]
+        UI["OmniBrick Web / Capacitor App"]
         Cam["Mobile Phone Camera (Front/Rear Eye)"]
         RC["RevenueCat SDK (Pro Tier Entitlements)"]
         Engine["RobotEngine + IRobotAdapter"]

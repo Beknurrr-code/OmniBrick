@@ -132,11 +132,11 @@ export default function RobotEyesFace({
       else if (e.detail?.mood === "focused") setEyeStyle("cyber_slit");
     };
 
-    window.addEventListener("brainbrick:speak", handleSpeakEvent);
-    window.addEventListener("brainbrick:set_eyes", handleEyesEvent);
+    window.addEventListener("omnibrick:speak", handleSpeakEvent);
+    window.addEventListener("omnibrick:set_eyes", handleEyesEvent);
     return () => {
-      window.removeEventListener("brainbrick:speak", handleSpeakEvent);
-      window.removeEventListener("brainbrick:set_eyes", handleEyesEvent);
+      window.removeEventListener("omnibrick:speak", handleSpeakEvent);
+      window.removeEventListener("omnibrick:set_eyes", handleEyesEvent);
     };
   }, []);
 

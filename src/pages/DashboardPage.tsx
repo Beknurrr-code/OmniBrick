@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
   const handleExportReport = () => {
     const reportData = {
-      app: "Brain Brick",
+      app: "OmniBrick",
       pilot: pilot.username,
       callsign: pilot.callsign,
       exportedAt: new Date().toISOString(),
@@ -273,7 +273,7 @@ export default function DashboardPage() {
 
           {/* 5-Layer Platform Architecture (6 cols) */}
           <div className="lg:col-span-6 bg-slate-900/80 p-5 rounded-2xl border border-slate-800 space-y-3">
-            <h2 className="text-sm font-bold text-white">Brain Brick 5-Layer Stack</h2>
+            <h2 className="text-sm font-bold text-white">OmniBrick 5-Layer Stack</h2>
             <p className="text-xs text-slate-400">
               Strictly decoupled architecture built for mobile autonomy and hardware abstraction.
             </p>

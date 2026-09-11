@@ -25,7 +25,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   if (!isOpen) return null;
 
   const handleFinish = (action?: "ai" | "register" | "guest") => {
-    localStorage.setItem("brainbrick_onboarding_v2", "true");
+    localStorage.setItem("omnibrick_onboarding_v2", "true");
     onClose();
 
     if (action === "register") {
@@ -56,7 +56,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <h2 className="text-sm sm:text-base font-black text-white tracking-wide">
-                  Brain Brick Onboarding
+                  OmniBrick Onboarding
                 </h2>
                 <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
                   Shipathon 2026
@@ -96,7 +96,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               </h3>
               <p className="text-xs text-slate-300 mt-1 leading-relaxed">
                 Традиционные роботы требуют дорогих компьютеров за $500+. 
-                <strong> Brain Brick</strong> превращает твой телефон в когнитивный NPU-мозг, 
+                <strong> OmniBrick</strong> превращает твой телефон в когнитивный NPU-мозг, 
                 управляющий моторами на частоте 20 Гц.
               </p>
             </div>
@@ -213,7 +213,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 Аппаратная конфигурация
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">
-                Brain Brick работает и без физических деталей, и с реальным шасси:
+                OmniBrick работает и без физических деталей, и с реальным шасси:
               </p>
             </div>
 

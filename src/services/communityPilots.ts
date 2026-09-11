@@ -78,11 +78,11 @@ const INITIAL_PILOTS: Record<string, CommunityPilot> = {
   Beknur: {
     username: "Beknur",
     callsign: "Founder-01",
-    bio: "15 y.o. Robotics creator from Astana • LEGO 51515 + Android AI brain • Building Brain Brick for RevenueCat Shipathon 2026",
+    bio: "15 y.o. Robotics creator from Astana • LEGO 51515 + Android AI brain • Building OmniBrick for RevenueCat Shipathon 2026",
     avatar: "🤖",
     level: 8,
     rank: "Grandmaster Engineer",
-    affiliation: "Brain Brick Labs",
+    affiliation: "OmniBrick Labs",
     location: "Astana, Kazakhstan",
     joinedDate: "Sept 2026",
     followersCount: 142,
@@ -240,7 +240,7 @@ const INITIAL_PILOTS: Record<string, CommunityPilot> = {
   },
 };
 
-const STORAGE_KEY = "brainbrick_community_pilots_v1";
+const STORAGE_KEY = "omnibrick_community_pilots_v1";
 
 export const pilotDirectory = {
   getAllPilots(): CommunityPilot[] {
@@ -266,7 +266,7 @@ export const pilotDirectory = {
     return {
       username: username,
       callsign: `${username}-Pilot`,
-      bio: `Autonomous robotics enthusiast and Brain Brick community member.`,
+      bio: `Autonomous robotics enthusiast and OmniBrick community member.`,
       avatar: "🤖",
       level: 3,
       rank: "Autonomous Pilot",

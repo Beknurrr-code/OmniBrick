@@ -1,9 +1,9 @@
-﻿# 🧱 Brain Brick — Embodied AI Robot Brain for LEGO Mindstorms 51515
+﻿# 🧱 OmniBrick — Embodied AI Robot Brain for LEGO Mindstorms 51515
 
 > **RevenueCat Shipathon 2026 Submission** • **Category:** *Next Gen Award (Student Track)*  
 > **Solo Creator:** Beknur (15 y.o., Astana, Kazakhstan)  
 > **Live Demo:** [https://7ac7091aac6aad.lhr.life](https://7ac7091aac6aad.lhr.life)  
-> **Repository:** [GitHub](https://github.com/Beknur/brain-brick)
+> **Repository:** [GitHub](https://github.com/Beknur/omnibrick)
 
 [![RevenueCat SDK](https://img.shields.io/badge/Monetization-RevenueCat%20SDK-orange.svg)](https://www.revenuecat.com/)
 [![Shipathon 2026](https://img.shields.io/badge/Shipathon-2026%20Contender-purple.svg)](https://shipaton.com/)
@@ -19,7 +19,7 @@ Educational robotics kits like **LEGO® Mindstorms 51515**, **SPIKE™ Prime**, 
 
 Meanwhile, almost every student or household has an old Android smartphone sitting in a drawer — equipped with an **ultra-fast NPU, high-res camera, sensitive microphone, loud speaker, and high-DPI display**.
 
-**Brain Brick** transforms that smartphone into the autonomous head, cognitive brain, voice, and emotive face of a LEGO robot. With **$0 extra hardware**, students can build and command conversational, vision-guided rovers that see their environment, calculate differential kinematics, and talk back.
+**OmniBrick** transforms that smartphone into the autonomous head, cognitive brain, voice, and emotive face of a LEGO robot. With **$0 extra hardware**, students can build and command conversational, vision-guided rovers that see their environment, calculate differential kinematics, and talk back.
 
 ---
 
@@ -29,7 +29,7 @@ Meanwhile, almost every student or household has an old Android smartphone sitti
 graph TD
     Pilot[👤 Human Pilot (Voice / Mic / UI)] -->|Speech-to-Text / Commands| Brain[📱 Smartphone Head (Android / Chrome)]
     
-    subgraph "Brain Brick Cognitive Core"
+    subgraph "OmniBrick Cognitive Core"
         Brain --> Vision[👁️ Camera & Optical Track]
         Brain --> Telemetry[📊 Live Sensor Telemetry (IMU, Battery, Sonar)]
         Vision --> LLM[🧠 LLM Cognitive Engine]
@@ -60,7 +60,7 @@ graph TD
 
 ## 💰 RevenueCat Monetization & Business Model
 
-Brain Brick is natively architected around the **RevenueCat SDK** (`@revenuecat/purchases-capacitor`) with a high-conversion freemium model:
+OmniBrick is natively architected around the **RevenueCat SDK** (`@revenuecat/purchases-capacitor`) with a high-conversion freemium model:
 
 ### 1. Subscription Tiers (Powered by RevenueCat)
 | Plan | Price | Included Features & Models |
@@ -78,7 +78,7 @@ Brain Brick is natively architected around the **RevenueCat SDK** (`@revenuecat/
 ## 🛠️ Key Technical Innovations
 
 ### 1. Embodied Multi-Tool Chaining (Tool Calling)
-Unlike basic chat assistants, Brain Brick coordinates multi-tool actions simultaneously. When given a compound voice command:
+Unlike basic chat assistants, OmniBrick coordinates multi-tool actions simultaneously. When given a compound voice command:
 > *"Say hello happily, calculate an arc turn, rotate left 90 degrees, and check your sensors"*
 The model outputs **3–4 tools in a single cycle**:
 1. `set_robot_eyes({ mood: "happy", color: "cyan" })`
@@ -121,8 +121,8 @@ Integrated 4-step hardware assembly modal directly in the web app:
 
 ### Installation
 ```bash
-git clone https://github.com/Beknur/brain-brick.git
-cd brain-brick
+git clone https://github.com/Beknur/omnibrick.git
+cd omnibrick
 
 # Install dependencies
 npm install
@@ -156,6 +156,6 @@ npm run build:android
 * **Participant:** Beknur (15 y.o., 10th Grade, Astana, Kazakhstan)
 * **Track:** Next Gen Award
 * **RevenueCat SDK Version:** `@revenuecat/purchases-capacitor` v13.4.0
-* **Entitlement ID:** `BrainBricks Pro`
+* **Entitlement ID:** `OmniBricks Pro`
 
 *Built with passion, curiosity, and LEGO bricks.*

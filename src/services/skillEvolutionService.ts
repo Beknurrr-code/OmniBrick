@@ -1,4 +1,4 @@
-// Brain Brick Skill Evolution & Self-Learning Engine
+// OmniBrick Skill Evolution & Self-Learning Engine
 // Synthesizes, persists, and upgrades custom MCP tools and robotics skills learned by the AI over time
 
 export interface LearnedSkill {
@@ -18,7 +18,7 @@ export interface LearnedSkill {
   author: string;
 }
 
-const STORAGE_KEY = "brainbrick_learned_skills_v1";
+const STORAGE_KEY = "omnibrick_learned_skills_v1";
 
 export const DEFAULT_LEARNED_SKILLS: LearnedSkill[] = [
   {
@@ -48,7 +48,7 @@ return { completedSweep: true, scannedSectors: clearSectors, perimeterSecure: tr
     successRate: 98,
     createdAt: "2026-09-08T12:00:00Z",
     sourceExperience: "Synthesized during automated night perimeter defense run",
-    author: "Brain Brick Autonomous Evolving Agent",
+    author: "OmniBrick Autonomous Evolving Agent",
   },
   {
     id: "skill-spiral-search",
@@ -78,7 +78,7 @@ return { trajectoryPoints: points, estimatedAreaSqM: 4.8 };
     successRate: 95,
     createdAt: "2026-09-09T14:30:00Z",
     sourceExperience: "Synthesized during red cube visual search mission",
-    author: "Brain Brick Autonomous Evolving Agent",
+    author: "OmniBrick Autonomous Evolving Agent",
   },
   {
     id: "skill-evasive-pivot",
@@ -134,7 +134,7 @@ return {
     successRate: 100,
     createdAt: "2026-09-10T16:00:00Z",
     sourceExperience: "Synthesized upon target acquisition in mission mode",
-    author: "Brain Brick Social Persona",
+    author: "OmniBrick Social Persona",
   },
 ];
 
@@ -160,7 +160,7 @@ class SkillEvolutionService {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.skills));
       if (typeof window !== "undefined") {
-        window.dispatchEvent(new CustomEvent("brainbrick:skills_updated", { detail: this.skills }));
+        window.dispatchEvent(new CustomEvent("omnibrick:skills_updated", { detail: this.skills }));
       }
     } catch (e) {
       console.warn("Failed to write learned skills:", e);
@@ -268,7 +268,7 @@ return {
       id,
       name: functionName,
       label: userPrompt.slice(0, 40),
-      description: `Автономно выученный навык: "${userPrompt}". Синтезирован AI-ядром Brain Brick.`,
+      description: `Автономно выученный навык: "${userPrompt}". Синтезирован AI-ядром OmniBrick.`,
       category,
       code: generatedCode,
       parametersSchema: {
@@ -281,7 +281,7 @@ return {
       successRate: 100,
       createdAt: new Date().toISOString(),
       sourceExperience: `Синтезировано из команды пилота: "${userPrompt}"`,
-      author: "Brain Brick Self-Learning Core",
+      author: "OmniBrick Self-Learning Core",
     };
 
     this.skills.unshift(newSkill);

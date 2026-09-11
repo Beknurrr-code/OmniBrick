@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.brainbrick.app',
-  appName: 'Brain Brick',
+  appId: 'com.omnibrick.app',
+  appName: 'OmniBrick',
   webDir: 'dist',
   android: {
     backgroundColor: '#030712',

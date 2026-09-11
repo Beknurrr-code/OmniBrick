@@ -39,7 +39,7 @@ export default function AICopilotWidget() {
     {
       id: "welcome",
       sender: "copilot",
-      text: "Привет, пилот! Я бортовой Копилот Brain Brick. Я помогу разобраться в приложении, подключить LEGO-хаб, настроить зрение или собрать нового робота. Чем помочь?",
+      text: "Привет, пилот! Я бортовой Копилот OmniBrick. Я помогу разобраться в приложении, подключить LEGO-хаб, настроить зрение или собрать нового робота. Чем помочь?",
       timestamp: Date.now(),
       actionButton: {
         label: "🚀 Быстрый старт: Академия",
@@ -78,9 +78,9 @@ export default function AICopilotWidget() {
       ];
     }
     return [
-      { label: "С чего начать?", query: "Я новичок. С чего мне начать в Brain Brick?" },
+      { label: "С чего начать?", query: "Я новичок. С чего мне начать в OmniBrick?" },
       { label: "Как запустить симулятор?", query: "Как протестировать робота в 3D симуляторе без железа?" },
-      { label: "Что умеет платформа?", query: "Расскажи кратко обо всех возможностях Brain Brick" },
+      { label: "Что умеет платформа?", query: "Расскажи кратко обо всех возможностях OmniBrick" },
     ];
   };
 
@@ -142,7 +142,7 @@ export default function AICopilotWidget() {
         answer = "Смартфон крепится на робота камерой вперед. Поток 20 FPS передается в локальную или облачную VLM-модель (Gemini 2.5 Flash / Gemma / Ollama). ИИ находит красный куб, людей или препятствия и передает координаты в колесные моторы.";
         action = { label: "📷 Открыть Видеопоток", path: "/run" };
       } else if (lower.includes("симулятор") || lower.includes("без желез") || lower.includes("virtual")) {
-        answer = "В Brain Brick есть полноценная 3D Виртуальная Арена на Three.js! Перейди в `/run` и переключи адаптер на 'Virtual Simulation Arena'. Там можно управлять виртуальным ровером, раскидывать кубики и тестировать зрение без реального конструктора.";
+        answer = "В OmniBrick есть полноценная 3D Виртуальная Арена на Three.js! Перейди в `/run` и переключи адаптер на 'Virtual Simulation Arena'. Там можно управлять виртуальным ровером, раскидывать кубики и тестировать зрение без реального конструктора.";
         action = { label: "🌐 Запустить 3D Арену", path: "/run" };
       } else if (lower.includes("brick") || lower.includes("заработ") || lower.includes("монет") || lower.includes("купить")) {
         answer = "Bricks 🧱 — это внутренняя валюта робототехников. Ты получаешь Bricks за прохождение тестов в Академии (по 50 Bricks за урок), а также 70% роялти от каждой покупки твоей сборки другими пилотами на Маркетплейсе!";
@@ -225,7 +225,7 @@ export default function AICopilotWidget() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-white tracking-wide">Brain Brick Copilot</h3>
+                  <h3 className="text-sm font-bold text-white tracking-wide">OmniBrick Copilot</h3>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono">v2.5</span>
                 </div>
                 <div className="text-[11px] text-gray-400 font-mono flex items-center gap-1">

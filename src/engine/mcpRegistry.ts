@@ -132,7 +132,7 @@ export class MCPRegistry {
   constructor() {
     this.refreshTools();
     if (typeof window !== "undefined") {
-      window.addEventListener("brainbrick:skills_updated", () => {
+      window.addEventListener("omnibrick:skills_updated", () => {
         this.refreshTools();
       });
     }
@@ -250,7 +250,7 @@ export class MCPRegistry {
     // 3. Emotive Eyes Face update
     if (toolName === "set_robot_eyes") {
       if (typeof window !== "undefined") {
-        window.dispatchEvent(new CustomEvent("brainbrick:set_eyes", { detail: params }));
+        window.dispatchEvent(new CustomEvent("omnibrick:set_eyes", { detail: params }));
       }
       return { success: true, mood: params.mood, color: params.color };
     }
@@ -259,7 +259,7 @@ export class MCPRegistry {
     if (toolName === "speak_voice") {
       const msg = params.message || "";
       if (typeof window !== "undefined") {
-        window.dispatchEvent(new CustomEvent("brainbrick:speak", { detail: params }));
+        window.dispatchEvent(new CustomEvent("omnibrick:speak", { detail: params }));
         if ("speechSynthesis" in window) {
           window.speechSynthesis.cancel();
           const utterance = new SpeechSynthesisUtterance(msg);

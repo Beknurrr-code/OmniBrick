@@ -25,7 +25,7 @@ function AppContent() {
 
   useEffect(() => {
     const isAuth = authService.isAuthenticated();
-    const guestDismissed = sessionStorage.getItem("brainbrick_guest_dismissed");
+    const guestDismissed = sessionStorage.getItem("omnibrick_guest_dismissed");
     
     // Automatically redirect unregistered pilots to the dedicated Onboarding Page
     const exemptPaths = ["/onboarding", "/register", "/login", "/landing"];

@@ -194,7 +194,7 @@ class ServerCallbacks : public BLEServerCallbacks {
   void onConnect(BLEServer* pServer) {
     deviceConnected = true;
     digitalWrite(PIN_STATUS_LED, HIGH);
-    Serial.println(">>> Brain Brick Mobile Connected!");
+    Serial.println(">>> OmniBrick Mobile Connected!");
   }
 
   void onDisconnect(BLEServer* pServer) {
@@ -220,7 +220,7 @@ class CommandCallbacks : public BLECharacteristicCallbacks {
 // ─── SETUP ───
 void setup() {
   Serial.begin(115200);
-  Serial.println("Starting Brain Brick Robot OS v1.0.0...");
+  Serial.println("Starting OmniBrick Robot OS v1.0.0...");
 
   pinMode(PIN_STATUS_LED, OUTPUT);
   pinMode(PIN_TRIG, OUTPUT);
@@ -228,7 +228,7 @@ void setup() {
   initMotors();
 
   // Initialize BLE
-  BLEDevice::init("BrainBrick-Rover");
+  BLEDevice::init("OmniBrick-Rover");
   pServer = BLEDevice::createServer();
   pServer->setCallbacks(new ServerCallbacks());
 
@@ -258,7 +258,7 @@ void setup() {
   pAdvertising->setMinPreferred(0x12);
   BLEDevice::startAdvertising();
 
-  Serial.println("BLE Advertising active as 'BrainBrick-Rover'. Waiting for phone link...");
+  Serial.println("BLE Advertising active as 'OmniBrick-Rover'. Waiting for phone link...");
 }
 
 // ─── MAIN LOOP (20Hz TELEMETRY + WATCHDOG) ───

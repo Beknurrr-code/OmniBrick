@@ -98,7 +98,7 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeId>(() => {
     try {
-      const saved = localStorage.getItem("brainbrick_theme") as ThemeId;
+      const saved = localStorage.getItem("omnibrick_theme") as ThemeId;
       if (saved && THEME_OPTIONS.some((o) => o.id === saved)) {
         return saved;
       }
@@ -112,7 +112,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setTheme = (t: ThemeId) => {
     setThemeState(t);
     try {
-      localStorage.setItem("brainbrick_theme", t);
+      localStorage.setItem("omnibrick_theme", t);
     } catch {
       // ignore
     }

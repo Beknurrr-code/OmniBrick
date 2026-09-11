@@ -117,7 +117,7 @@ export default function PaywallModal({
             </div>
           </div>
           <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white flex items-center justify-center gap-2">
-            Brain Brick Store
+            OmniBrick Store
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 normal-case font-semibold">
               RevenueCat 2026
             </span>
@@ -234,7 +234,7 @@ export default function PaywallModal({
                 ) : isPro ? (
                   <>
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>Brain Brick PRO Активен ({tier.toUpperCase()})</span>
+                    <span>OmniBrick PRO Активен ({tier.toUpperCase()})</span>
                   </>
                 ) : (
                   <>

@@ -33,7 +33,7 @@ export interface PingResult {
   latencyMs: number;
 }
 
-const STORAGE_KEY = "brainbrick_ai_provider_config";
+const STORAGE_KEY = "omnibrick_ai_provider_config";
 
 export function getEnvDefaults(): AIProviderConfig {
   const env = (import.meta as any).env || {};
@@ -229,7 +229,7 @@ export class AIVisionService {
 - Optical Target in View: ${telemetryContext.lastDetectedObject ? `${telemetryContext.lastDetectedObject.label} (Distance: ${telemetryContext.lastDetectedObject.distanceCm}cm, Bearing: ${telemetryContext.lastDetectedObject.bearingDeg ?? 0}°)` : "None"}
 ` : "";
 
-    const fullSystemPrompt = `You are Brain Brick Robot Cognitive Core — an advanced autonomous Embodied AI robot brain. You control a physical robotic rover built with LEGO Mindstorms 51515 / SPIKE Prime actuators, with an Android smartphone functioning as your head, eyes, speaker, and camera.
+    const fullSystemPrompt = `You are OmniBrick Robot Cognitive Core — an advanced autonomous Embodied AI robot brain. You control a physical robotic rover built with LEGO Mindstorms 51515 / SPIKE Prime actuators, with an Android smartphone functioning as your head, eyes, speaker, and camera.
 
 ${systemPrompt}
 ${telemetryBlock}
@@ -360,7 +360,7 @@ ${telemetryBlock}
         {
           type: "text",
           text: `Human Pilot Instruction: "${userIntent}".
-You are Brain Brick Robot Cognitive Core.
+You are OmniBrick Robot Cognitive Core.
 Execute all necessary tool calls in order (e.g. greeting + turn + face expression).`,
         },
       ];
@@ -511,7 +511,7 @@ Execute all necessary tool calls in order (e.g. greeting + turn + face expressio
 
     // Check Voice / Speech intent
     if (combined.includes("скажи") || combined.includes("speak") || combined.includes("say") || combined.includes("привет") || combined.includes("hello") || combined.includes("поздоровайся") || combined.includes("голос")) {
-      let voiceMsg = "Привет, пилот! Я автономный робот Brain Brick, готов к миссиям.";
+      let voiceMsg = "Привет, пилот! Я автономный робот OmniBrick, готов к миссиям.";
       if (content && content.length > 0 && content.length < 150 && !content.includes("{")) {
         voiceMsg = content.trim();
       }
@@ -675,7 +675,7 @@ Execute all necessary tool calls in order (e.g. greeting + turn + face expressio
 
     if (isGreeting) {
       const messages = [
-        "Привет, пилот! Я робот Brain Brick с искусственным интеллектом. Готов исследовать пространство!",
+        "Привет, пилот! Я робот OmniBrick с искусственным интеллектом. Готов исследовать пространство!",
         "Система на связи! Моторы сопряжены, камера калибрована, готов принимать команды.",
         "Приветствую! Все когнитивные контуры в норме. Какой сектор исследуем?",
       ];
@@ -751,7 +751,7 @@ Execute all necessary tool calls in order (e.g. greeting + turn + face expressio
 
     if (isQuestion && !isMovementExplicit) {
       let reply = "Все системы в порядке! Батарея заряжена, сенсоры откалиброваны.";
-      if (lower.includes("кто ты")) reply = "Я бортовой интеллект Brain Brick. Мой телефон видит и думает, а шасси слушает команды!";
+      if (lower.includes("кто ты")) reply = "Я бортовой интеллект OmniBrick. Мой телефон видит и думает, а шасси слушает команды!";
       else if (lower.includes("что ты умеешь")) reply = "Я умею перемещаться, распознавать предметы через камеру, говорить и решать математику.";
       else if (lower.includes("шутк") || lower.includes("анекдот")) reply = "Шутка: Спросили у робота, почему он не спит. Он ответил: Боюсь пропустить обновление прошивки!";
       else if (lower.includes("как дела")) reply = "Отлично! Все сенсоры в зеленой зоне, готов к новым миссиям.";

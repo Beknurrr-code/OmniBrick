@@ -1,6 +1,6 @@
 ﻿{
-  "name": "Brain Brick — AI Robotics",
-  "short_name": "Brain Brick",
+  "name": "OmniBrick — AI Robotics",
+  "short_name": "OmniBrick",
   "description": "Turn your smartphone into an AI robot brain for LEGO Mindstorms 51515 and custom hardware.",
   "start_url": "/",
   "display": "standalone",

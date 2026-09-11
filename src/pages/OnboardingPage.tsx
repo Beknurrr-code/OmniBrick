@@ -148,8 +148,8 @@ export default function OnboardingPage() {
         }
 
         // Save preferences
-        localStorage.setItem("brainbrick_onboarding_v2", "true");
-        localStorage.setItem("brainbrick_user_avatar", selectedAvatar);
+        localStorage.setItem("omnibrick_onboarding_v2", "true");
+        localStorage.setItem("omnibrick_user_avatar", selectedAvatar);
 
         soundService.playHappyFanfare();
         setCreatedUser(res.user);
@@ -159,8 +159,8 @@ export default function OnboardingPage() {
   };
 
   const handleGuestFinish = () => {
-    localStorage.setItem("brainbrick_onboarding_v2", "true");
-    sessionStorage.setItem("brainbrick_guest_dismissed", "true");
+    localStorage.setItem("omnibrick_onboarding_v2", "true");
+    sessionStorage.setItem("omnibrick_guest_dismissed", "true");
     setAdapterMode(selectedHardware === "lego_spike" ? "lego_spike" : "mock_simulator");
     const robot = buildStorage.getRobotById(selectedRobotId);
     if (robot) {
@@ -187,7 +187,7 @@ export default function OnboardingPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-base sm:text-lg font-black text-white tracking-tight">
-                  Brain Brick Onboarding
+                  OmniBrick Onboarding
                 </h1>
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold">
                   Шаг {step} из 4
@@ -236,7 +236,7 @@ export default function OnboardingPage() {
               </h2>
               <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
                 Традиционные автономные роботы требуют тяжелых и дорогих компьютеров за $500+ (NVIDIA Jetson / Raspberry Pi 5). 
-                <strong> Brain Brick</strong> решает эту проблему элегантно: твой телефон уже оснащён HD-камерой, стерео-микрофоном, динамиками и NPU-чипом искусственного интеллекта.
+                <strong> OmniBrick</strong> решает эту проблему элегантно: твой телефон уже оснащён HD-камерой, стерео-микрофоном, динамиками и NPU-чипом искусственного интеллекта.
               </p>
             </div>
 
@@ -373,7 +373,7 @@ export default function OnboardingPage() {
                 Выбери среду исполнения
               </h2>
               <p className="text-xs sm:text-sm text-slate-400">
-                Brain Brick поддерживает как физических роботов, так и работу без железа:
+                OmniBrick поддерживает как физических роботов, так и работу без железа:
               </p>
             </div>
 

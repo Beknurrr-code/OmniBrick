@@ -316,8 +316,8 @@ export default function RunPage() {
         speakVoice(e.detail.message);
       }
     };
-    window.addEventListener("brainbrick:speak", handleSpeakEvent);
-    return () => window.removeEventListener("brainbrick:speak", handleSpeakEvent);
+    window.addEventListener("omnibrick:speak", handleSpeakEvent);
+    return () => window.removeEventListener("omnibrick:speak", handleSpeakEvent);
   }, [speakVoice]);
 
   // ─── 5. FAST REFLEX INTENT PARSER WITH WATCHDOG & VLM ───
@@ -426,7 +426,7 @@ export default function RunPage() {
     // Fast-path 7: Introduction & Help
     if (lower.includes("кто ты") || lower.includes("представься")) {
       soundService.playHappyFanfare();
-      const reply = `Привет! Я бортовой интеллект робота ${activeBuild?.name || "Brain Brick"}. Мой телефон — это зрение и мозг, а колёса слушают команды!`;
+      const reply = `Привет! Я бортовой интеллект робота ${activeBuild?.name || "OmniBrick"}. Мой телефон — это зрение и мозг, а колёса слушают команды!`;
       setSubtitleText(reply);
       setSubtitleRole("robot");
       speakVoice(reply);
@@ -894,7 +894,7 @@ export default function RunPage() {
             <div className="w-full h-full flex flex-col items-center justify-center p-4 relative">
               <div className="w-full max-w-2xl flex-1 flex items-center justify-center">
                 <RobotEyesFace
-                  robotName={activeBuild?.name || "Brain Brick Robot"}
+                  robotName={activeBuild?.name || "OmniBrick Robot"}
                   isAutonomous={isAutonomous}
                   transcript={transcript}
                   onEmergencyStop={emergencyHalt}

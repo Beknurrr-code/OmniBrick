@@ -49,14 +49,14 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     };
 
     if (typeof window !== "undefined") {
-      window.addEventListener("brainbrick:subscription_updated", handleSubUpdate);
-      window.addEventListener("brainbrick:profile_updated", handleProfileUpdate);
+      window.addEventListener("omnibrick:subscription_updated", handleSubUpdate);
+      window.addEventListener("omnibrick:profile_updated", handleProfileUpdate);
     }
 
     return () => {
       if (typeof window !== "undefined") {
-        window.removeEventListener("brainbrick:subscription_updated", handleSubUpdate);
-        window.removeEventListener("brainbrick:profile_updated", handleProfileUpdate);
+        window.removeEventListener("omnibrick:subscription_updated", handleSubUpdate);
+        window.removeEventListener("omnibrick:profile_updated", handleProfileUpdate);
       }
     };
   }, []);

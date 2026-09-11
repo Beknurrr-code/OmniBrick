@@ -118,7 +118,7 @@ export default function MobileAuthModal({ isOpen, onClose, onSuccess }: Props) {
                 {isRegister ? "Регистрация" : "Вход"}
               </h2>
               <p className="text-xs text-slate-400 mt-0.5">
-                {isRegister ? "Создайте аккаунт для сохранения роботов" : "Войдите в свой аккаунт Brain Brick"}
+                {isRegister ? "Создайте аккаунт для сохранения роботов" : "Войдите в свой аккаунт OmniBrick"}
               </p>
             </div>
 

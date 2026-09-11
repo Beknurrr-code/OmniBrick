@@ -87,7 +87,7 @@ export default function LandingPage() {
 
   const faqs = [
     {
-      q: "Нужен ли мне настоящий физический робот для работы с Brain Brick?",
+      q: "Нужен ли мне настоящий физический робот для работы с OmniBrick?",
       a: "Нет! В платформу встроен полноценный 2D-симулятор арены с физикой движения, трассировкой лучей сонара и виртуальной камерой. Ты можешь тестировать алгоритмы прямо в браузере без единой физической детали.",
     },
     {
@@ -100,7 +100,7 @@ export default function LandingPage() {
     },
     {
       q: "Что такое валюта Bricks и как работает монетизация RevenueCat?",
-      a: "Bricks 🧱 — внутренняя валюта платформы. Пилоты зарабатывают её за прохождение уроков Академии и получают 70% роялти за форки их сборок другими пользователями. Подписка Brain Brick Pro через RevenueCat открывает безлимитные вызовы облачных моделей Gemini ER-2 и Gemma.",
+      a: "Bricks 🧱 — внутренняя валюта платформы. Пилоты зарабатывают её за прохождение уроков Академии и получают 70% роялти за форки их сборок другими пользователями. Подписка OmniBrick Pro через RevenueCat открывает безлимитные вызовы облачных моделей Gemini ER-2 и Gemma.",
     },
   ];
 
@@ -171,7 +171,7 @@ export default function LandingPage() {
 
           {/* Subtitle */}
           <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Brain Brick объединяет HD-камеру, микрофон и NPU твоего телефона с LEGO Mindstorms 51515 и 2D-симулятором. 
+            OmniBrick объединяет HD-камеру, микрофон и NPU твоего телефона с LEGO Mindstorms 51515 и 2D-симулятором. 
             Компьютерное зрение Gemini VLM, когнитивный контур 20 Гц и готовые инструменты в одном приложении.
           </p>
 
@@ -228,7 +228,7 @@ export default function LandingPage() {
               Зачем тратить $500 на Jetson, если в твоём кармане уже есть всё?
             </h2>
             <p className="text-xs sm:text-sm text-slate-400">
-              Brain Brick разделяет робота на два независимых слоя: высокоуровневый когнитивный мозг и низкоуровневый спинной рефлекс.
+              OmniBrick разделяет робота на два независимых слоя: высокоуровневый когнитивный мозг и низкоуровневый спинной рефлекс.
             </p>
           </div>
 
@@ -256,11 +256,11 @@ export default function LandingPage() {
               </ul>
             </div>
 
-            {/* Right Card: The Brain Brick Way */}
+            {/* Right Card: The OmniBrick Way */}
             <div className="p-6 rounded-3xl bg-gradient-to-br from-cyan-950/60 via-slate-900 to-blue-950/60 border border-cyan-500/40 space-y-4 shadow-xl">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
                 <Check className="w-3.5 h-3.5 text-emerald-400" />
-                <span>✨ Инновация Brain Brick</span>
+                <span>✨ Инновация OmniBrick</span>
               </div>
               <h3 className="text-lg font-black text-white">Смартфон на шасси + BLE Рефлекс</h3>
               <ul className="text-xs text-slate-300 space-y-2.5">
@@ -529,7 +529,7 @@ export default function LandingPage() {
               className="px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-slate-950 font-black text-sm inline-flex items-center gap-2 shadow-2xl shadow-cyan-500/30 hover:scale-105 transition-all cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-slate-950" />
-              <span>Запустить Brain Brick (Онбординг)</span>
+              <span>Запустить OmniBrick (Онбординг)</span>
               <ArrowRight className="w-4 h-4 text-slate-950" />
             </button>
           </div>
@@ -543,7 +543,7 @@ export default function LandingPage() {
             <div className="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs">
               BB
             </div>
-            <span className="font-bold text-slate-300">Brain Brick</span>
+            <span className="font-bold text-slate-300">OmniBrick</span>
             <span>• Created by Beknur (15 y.o., Astana, Kazakhstan)</span>
           </div>
 

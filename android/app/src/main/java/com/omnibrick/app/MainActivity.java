@@ -1,4 +1,4 @@
-package com.brainbrick.app;
+package com.omnibrick.app;
 
 import com.getcapacitor.BridgeActivity;
 

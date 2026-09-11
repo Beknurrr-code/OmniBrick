@@ -51,7 +51,7 @@ export function RobotProvider({ children }: { children: ReactNode }) {
       timestamp: Date.now(),
       role: "ai_thought",
       label: "AI Brain",
-      content: "Brain Brick OS initialized. Red Cube Hunter stand-by. Connect or engage autonomous search.",
+      content: "OmniBrick OS initialized. Red Cube Hunter stand-by. Connect or engage autonomous search.",
     },
   ]);
 

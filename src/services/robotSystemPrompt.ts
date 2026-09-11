@@ -1,4 +1,4 @@
-// Brain Brick Two-Tier System Prompt & Event Matrix Engine
+// OmniBrick Two-Tier System Prompt & Event Matrix Engine
 // Separates inviolable Core Embodied Safety from custom User Persona & Missions
 
 import type { RobotBuild, RobotTelemetry } from "../types";
@@ -167,7 +167,7 @@ export function buildCompositeSystemPrompt(
 
   // Tier 1: Core System Prompt
   const tier1Core = `=== TIER 1: BRAIN BRICK EMBODIED SAFETY & OPERATIONAL KERNEL ===
-You are the Cognitive Core of an Embodied AI Robot powered by Brain Brick.
+You are the Cognitive Core of an Embodied AI Robot powered by OmniBrick.
 Your head is an Android smartphone providing optical perception (camera), neural reasoning (LLM/VLM), voice (TTS), and emotive expressions (eyes).
 Your physical actuators are controlled via BLE LWP3 protocol (LEGO Mindstorms 51515 / SPIKE Prime / ESP32).
 
@@ -189,7 +189,7 @@ ${telemetryBlock}
 `;
 
   // Tier 2: User Persona & Custom Mission Instructions
-  const robotName = build?.ai?.name || build?.name || "Brain Brick Robot";
+  const robotName = build?.ai?.name || build?.name || "OmniBrick Robot";
   const userPersona = build?.ai?.systemPrompt || "You are an intelligent, friendly robotic companion.";
   const userInstructions = build?.ai?.instructions || "Perceive your environment and execute tasks using your tools.";
 

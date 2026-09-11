@@ -102,9 +102,9 @@ export default function RegisterPage({ defaultMode = "register" }: Props) {
           });
 
           // Mark onboarding as complete
-          localStorage.setItem("brainbrick_onboarding_v2", "true");
-          localStorage.setItem("brainbrick_user_avatar", selectedAvatar);
-          localStorage.setItem("brainbrick_user_specialty", selectedSpecialty);
+          localStorage.setItem("omnibrick_onboarding_v2", "true");
+          localStorage.setItem("omnibrick_user_avatar", selectedAvatar);
+          localStorage.setItem("omnibrick_user_specialty", selectedSpecialty);
 
           soundService.playHappyFanfare();
           setRegisteredSuccess(res.user);
@@ -123,7 +123,7 @@ export default function RegisterPage({ defaultMode = "register" }: Props) {
             username: res.user.username,
             callsign: `${res.user.username}-Lead`,
           });
-          localStorage.setItem("brainbrick_onboarding_v2", "true");
+          localStorage.setItem("omnibrick_onboarding_v2", "true");
           soundService.playRobotChirp();
           nav("/");
         }
@@ -132,8 +132,8 @@ export default function RegisterPage({ defaultMode = "register" }: Props) {
   };
 
   const handleGuestContinue = () => {
-    localStorage.setItem("brainbrick_onboarding_v2", "true");
-    sessionStorage.setItem("brainbrick_guest_dismissed", "true");
+    localStorage.setItem("omnibrick_onboarding_v2", "true");
+    sessionStorage.setItem("omnibrick_guest_dismissed", "true");
     nav("/");
   };
 
@@ -235,7 +235,7 @@ export default function RegisterPage({ defaultMode = "register" }: Props) {
                 <Bot className="w-7 h-7 text-slate-950" />
               </div>
               <h1 className="text-2xl font-black text-white tracking-tight pt-1">
-                {mode === "register" ? "Паспорт Пилота Brain Brick" : "Вход в систему Пилота"}
+                {mode === "register" ? "Паспорт Пилота OmniBrick" : "Вход в систему Пилота"}
               </h1>
               <p className="text-xs text-slate-400 max-w-sm mx-auto">
                 {mode === "register"

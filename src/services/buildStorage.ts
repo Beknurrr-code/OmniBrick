@@ -75,9 +75,9 @@ export const DEFAULT_CAPABILITIES: RobotCapability[] = [
   },
 ];
 
-const STORAGE_KEY_ROBOTS = "brainbrick_builds_robots_v2";
-const STORAGE_KEY_PROMPTS = "brainbrick_builds_prompts_v2";
-const STORAGE_KEY_TOOLS = "brainbrick_builds_tools_v2";
+const STORAGE_KEY_ROBOTS = "omnibrick_builds_robots_v2";
+const STORAGE_KEY_PROMPTS = "omnibrick_builds_prompts_v2";
+const STORAGE_KEY_TOOLS = "omnibrick_builds_tools_v2";
 
 export const SEED_ROBOT_BUILDS: RobotBuild[] = [
   {
@@ -256,7 +256,7 @@ export const SEED_ROBOT_BUILDS: RobotBuild[] = [
     description: "Robotic arm configuration designed for sorting colored cubes and physical object manipulation via inverse kinematics.",
     difficulty: "hard",
     category: "arm",
-    author: "Brain Brick Labs",
+    author: "OmniBrick Labs",
     version: "2.1.0",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -419,7 +419,7 @@ export const SEED_PROMPT_BUILDS: PromptBuild[] = [
     name: "Cautious Maze Explorer Logic",
     tagline: "Obstacle-avoiding wandering behavior with perimeter mapping",
     description: "System instructions that enforce safe forward exploration while actively maintaining clearance from walls and sudden hurdles.",
-    author: "Brain Brick Labs",
+    author: "OmniBrick Labs",
     version: "1.1.2",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -447,7 +447,7 @@ export const SEED_MCP_TOOL_BUILDS: MCPToolBuild[] = [
     name: "Vision Core Tools Bundle",
     tagline: "Multimodal object identification & bounding box extraction",
     description: "Standardized MCP tool definitions for camera snapshot analysis, color isolation, and distance estimation.",
-    author: "Brain Brick Labs",
+    author: "OmniBrick Labs",
     version: "2.0.0",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

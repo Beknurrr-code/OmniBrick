@@ -96,7 +96,7 @@ export default function SkillForgeModal({ isOpen, onClose }: SkillForgeModalProp
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `brain-brick-learned-skills-${Date.now()}.json`;
+    a.download = `omnibrick-learned-skills-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     soundService.playHappyFanfare();
@@ -317,7 +317,7 @@ export default function SkillForgeModal({ isOpen, onClose }: SkillForgeModalProp
         <div className="p-4 border-t border-gray-800 bg-gray-950/90 flex items-center justify-between text-xs text-gray-400 font-mono">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-cyan-400" />
-            <span>Все выученные навыки верифицированы кинематическим ядром Brain Brick</span>
+            <span>Все выученные навыки верифицированы кинематическим ядром OmniBrick</span>
           </div>
           <button
             onClick={onClose}

@@ -1,4 +1,4 @@
-// Brain Brick Kinematics & Pre-Acceleration Safety Engine
+// OmniBrick Kinematics & Pre-Acceleration Safety Engine
 // Computes safe distance, braking margins, and ramp-up throttle before motors engage
 
 export interface SafeTrajectoryResult {

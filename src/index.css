@@ -1,0 +1,286 @@
+@import "tailwindcss";
+
+@layer base {
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    background-color: #030712;
+    color: #f3f4f6;
+    overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(3, 7, 18, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+
+/* iOS & Android Safe Area Insets */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 12px);
+}
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROGRAMMER THEME SYSTEM OVERRIDES
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── 1. MINIMALIST OLED BLACK (Pure #000000 Monochrome) ─── */
+[data-theme="oled"] {
+  color-scheme: dark;
+}
+[data-theme="oled"] body,
+[data-theme="oled"] .bg-\[\#030712\],
+[data-theme="oled"] .bg-slate-950 {
+  background-color: #000000 !important;
+}
+[data-theme="oled"] .bg-slate-900,
+[data-theme="oled"] .bg-slate-900\/90,
+[data-theme="oled"] .bg-slate-900\/80,
+[data-theme="oled"] .bg-slate-900\/60,
+[data-theme="oled"] .bg-slate-900\/50,
+[data-theme="oled"] .bg-\[\#020617\] {
+  background-color: #09090b !important;
+}
+[data-theme="oled"] .bg-slate-800,
+[data-theme="oled"] .bg-slate-800\/80,
+[data-theme="oled"] .bg-slate-800\/40 {
+  background-color: #141416 !important;
+}
+[data-theme="oled"] .border-slate-800,
+[data-theme="oled"] .border-slate-800\/80,
+[data-theme="oled"] .border-slate-700,
+[data-theme="oled"] .border-slate-700\/80 {
+  border-color: #27272a !important;
+}
+[data-theme="oled"] .text-cyan-400,
+[data-theme="oled"] .text-cyan-300 {
+  color: #f4f4f5 !important;
+}
+[data-theme="oled"] .border-cyan-500\/30,
+[data-theme="oled"] .border-cyan-500\/40,
+[data-theme="oled"] .border-cyan-400 {
+  border-color: #52525b !important;
+}
+
+/* ─── 2. CLEAN PAPER WHITE (Light Mode) ─── */
+[data-theme="light"] {
+  color-scheme: light;
+}
+[data-theme="light"] body,
+[data-theme="light"] .bg-\[\#030712\],
+[data-theme="light"] .bg-slate-950,
+[data-theme="light"] .bg-slate-950\/90,
+[data-theme="light"] .bg-slate-950\/95,
+[data-theme="light"] .bg-slate-950\/80 {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+[data-theme="light"] .bg-slate-900,
+[data-theme="light"] .bg-slate-900\/90,
+[data-theme="light"] .bg-slate-900\/80,
+[data-theme="light"] .bg-slate-900\/60,
+[data-theme="light"] .bg-slate-900\/50,
+[data-theme="light"] .bg-\[\#020617\] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+[data-theme="light"] .bg-slate-800,
+[data-theme="light"] .bg-slate-800\/80,
+[data-theme="light"] .bg-slate-800\/40 {
+  background-color: #f1f5f9 !important;
+  color: #1e293b !important;
+}
+[data-theme="light"] .border-slate-800,
+[data-theme="light"] .border-slate-800\/80,
+[data-theme="light"] .border-slate-700,
+[data-theme="light"] .border-slate-700\/80 {
+  border-color: #e2e8f0 !important;
+}
+[data-theme="light"] .text-white,
+[data-theme="light"] .text-slate-100 {
+  color: #09090b !important;
+}
+[data-theme="light"] .text-slate-200,
+[data-theme="light"] .text-slate-300 {
+  color: #1e293b !important;
+}
+[data-theme="light"] .text-slate-400 {
+  color: #64748b !important;
+}
+[data-theme="light"] .text-slate-500 {
+  color: #94a3b8 !important;
+}
+[data-theme="light"] .text-cyan-400,
+[data-theme="light"] .text-cyan-300 {
+  color: #2563eb !important;
+}
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* ─── 3. HACKER MATRIX GREEN ─── */
+[data-theme="matrix"] {
+  color-scheme: dark;
+}
+[data-theme="matrix"] body,
+[data-theme="matrix"] .bg-\[\#030712\],
+[data-theme="matrix"] .bg-slate-950 {
+  background-color: #020703 !important;
+  color: #4ade80 !important;
+}
+[data-theme="matrix"] .bg-slate-900,
+[data-theme="matrix"] .bg-slate-900\/90,
+[data-theme="matrix"] .bg-slate-900\/80,
+[data-theme="matrix"] .bg-slate-900\/60,
+[data-theme="matrix"] .bg-slate-900\/50,
+[data-theme="matrix"] .bg-\[\#020617\] {
+  background-color: #041407 !important;
+}
+[data-theme="matrix"] .bg-slate-800,
+[data-theme="matrix"] .bg-slate-800\/80 {
+  background-color: #06230c !important;
+}
+[data-theme="matrix"] .border-slate-800,
+[data-theme="matrix"] .border-slate-800\/80,
+[data-theme="matrix"] .border-slate-700 {
+  border-color: #14532d !important;
+}
+[data-theme="matrix"] .text-cyan-400,
+[data-theme="matrix"] .text-cyan-300 {
+  color: #22c55e !important;
+}
+[data-theme="matrix"] .border-cyan-500\/30,
+[data-theme="matrix"] .border-cyan-400 {
+  border-color: #22c55e !important;
+}
+
+/* ─── 4. MONOKAI PRO ─── */
+[data-theme="monokai"] {
+  color-scheme: dark;
+}
+[data-theme="monokai"] body,
+[data-theme="monokai"] .bg-\[\#030712\],
+[data-theme="monokai"] .bg-slate-950 {
+  background-color: #19181a !important;
+  color: #fcfcfa !important;
+}
+[data-theme="monokai"] .bg-slate-900,
+[data-theme="monokai"] .bg-slate-900\/90,
+[data-theme="monokai"] .bg-slate-900\/80,
+[data-theme="monokai"] .bg-slate-900\/60,
+[data-theme="monokai"] .bg-slate-900\/50,
+[data-theme="monokai"] .bg-\[\#020617\] {
+  background-color: #221f22 !important;
+}
+[data-theme="monokai"] .bg-slate-800,
+[data-theme="monokai"] .bg-slate-800\/80 {
+  background-color: #2d2a2e !important;
+}
+[data-theme="monokai"] .border-slate-800,
+[data-theme="monokai"] .border-slate-800\/80,
+[data-theme="monokai"] .border-slate-700 {
+  border-color: #403e41 !important;
+}
+[data-theme="monokai"] .text-cyan-400,
+[data-theme="monokai"] .text-cyan-300 {
+  color: #ffd866 !important;
+}
+[data-theme="monokai"] .border-cyan-500\/30,
+[data-theme="monokai"] .border-cyan-400 {
+  border-color: #ffd866 !important;
+}
+
+/* ─── 5. NORDIC ARCTIC FROST ─── */
+[data-theme="nord"] {
+  color-scheme: dark;
+}
+[data-theme="nord"] body,
+[data-theme="nord"] .bg-\[\#030712\],
+[data-theme="nord"] .bg-slate-950 {
+  background-color: #242933 !important;
+  color: #eceff4 !important;
+}
+[data-theme="nord"] .bg-slate-900,
+[data-theme="nord"] .bg-slate-900\/90,
+[data-theme="nord"] .bg-slate-900\/80,
+[data-theme="nord"] .bg-slate-900\/60,
+[data-theme="nord"] .bg-slate-900\/50,
+[data-theme="nord"] .bg-\[\#020617\] {
+  background-color: #2e3440 !important;
+}
+[data-theme="nord"] .bg-slate-800,
+[data-theme="nord"] .bg-slate-800\/80 {
+  background-color: #3b4252 !important;
+}
+[data-theme="nord"] .border-slate-800,
+[data-theme="nord"] .border-slate-800\/80,
+[data-theme="nord"] .border-slate-700 {
+  border-color: #434c5e !important;
+}
+[data-theme="nord"] .text-cyan-400,
+[data-theme="nord"] .text-cyan-300 {
+  color: #88c0d0 !important;
+}
+[data-theme="nord"] .border-cyan-500\/30,
+[data-theme="nord"] .border-cyan-400 {
+  border-color: #88c0d0 !important;
+}
+
+/* ─── 6. DRACULA TWILIGHT ─── */
+[data-theme="dracula"] {
+  color-scheme: dark;
+}
+[data-theme="dracula"] body,
+[data-theme="dracula"] .bg-\[\#030712\],
+[data-theme="dracula"] .bg-slate-950 {
+  background-color: #1e1f29 !important;
+  color: #f8f8f2 !important;
+}
+[data-theme="dracula"] .bg-slate-900,
+[data-theme="dracula"] .bg-slate-900\/90,
+[data-theme="dracula"] .bg-slate-900\/80,
+[data-theme="dracula"] .bg-slate-900\/60,
+[data-theme="dracula"] .bg-slate-900\/50,
+[data-theme="dracula"] .bg-\[\#020617\] {
+  background-color: #282a36 !important;
+}
+[data-theme="dracula"] .bg-slate-800,
+[data-theme="dracula"] .bg-slate-800\/80 {
+  background-color: #343746 !important;
+}
+[data-theme="dracula"] .border-slate-800,
+[data-theme="dracula"] .border-slate-800\/80,
+[data-theme="dracula"] .border-slate-700 {
+  border-color: #44475a !important;
+}
+[data-theme="dracula"] .text-cyan-400,
+[data-theme="dracula"] .text-cyan-300 {
+  color: #bd93f9 !important;
+}
+[data-theme="dracula"] .border-cyan-500\/30,
+[data-theme="dracula"] .border-cyan-400 {
+  border-color: #bd93f9 !important;
+}

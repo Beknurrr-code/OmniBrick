@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Brain Brick</string>
+    <string name="title_activity_main">Brain Brick</string>
+    <string name="package_name">com.brainbrick.app</string>
+    <string name="custom_url_scheme">com.brainbrick.app</string>
+</resources>

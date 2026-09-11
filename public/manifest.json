@@ -1,0 +1,19 @@
+﻿{
+  "name": "Brain Brick — AI Robotics",
+  "short_name": "Brain Brick",
+  "description": "Turn your smartphone into an AI robot brain for LEGO Mindstorms 51515 and custom hardware.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#030712",
+  "theme_color": "#030712",
+  "icons": [
+    {
+      "src": "/robot-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "developer tools", "robotics"]
+}

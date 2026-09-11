@@ -6,13 +6,9 @@ const SUB_STORAGE_KEY = "omnibrick_subscription_v1";
 const PROFILE_STORAGE_KEY = "omnibrick_pilot_profile_v1";
 
 export const getRevenueCatApiKey = (): string => {
-  if (Capacitor.getPlatform() === "android") {
-    return import.meta.env.VITE_REVENUECAT_ANDROID_KEY || "goog_OmniBricksShipathon2026Key";
-  }
-  if (Capacitor.getPlatform() === "ios") {
-    return import.meta.env.VITE_REVENUECAT_IOS_KEY || "appl_OmniBricksShipathon2026Key";
-  }
-  return import.meta.env.VITE_REVENUECAT_API_KEY || "test_JYKrCLHXORsLhlcsKDMeGdSdurN";
+  return import.meta.env.VITE_REVENUECAT_API_KEY ||
+         import.meta.env.VITE_REVENUECAT_ANDROID_KEY ||
+         "test_IEtAtlxQzynZEHjHhGVpaJymjfM";
 };
 
 export const REVENUECAT_API_KEY = getRevenueCatApiKey();

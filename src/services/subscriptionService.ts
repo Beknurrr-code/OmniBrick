@@ -12,7 +12,7 @@ export const getRevenueCatApiKey = (): string => {
 };
 
 export const REVENUECAT_API_KEY = getRevenueCatApiKey();
-export const PRO_ENTITLEMENT = "OmniBrick Pro";
+export const PRO_ENTITLEMENT = "omnibrick_pro";
 export const HARDWARE_ENTITLEMENT = "hardware_unlocked";
 
 export const isProEntitlementActive = (customerInfo: any): boolean => {

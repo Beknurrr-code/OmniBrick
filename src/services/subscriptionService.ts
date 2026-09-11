@@ -16,8 +16,21 @@ export const getRevenueCatApiKey = (): string => {
 };
 
 export const REVENUECAT_API_KEY = getRevenueCatApiKey();
-export const PRO_ENTITLEMENT = "OmniBricks Pro";
+export const PRO_ENTITLEMENT = "OmniBrick Pro";
 export const HARDWARE_ENTITLEMENT = "hardware_unlocked";
+
+export const isProEntitlementActive = (customerInfo: any): boolean => {
+  if (!customerInfo?.entitlements?.active) return false;
+  const active = customerInfo.entitlements.active;
+  return !!(
+    active[PRO_ENTITLEMENT] ||
+    active["OmniBricks Pro"] ||
+    active["OmniBrick Pro"] ||
+    active["omnibrick_pro"] ||
+    active["pro"] ||
+    active["premium"]
+  );
+};
 
 export interface IAPProductPackage {
   id: string;
@@ -251,7 +264,7 @@ export class SubscriptionService {
         const { products } = await Purchases.getProducts({ productIdentifiers: [packageId] });
         if (products.length > 0) {
           const { customerInfo } = await Purchases.purchaseStoreProduct({ product: products[0] });
-          const isPro = !!customerInfo.entitlements.active[PRO_ENTITLEMENT];
+          const isPro = isProEntitlementActive(customerInfo);
           
           if (pkg.category === "subscription" || pkg.category === "lifetime") {
             this.setTier(pkg.period === "lifetime" ? "lifetime" : "pro");
@@ -344,7 +357,7 @@ export class SubscriptionService {
     if (Capacitor.isNativePlatform()) {
       try {
         const { customerInfo } = await Purchases.restorePurchases();
-        const isPro = !!customerInfo.entitlements.active[PRO_ENTITLEMENT];
+        const isPro = isProEntitlementActive(customerInfo);
         if (isPro) {
           this.setTier("pro");
           return { success: true, isPro: true };

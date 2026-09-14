@@ -109,7 +109,18 @@ export interface ConnectedMCPServer {
   permissions: string[];
 }
 
-// ─── AI Behavior & Variables (Sections 11 & 12) ───
+export interface PilotHabit {
+  id: string;
+  title: string;
+  description: string;
+  category: "habit" | "environment" | "kinematics" | "schedule" | "preference";
+  confidence: number; // 0..100%
+  active: boolean;
+  source: string;
+  createdAt: string;
+  lastTriggered?: string;
+}
+
 export interface AIPersona {
   name: string;
   tagline?: string;
@@ -118,6 +129,11 @@ export interface AIPersona {
   reasoningEffort: "fast" | "deep";
   voiceTone: "tactical" | "friendly" | "curious" | "minimal";
   temperature?: number;
+  // Adaptive Self-Learning & Memory Settings (Configured in Build, displayed in Dashboard)
+  adaptiveMemory?: boolean;
+  proactiveReminders?: boolean;
+  kinematicsSelfTuning?: boolean;
+  targetHabits?: string[];
 }
 
 export interface BuildVariable {

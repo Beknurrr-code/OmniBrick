@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { 
   Bot, 
@@ -15,12 +15,16 @@ import {
   Clock, 
   CheckCircle2, 
   Cpu,
-  Download
+  Download,
+  Brain,
+  RotateCcw,
+  Plus
 } from "lucide-react";
 import { useRobot } from "../context/RobotContext";
 import { useSubscription } from "../context/SubscriptionContext";
 import { buildStorage } from "../services/buildStorage";
-import type { LiveTranscriptEntry } from "../types";
+import { pilotMemoryService } from "../services/pilotMemoryService";
+import type { LiveTranscriptEntry, PilotHabit } from "../types";
 import PageOverviewBanner from "../components/PageOverviewBanner";
 
 export default function DashboardPage() {
@@ -28,6 +32,21 @@ export default function DashboardPage() {
   const { pilot, isPro } = useSubscription();
   const robotBuilds = buildStorage.getRobotBuilds();
   const allBuilds = buildStorage.getAllBuilds();
+
+  const [habits, setHabits] = useState<PilotHabit[]>(pilotMemoryService.getHabits());
+  const [newHabitTitle, setNewHabitTitle] = useState("");
+  const [newHabitDesc, setNewHabitDesc] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      setHabits(pilotMemoryService.getHabits());
+    };
+    window.addEventListener("omnibrick:memory_updated", handleUpdate);
+    return () => window.removeEventListener("omnibrick:memory_updated", handleUpdate);
+  }, []);
+
+  const cognitiveXP = pilotMemoryService.getCognitiveXP();
 
   const [activeTab, setActiveTab] = useState<"overview" | "logs" | "activity">("overview");
 
@@ -300,6 +319,172 @@ export default function DashboardPage() {
                 <span className="text-slate-400">Mock Arena (20Hz) / BLE</span>
               </div>
             </div>
+          </div>
+
+          {/* 🧠 COGNITIVE MEMORY & ADAPTIVE HABITS WIDGET (12 cols) */}
+          <div className="lg:col-span-12 bg-slate-900/80 p-5 md:p-6 rounded-2xl border border-purple-500/30 shadow-xl shadow-purple-500/5 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300">
+                  <Brain className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base font-bold text-white tracking-tight">
+                      Когнитивная Память и Самообучение (Adaptive Habits)
+                    </h2>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                      Level {cognitiveXP.level}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Связано с билдом: <span className="text-cyan-300 font-semibold">{activeBuild?.name || "OmniBrick Base"}</span> • Робот адаптируется под твои привычки
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowAddModal(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold shadow-sm transition-colors cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Добавить факт</span>
+                </button>
+                <button
+                  onClick={() => {
+                    if (window.confirm("Сбросить память привычек к заводским калибровкам?")) {
+                      pilotMemoryService.resetToDefaults();
+                    }
+                  }}
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700 transition-colors cursor-pointer"
+                  title="Сбросить память к базовым"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Cognitive Evolution XP Progress */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-xs font-mono">
+                <span className="text-slate-400">Когнитивный опыт (Cognitive XP)</span>
+                <span className="text-purple-300 font-bold">{cognitiveXP.xp} / {cognitiveXP.nextLevelXp} XP ({cognitiveXP.progressPercent}%)</span>
+              </div>
+              <div className="w-full h-2 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
+                <div 
+                  className="h-full bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 rounded-full transition-all duration-500"
+                  style={{ width: `${cognitiveXP.progressPercent}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Habit Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+              {habits.map((h) => (
+                <div
+                  key={h.id}
+                  className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between ${
+                    h.active 
+                      ? "bg-slate-950/80 border-purple-500/30 hover:border-purple-500/50" 
+                      : "bg-slate-950/40 border-slate-800 opacity-60"
+                  }`}
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded font-semibold ${
+                        h.category === "habit" ? "bg-cyan-500/20 text-cyan-300" :
+                        h.category === "kinematics" ? "bg-amber-500/20 text-amber-300" :
+                        h.category === "environment" ? "bg-rose-500/20 text-rose-300" :
+                        "bg-indigo-500/20 text-indigo-300"
+                      }`}>
+                        {h.category}
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-400">
+                        {h.confidence}% conf
+                      </span>
+                    </div>
+
+                    <h4 className="text-xs font-bold text-white leading-snug">{h.title}</h4>
+                    <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-3">
+                      {h.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-2 mt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-slate-500 truncate max-w-[120px]" title={h.source}>{h.source}</span>
+                    <button
+                      onClick={() => pilotMemoryService.toggleHabit(h.id)}
+                      className={`px-2 py-0.5 rounded cursor-pointer transition-colors ${
+                        h.active ? "bg-purple-500/20 text-purple-300 hover:bg-purple-500/30" : "bg-slate-800 text-slate-400 hover:bg-slate-700"
+                      }`}
+                    >
+                      {h.active ? "Активно" : "Пауза"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Add Habit Modal Form */}
+            {showAddModal && (
+              <div className="p-4 rounded-xl bg-slate-950 border border-purple-500/40 space-y-3 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                    ➕ Обучить робота новому факту или привычке
+                  </h4>
+                  <button 
+                    onClick={() => setShowAddModal(false)}
+                    className="text-slate-400 hover:text-white text-xs cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <input
+                    type="text"
+                    placeholder="Название привычки (например: Antigravity IDE)"
+                    value={newHabitTitle}
+                    onChange={(e) => setNewHabitTitle(e.target.value)}
+                    className="p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-purple-500"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Описание привычки (что робот должен делать и помнить)"
+                    value={newHabitDesc}
+                    onChange={(e) => setNewHabitDesc(e.target.value)}
+                    className="p-2.5 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-purple-500"
+                  />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => setShowAddModal(false)}
+                    className="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs hover:bg-slate-700 cursor-pointer"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!newHabitTitle.trim()) return;
+                      pilotMemoryService.addHabit({
+                        title: newHabitTitle.trim(),
+                        description: newHabitDesc.trim() || "Пользовательская привычка, заданная вручную.",
+                        category: "habit",
+                        confidence: 100,
+                        active: true,
+                        source: "Ручной ввод пилота",
+                      });
+                      setNewHabitTitle("");
+                      setNewHabitDesc("");
+                      setShowAddModal(false);
+                    }}
+                    className="px-4 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-md cursor-pointer"
+                  >
+                    Сохранить в память
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -2,6 +2,7 @@
 // Separates inviolable Core Embodied Safety from custom User Persona & Missions
 
 import type { RobotBuild, RobotTelemetry } from "../types";
+import { pilotMemoryService } from "./pilotMemoryService";
 
 export type RobotCategoryType = "rover" | "arm" | "pet" | "drone" | "security" | "assistant";
 
@@ -199,5 +200,18 @@ Role / Persona: ${userPersona}
 Mission Instructions: ${userInstructions}
 `;
 
-  return `${tier1Core}\n\n${tier2Persona}`;
+  // Tier 3: Learned Pilot Habits & Adaptive Memory (Configured in Build, Displayed in Dashboard)
+  let tier3Habits = "";
+  if (build?.ai?.adaptiveMemory !== false) {
+    const activeHabits = pilotMemoryService.getHabits().filter(h => h.active);
+    if (activeHabits.length > 0) {
+      tier3Habits = `\n=== TIER 3: PERSISTENT PILOT MEMORY & LEARNED HABITS ===
+You have an evolving long-term memory about your pilot (Beknur). You must proactively use these habits:
+${activeHabits.map(h => `- [${h.category.toUpperCase()}] ${h.title}: ${h.description} (Confidence: ${h.confidence}%)`).join("\n")}
+Always align your tone, timing (e.g. Antigravity evening sessions), and floor kinematics to these learned facts!
+`;
+    }
+  }
+
+  return `${tier1Core}\n\n${tier2Persona}\n${tier3Habits}`;
 }

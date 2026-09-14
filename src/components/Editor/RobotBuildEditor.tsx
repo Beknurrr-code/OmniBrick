@@ -441,6 +441,72 @@ export const RobotBuildEditor: React.FC<RobotBuildEditorProps> = ({
                   className="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500 leading-relaxed"
                 />
               </div>
+
+              {/* Cognitive Memory & Self-Learning Configuration */}
+              <div className="pt-3 border-t border-slate-800 space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm">🧠</span>
+                  <span className="text-xs font-bold text-white uppercase tracking-wider">
+                    Когнитивная память и Самообучение (Adaptive Memory)
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400">
+                  Позволяет роботу запоминать твои привычки (например, работу в Antigravity), обучаться на ошибках и калибровать моторы под покрытие пола.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                  <label className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-900/90 border border-slate-800 cursor-pointer hover:border-cyan-500/50 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={build.ai.adaptiveMemory !== false}
+                      onChange={(e) => {
+                        const updated = { ...build, ai: { ...build.ai, adaptiveMemory: e.target.checked } };
+                        setBuild(updated);
+                        onSave(updated);
+                      }}
+                      className="w-4 h-4 rounded text-cyan-500 focus:ring-0 cursor-pointer"
+                    />
+                    <div>
+                      <span className="text-xs font-semibold text-white block">Запоминать привычки пилота</span>
+                      <span className="text-[10px] text-slate-400">Долговременная память контекста и диалогов</span>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-900/90 border border-slate-800 cursor-pointer hover:border-cyan-500/50 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={build.ai.proactiveReminders !== false}
+                      onChange={(e) => {
+                        const updated = { ...build, ai: { ...build.ai, proactiveReminders: e.target.checked } };
+                        setBuild(updated);
+                        onSave(updated);
+                      }}
+                      className="w-4 h-4 rounded text-cyan-500 focus:ring-0 cursor-pointer"
+                    />
+                    <div>
+                      <span className="text-xs font-semibold text-white block">Проактивные напоминания</span>
+                      <span className="text-[10px] text-slate-400">Напоминать о сессиях Antigravity по вечерам</span>
+                    </div>
+                  </label>
+
+                  <label className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-900/90 border border-slate-800 cursor-pointer hover:border-cyan-500/50 transition-colors sm:col-span-2">
+                    <input
+                      type="checkbox"
+                      checked={build.ai.kinematicsSelfTuning !== false}
+                      onChange={(e) => {
+                        const updated = { ...build, ai: { ...build.ai, kinematicsSelfTuning: e.target.checked } };
+                        setBuild(updated);
+                        onSave(updated);
+                      }}
+                      className="w-4 h-4 rounded text-cyan-500 focus:ring-0 cursor-pointer"
+                    />
+                    <div>
+                      <span className="text-xs font-semibold text-white block">Самокалибровка кинематики колес</span>
+                      <span className="text-[10px] text-slate-400">Авто-подстройка мощности моторов под скользкий ламинат или ковер</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
             </div>
           )}
 

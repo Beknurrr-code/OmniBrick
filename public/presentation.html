@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniBrick — Презентация проекта | Shipaton 2026</title>
+  <title>OmniBrick — Школьный научно-технический проект по робототехнике и ИИ | Бекнур, 15 лет</title>
   <link rel="icon" type="image/svg+xml" href="/robot-icon.svg">
 
   <style>
@@ -738,7 +738,7 @@
         <span>🧱</span>
         <span>OmniBrick</span>
       </a>
-      <span class="brand-badge">Next Gen 2026</span>
+      <span class="brand-badge">Школьный проект 2026</span>
     </div>
 
     <!-- Quick Stage Navigation Pills -->
@@ -747,7 +747,7 @@
       <button class="top-stage-pill" id="pill-1" onclick="jumpToSpaceStage(1)">2. Кокпит & ИИ</button>
       <button class="top-stage-pill" id="pill-2" onclick="jumpToSpaceStage(2)">3. Робот 51515</button>
       <button class="top-stage-pill" id="pill-3" onclick="jumpToSpaceStage(3)">4. 3D Архитектура</button>
-      <button class="top-stage-pill" id="pill-4" onclick="jumpToSpaceStage(4)">5. Shipaton 2026</button>
+      <button class="top-stage-pill" id="pill-4" onclick="jumpToSpaceStage(4)">5. Результаты & Автор</button>
     </div>
 
     <div class="nav-actions">
@@ -807,7 +807,7 @@
       <button class="cockpit-tab-item active" onclick="switchCockpitTab('face')">👁️ Эмоции и Голос</button>
       <button class="cockpit-tab-item" onclick="switchCockpitTab('habits')">🧠 Память привычек и AI</button>
       <button class="cockpit-tab-item" onclick="switchCockpitTab('build')">🛠️ Build Studio (MCP)</button>
-      <button class="cockpit-tab-item" onclick="switchCockpitTab('market')">🧱 RevenueCat & Рынок</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('market')">🧩 Модули & Навыки</button>
       <button class="cockpit-tab-item" onclick="switchCockpitTab('telemetry')">📊 Live Телеметрия</button>
     </div>
 
@@ -826,26 +826,26 @@
     <button class="chip-btn" onclick="setRobotPartFocus('all')">🔄 Полный робот 360°</button>
   </div>
 
-  <!-- Stage 5 Final Pitch Overlay -->
+  <!-- Stage 5 Final School Project Summary Overlay -->
   <div class="final-stage-overlay hidden" id="finalOverlay">
     <span style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.12em; display: block; margin-bottom: 0.5rem;">
-      Shipaton 2026 • Official Next Gen Award Candidate
+      Школьный научно-технический проект • Робототехника и прикладной ИИ
     </span>
     <h2 style="font-size: clamp(2rem, 3.8vw, 3rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1rem;">
-      Готов к реальному миру.
+      Умный робот-помощник для учёбы и программирования.
     </h2>
     <p style="color: #94a3b8; max-width: 640px; margin: 0 auto 2rem auto; line-height: 1.65; font-size: 0.98rem;">
-      Создано <strong>Бекнуром (15 лет, Астана, Казахстан)</strong>. Полностью открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515. Превращает старые телефоны в мощных физических ИИ-агентов.
+      Создан <strong>Бекнуром (15 лет, г. Астана)</strong>. Проект доказывает, что современный искусственный интеллект и робототехника могут быть доступны каждому школьнику: обычный смартфон становится мозгом робота LEGO 51515, помогает в учёбе, напоминает о занятиях и открывает среду программирования Antigravity IDE.
     </p>
     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
       <a href="http://localhost:5180" target="_blank" class="btn-nav btn-nav-primary" style="padding: 0.85rem 2.2rem; font-size: 0.95rem; background: #38bdf8; color: #000; border-color: #38bdf8; font-weight: 800;">
-        🚀 Запустить веб-студию OmniBrick
+        🚀 Запустить веб-интерфейс OmniBrick
       </a>
       <button onclick="toggleTechDrawer(true); setTechDrawerStage(4);" class="btn-nav" style="padding: 0.85rem 1.8rem; font-size: 0.95rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #fff;">
-        🔬 Смотреть ТТХ & Дорожную карту
+        🔬 Паспорт проекта & Цели
       </button>
       <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-nav" style="padding: 0.85rem 1.8rem; font-size: 0.95rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff;">
-        ⭐ GitHub (MIT)
+        ⭐ Репозиторий на GitHub (MIT)
       </a>
     </div>
   </div>
@@ -865,7 +865,7 @@
       <button class="drawer-stage-pill" id="drawerPill-1" onclick="setTechDrawerStage(1)">2. Кокпит & ИИ</button>
       <button class="drawer-stage-pill" id="drawerPill-2" onclick="setTechDrawerStage(2)">3. Железо 51515</button>
       <button class="drawer-stage-pill" id="drawerPill-3" onclick="setTechDrawerStage(3)">4. Стек протоколов</button>
-      <button class="drawer-stage-pill" id="drawerPill-4" onclick="setTechDrawerStage(4)">5. Команда & Roadmap</button>
+      <button class="drawer-stage-pill" id="drawerPill-4" onclick="setTechDrawerStage(4)">5. Паспорт проекта</button>
     </div>
 
     <div class="drawer-body" id="drawerContent">
@@ -998,14 +998,14 @@
         yaw: 0.40, pitch: 0.60, zoom: 1.25, robotAlpha: 0.15, diagramAlpha: 1.0
       },
       {
-        badge: "05 // Next Gen Award Pitch",
-        title: "Готов к реальному миру.",
-        desc: "Финал: открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515. Автор — 15-летний разработчик Бекнур из Астаны.",
+        badge: "05 // Школьный инженерный проект",
+        title: "Результаты и практическая ценность.",
+        desc: "Итоги работы: автономный физический робот-помощник, объединяющий LEGO Mindstorms 51515 и искусственный интеллект смартфона. Проект открыт для школьников и образовательных кружков.",
         tags: [
-          { text: "👨‍💻 Автор: Бекнур (15 лет)", hi: true },
-          { text: "🇰🇿 Астана, Казахстан", hi: false },
-          { text: "⭐ MIT Open Source", hi: true },
-          { text: "🏆 Shipaton 2026 Ready", hi: true }
+          { text: "👨‍💻 Автор: Бекнур (15 лет, г. Астана)", hi: true },
+          { text: "🏫 Школьный проект по ИИ и робототехнике", hi: false },
+          { text: "⭐ Открытый исходный код (MIT)", hi: true },
+          { text: "💡 Готов к демонстрации в классе", hi: true }
         ],
         yaw: 0.50, pitch: 0.35, zoom: 1.10, robotAlpha: 0.8, diagramAlpha: 0.0
       }
@@ -1613,37 +1613,37 @@
       } else if (tab === 'market') {
         body.innerHTML = `
           <div style="display: flex; flex-direction: column; gap: 0.85rem; max-width: 680px; margin: 0 auto; width: 100%;">
-            <!-- RevenueCat Entitlement Banner -->
+            <!-- Educational Open Stack Banner -->
             <div style="background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(124,58,237,0.15)); border: 1px solid rgba(56,189,248,0.3); border-radius: 0.85rem; padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center;">
               <div>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
-                  <strong style="color: #38bdf8; font-size: 0.88rem;">👑 REVENUECAT ВЕРИФИЦИРОВАН: omnibrick_pro</strong>
-                  <span style="background: #10b981; color: #000; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 4px;">ACTIVE</span>
+                  <strong style="color: #38bdf8; font-size: 0.88rem;">🧩 ОБРАЗОВАТЕЛЬНЫЕ МОДУЛИ & НАВЫКИ</strong>
+                  <span style="background: #10b981; color: #000; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 4px;">FREE & OPEN</span>
                 </div>
                 <div style="font-size: 0.72rem; color: #cbd5e1; margin-top: 0.2rem;">
-                  ID: beknur_maker_astana • Квота: 250k мультимодальных токенов/день • Неограниченный BLE доступ
+                  Открытая архитектура: любой школьник может собрать и запрограммировать собственный модуль расширения.
                 </div>
               </div>
-              <span style="font-family: var(--font-mono); font-size: 1.1rem; font-weight: 900; color: #38bdf8;">$9.99/mo</span>
+              <span style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: 800; color: #34d399;">100% MIT</span>
             </div>
 
-            <!-- Marketplace Grid -->
+            <!-- Modules Grid -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; font-family: var(--font-mono);">
               <div style="background: rgba(255,255,255,0.05); padding: 0.9rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
                 <div style="color: #fbbf24; font-weight: bold; font-size: 0.82rem;">🧱 Модуль Манипулятора-клешни</div>
-                <div style="font-size: 0.72rem; color: #94a3b8; margin: 0.35rem 0;">Захват кубиков 2x4 по цвету с помощью компьютерного зрения.</div>
+                <div style="font-size: 0.72rem; color: #94a3b8; margin: 0.35rem 0;">Захват и сортировка деталей LEGO 2x4 по цветам через нейросеть телефона.</div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-                  <span style="color: #fbbf24; font-weight: bold;">350 🧱</span>
-                  <button class="chip-btn" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" onclick="playChime('click')">Установить</button>
+                  <span style="color: #34d399; font-weight: bold; font-size: 0.72rem;">LEGO 51515 + Камера</span>
+                  <button class="chip-btn" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" onclick="playChime('click')">Запустить</button>
                 </div>
               </div>
 
               <div style="background: rgba(255,255,255,0.05); padding: 0.9rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
-                <div style="color: #34d399; font-weight: bold; font-size: 0.82rem;">🛡️ Сторож квартиры (Sentry Guard)</div>
-                <div style="font-size: 0.72rem; color: #94a3b8; margin: 0.35rem 0;">Патрулирование коридора, отправка фото в Telegram при движении.</div>
+                <div style="color: #34d399; font-weight: bold; font-size: 0.82rem;">🛡️ Школьный дозор и безопасность</div>
+                <div style="font-size: 0.72rem; color: #94a3b8; margin: 0.35rem 0;">Патрулирование учебного места, обнаружение движения и звуковой сигнал.</div>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
-                  <span style="color: #34d399; font-weight: bold;">500 🧱</span>
-                  <button class="chip-btn" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" onclick="playChime('click')">Установить</button>
+                  <span style="color: #38bdf8; font-weight: bold; font-size: 0.72rem;">Сонар + Звук</span>
+                  <button class="chip-btn" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" onclick="playChime('click')">Запустить</button>
                 </div>
               </div>
             </div>
@@ -1852,20 +1852,26 @@
         `
       },
       {
-        title: "5. Команда проекта, Метрики & Roadmap 2026",
+        title: "5. Паспорт проекта, цели и практическое применение",
         html: `
-          <p><strong>Создатель проекта:</strong> Бекнур (15 лет, Астана, Казахстан). Финалист олимпиад по робототехнике, энтузиаст открытого исходного кода и агентных систем.</p>
+          <p><strong>Автор и разработчик:</strong> Бекнур (15 лет, г. Астана). Проект выполнен в рамках школьной исследовательской и инженерной деятельности по информатике и робототехнике.</p>
           <table class="drawer-table">
             <thead>
-              <tr><th>Фаза</th><th>Сроки</th><th>Ключевые результаты</th></tr>
+              <tr><th>Раздел</th><th>Описание</th></tr>
             </thead>
             <tbody>
-              <tr><td><strong>MVP</strong></td><td>Q1 2026</td><td>Web Bluetooth LWP3, интеграция Gemini 2.5 Flash, базовая подписка RevenueCat</td></tr>
-              <tr><td><strong>Релиз 2.0</strong></td><td>Q2 2026</td><td>Векторная память привычек, адаптивный ПИД-контроллер ламината, 3D витрина</td></tr>
-              <tr><td><strong>Swarm & ROS2</strong></td><td>Q3-Q4 2026</td><td>Роевое взаимодействие роботов, мост к ROS2, плата расширения на ESP32-S3</td></tr>
+              <tr><td><strong>Цель проекта</strong></td><td>Создать доступного интеллектуального робота-помощника для школьников на базе LEGO 51515 и обычного смартфона без покупки дорогостоящих промышленных контроллеров.</td></tr>
+              <tr><td><strong>Задачи проекта</strong></td><td>
+                1. Исследовать Upcycling: использование б/у смартфонов в роли бортового ИИ-компьютера.<br>
+                2. Разработать прямое управление LEGO 51515 через Web Bluetooth API (протокол LWP3).<br>
+                3. Подключить модель Google Gemini для голосового диалога и зрительного анализа предметов.<br>
+                4. Обучить робота полезным привычкам (напоминание о кодинге в Antigravity IDE в 21:00, калибровка скользкого пола).<br>
+                5. Реализовать аппаратный контур безопасности (аварийный стоп &lt;15 см за 8 мс).
+              </td></tr>
+              <tr><td><strong>Практическая польза</strong></td><td>Наглядное учебное пособие для уроков информатики, физики и кружков робототехники. Любой ученик может повторить проект дома из доступных компонентов.</td></tr>
+              <tr><td><strong>Лицензия</strong></td><td>MIT Open Source (полностью открытый код и чертежи).</td></tr>
             </tbody>
           </table>
-          <p><strong>Лицензия:</strong> MIT Open Source. Проект готов к масштабированию в школах и мейкерспейсах по всему миру!</p>
         `
       }
     ];

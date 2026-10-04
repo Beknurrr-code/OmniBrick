@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniBrick — Next-Gen AI Robot Brain | Official Presentation</title>
+  <title>OmniBrick — 3D Space Scrollytelling Presentation</title>
   <link rel="icon" type="image/svg+xml" href="/robot-icon.svg">
 
   <style>
@@ -11,28 +11,26 @@
     :root {
       --bg: #f8fafc;
       --bg-alt: #f1f5f9;
-      --bg-card: #ffffff;
-      --border: rgba(15, 23, 42, 0.1);
-      --border-bright: #0284c7;
-
+      --border: rgba(15, 23, 42, 0.12);
+      
       --text: #0f172a;
       --text-muted: #475569;
       --text-dim: #94a3b8;
 
       --cyan: #0284c7;
       --cyan-bright: #0ea5e9;
-      --cyan-soft: rgba(14, 165, 233, 0.1);
+      --cyan-soft: rgba(14, 165, 233, 0.12);
 
-      --amber: #d97706; /* Industrial LEGO Yellow */
-      --amber-soft: rgba(217, 119, 6, 0.1);
+      --amber: #d97706;
+      --amber-soft: rgba(217, 119, 6, 0.12);
 
       --emerald: #059669;
       --purple: #7c3aed;
       --crimson: #dc2626;
 
       --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.07), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      --shadow-xl: 0 20px 45px -10px rgba(15, 23, 42, 0.12);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+      --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
 
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -45,24 +43,22 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden; /* Direct 3D space scroll handling */
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
-      min-height: 100vh;
-      position: relative;
+      user-select: none;
     }
 
-    /* Ambient Subtle Grid Background */
+    /* Ambient Subtle Grid */
     .bg-grid {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
       background-image: 
         radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px),
         linear-gradient(to right, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
@@ -79,7 +75,7 @@
       height: 64px;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.85);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -115,8 +111,7 @@
       align-items: center;
       gap: 1rem;
     }
-
-    .btn-action {
+    .btn-nav {
       padding: 0.5rem 1.15rem;
       border-radius: 9999px;
       font-family: var(--font-mono);
@@ -133,354 +128,207 @@
       color: var(--text);
       box-shadow: var(--shadow-sm);
     }
-    .btn-action:hover {
+    .btn-nav:hover {
       border-color: var(--cyan);
       color: var(--cyan);
       transform: translateY(-1px);
     }
-    .btn-action-primary {
+    .btn-nav-primary {
       background: #0f172a;
       border-color: #0f172a;
       color: #fff;
     }
-    .btn-action-primary:hover {
+    .btn-nav-primary:hover {
       background: var(--cyan);
       border-color: var(--cyan);
       color: #fff;
       box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
     }
 
-    /* ─── RIGHT SIDE PROGRESS RAIL (CLICK TO JUMP) ─── */
-    .section-rail {
-      position: fixed;
-      right: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 500;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-    .rail-step {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      cursor: pointer;
-      opacity: 0.4;
-      transition: all 0.25s;
-      text-decoration: none;
-    }
-    .rail-step:hover, .rail-step.active {
-      opacity: 1;
-    }
-    .rail-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      transition: all 0.25s;
-    }
-    .rail-step.active .rail-dot {
-      width: 14px;
-      height: 14px;
-      background: var(--cyan);
-      box-shadow: 0 0 12px var(--cyan);
-    }
-    .rail-text {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--text);
-      text-transform: uppercase;
-      display: none;
-    }
-    @media (min-width: 1200px) {
-      .rail-text { display: block; }
-    }
-
-    /* ─── MAIN CONTENT SECTIONS (NATURALLY FLOWING DOWN) ─── */
-    main {
-      position: relative;
+    /* ─── FULL-SCREEN 3D SCENE CANVAS ─── */
+    #spaceCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
       z-index: 10;
-      margin-top: 64px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    section.story-stage {
-      width: 100%;
-      max-width: 1180px;
-      padding: 6rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      box-sizing: border-box;
-      position: relative;
-    }
-
-    /* Transition Connecting Bridge between Sections */
-    .transition-bridge {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2.5rem 0 1rem 0;
-    }
-    .transition-line {
-      width: 2px;
-      height: 60px;
-      background: linear-gradient(to bottom, var(--border), var(--cyan));
-      margin-bottom: 0.75rem;
-    }
-    .btn-transition {
-      padding: 0.75rem 1.6rem;
-      border-radius: 9999px;
-      background: #fff;
-      border: 1px solid var(--border);
-      color: var(--cyan);
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      font-weight: 800;
-      text-decoration: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      box-shadow: var(--shadow-md);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .btn-transition:hover {
-      background: var(--cyan);
-      color: #fff;
-      border-color: var(--cyan);
-      transform: translateY(3px);
-      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
-    }
-
-    .badge-pill {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--cyan);
-      margin-bottom: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    h1.hero-title {
-      font-size: clamp(2.5rem, 5vw, 4.2rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-      text-align: center;
-      color: var(--text);
-      margin-bottom: 1.25rem;
-    }
-
-    h2.stage-title {
-      font-size: clamp(2rem, 3.8vw, 3rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1.1;
-      text-align: center;
-      color: var(--text);
-      margin-bottom: 1rem;
-    }
-
-    p.stage-desc {
-      font-size: clamp(1rem, 1.35vw, 1.15rem);
-      line-height: 1.65;
-      text-align: center;
-      max-width: 760px;
-      color: var(--text-muted);
-      margin-bottom: 2.5rem;
-    }
-
-    /* ─── STAGE 1: 3D PHONE CARD ─── */
-    .card-3d-stage {
-      width: 100%;
-      height: 520px;
-      position: relative;
-      background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
-      border: 1px solid var(--border);
-      border-radius: 2rem;
-      box-shadow: var(--shadow-xl);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    #phoneCanvas {
-      width: 100%;
-      height: 100%;
       cursor: grab;
     }
-    #phoneCanvas:active {
+    #spaceCanvas:active {
       cursor: grabbing;
     }
 
-    .card-hint {
-      position: absolute;
-      bottom: 1.5rem;
-      left: 1.75rem;
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      color: var(--text-dim);
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(12px);
-      padding: 0.4rem 0.85rem;
-      border-radius: 9999px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: var(--shadow-sm);
-    }
-    .hint-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--cyan);
+    /* ─── FLOATING NARRATIVE HUD (TOP-LEFT) ─── */
+    .narrative-card {
+      position: fixed;
+      top: 90px;
+      left: 2.5rem;
+      max-width: 460px;
+      z-index: 30;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    /* ─── STAGE 2: INSIDE THE APPLICATION COCKPIT ─── */
-    .app-cockpit-frame {
-      width: 100%;
-      max-width: 920px;
+    .narrative-badge {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--cyan);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    h1.narrative-title {
+      font-size: clamp(2rem, 3.8vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    p.narrative-desc {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      padding: 0.9rem 1.25rem;
+      border-radius: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ─── STAGE 2: IN-APP COCKPIT SCREEN OVERLAY ─── */
+    .app-screen-frame {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(880px, 92vw);
+      max-height: 78vh;
       background: #0f172a;
       border-radius: 2.25rem;
       border: 8px solid #e2e8f0;
-      box-shadow: 0 30px 70px -15px rgba(15, 23, 42, 0.25);
+      box-shadow: 0 35px 80px -15px rgba(15, 23, 42, 0.35);
       overflow: hidden;
       color: #fff;
+      z-index: 50;
+      pointer-events: auto;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .app-screen-frame.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.65);
+    }
+    .app-screen-frame.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
     }
 
-    .cockpit-header {
+    .cockpit-top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.9rem 1.75rem;
+      padding: 0.8rem 1.5rem;
       background: rgba(255, 255, 255, 0.05);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       font-family: var(--font-mono);
       font-size: 0.75rem;
     }
 
-    .cockpit-tabs-bar {
+    .cockpit-tabs {
       display: flex;
+      background: rgba(0, 0, 0, 0.3);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(0, 0, 0, 0.25);
     }
-    .cockpit-tab-btn {
+    .cockpit-tab-item {
       flex: 1;
-      padding: 0.9rem 0.6rem;
+      padding: 0.8rem;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       border: none;
       background: transparent;
       color: #94a3b8;
       cursor: pointer;
-      transition: all 0.2s;
       text-align: center;
+      transition: all 0.2s;
     }
-    .cockpit-tab-btn:hover {
+    .cockpit-tab-item:hover {
       color: #fff;
     }
-    .cockpit-tab-btn.active {
+    .cockpit-tab-item.active {
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.12);
       border-bottom: 2px solid #38bdf8;
     }
 
-    .cockpit-viewport {
-      padding: 2.5rem;
-      min-height: 360px;
+    .cockpit-viewport-body {
+      padding: 2rem;
+      min-height: 290px;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
 
-    .robot-eyes-box {
+    .app-robot-eyes {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 3.5rem;
-      margin: 1.5rem 0;
+      margin: 1rem 0;
     }
-    .robot-eye-item {
-      width: 78px;
-      height: 104px;
+    .app-eye-unit {
+      width: 72px;
+      height: 98px;
       background: #06b6d4;
-      border-radius: 30px;
+      border-radius: 28px;
       box-shadow: 0 0 35px rgba(6, 182, 212, 0.75);
       position: relative;
       transition: all 0.2s ease;
     }
-    .robot-eye-item::after {
+    .app-eye-unit::after {
       content: '';
       position: absolute;
-      top: 15px;
-      left: 15px;
-      width: 22px;
-      height: 22px;
+      top: 14px;
+      left: 14px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.85);
     }
 
-    /* ─── STAGE 3: DETAILED PHYSICAL ROBOT CAD ─── */
-    .robot-detailed-stage {
-      width: 100%;
-      height: 620px;
-      position: relative;
-      background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
-      border: 1px solid var(--border);
-      border-radius: 2rem;
-      box-shadow: var(--shadow-xl);
-      overflow: hidden;
-    }
-    #robotCanvas {
-      width: 100%;
-      height: 100%;
-      cursor: grab;
-    }
-    #robotCanvas:active {
-      cursor: grabbing;
-    }
-
-    .robot-hud-card {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--border);
-      padding: 0.85rem 1.25rem;
-      border-radius: 1rem;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      box-shadow: var(--shadow-sm);
-      pointer-events: none;
-    }
-
-    .robot-chips-bar {
-      position: absolute;
-      bottom: 1.5rem;
-      left: 1.5rem;
+    /* ─── STAGE 3: ROBOT PART INSPECTION CHIPS ─── */
+    .robot-chips-overlay {
+      position: fixed;
+      bottom: 2rem;
+      left: 2.5rem;
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-      z-index: 10;
+      z-index: 40;
+      pointer-events: auto;
+      transition: opacity 0.3s;
     }
-    .chip {
+    .chip-btn {
       padding: 0.45rem 0.95rem;
       border-radius: 9999px;
       font-family: var(--font-mono);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
       background: #fff;
       border: 1px solid var(--border);
@@ -489,111 +337,126 @@
       box-shadow: var(--shadow-sm);
       transition: all 0.2s;
     }
-    .chip:hover, .chip.active {
+    .chip-btn:hover, .chip-btn.active {
       background: #0f172a;
       color: #fff;
       border-color: #0f172a;
     }
 
-    /* ─── STAGE 4: 3D SCHEMATIC DIAGRAM ─── */
-    .diagram-stage {
-      width: 100%;
-      height: 500px;
-      position: relative;
-      background: radial-gradient(circle at center, #ffffff 0%, #f8fafc 100%);
-      border: 1px solid var(--border);
-      border-radius: 2rem;
+    /* ─── STAGE 5: FINAL PITCH OVERLAY ─── */
+    .final-stage-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(840px, 92vw);
+      background: #0f172a;
+      border-radius: 2.25rem;
+      padding: 3.5rem 2.5rem;
+      text-align: center;
+      color: #fff;
       box-shadow: var(--shadow-xl);
-      overflow: hidden;
+      z-index: 50;
+      pointer-events: auto;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
     }
-    #diagramCanvas {
-      width: 100%;
-      height: 100%;
+    .final-stage-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.7);
+    }
+    .final-stage-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
     }
 
-    .diagram-cta-row {
-      position: absolute;
+    /* ─── BOTTOM FLOATING SCROLL WHEEL CONTROLLER HUD ─── */
+    .space-scroll-hud {
+      position: fixed;
       bottom: 1.75rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-    }
-    .btn-pulse-wave {
-      padding: 0.85rem 2rem;
+      right: 2.5rem;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
       border-radius: 9999px;
-      background: #0f172a;
-      color: #fff;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 800;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.25);
-      transition: all 0.2s;
+      padding: 0.45rem 1rem;
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-    }
-    .btn-pulse-wave:hover {
-      background: var(--cyan);
-      box-shadow: 0 6px 25px rgba(2, 132, 199, 0.4);
-      transform: translateY(-2px);
-    }
-
-    /* Technical Spec Table */
-    .tech-table-box {
-      width: 100%;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 1.5rem;
-      overflow: hidden;
+      gap: 0.85rem;
       box-shadow: var(--shadow-md);
-      margin-top: 2rem;
-    }
-    table.tech-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-    table.tech-table th, table.tech-table td {
-      padding: 1.1rem 1.5rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-    }
-    table.tech-table th {
-      background: var(--bg-alt);
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-    }
-    table.tech-table tr:last-child td {
-      border-bottom: none;
     }
 
-    /* ─── STAGE 5: NEXT GEN SUBMISSION CTA ─── */
-    .final-pitch-box {
-      width: 100%;
+    .scroll-arrow-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .scroll-arrow-btn:hover {
+      background: var(--cyan);
+      color: #fff;
+      border-color: var(--cyan);
+      transform: scale(1.08);
+    }
+
+    .stage-dots-group {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+    .stage-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .stage-dot:hover {
+      color: var(--text);
+    }
+    .stage-dot.active {
       background: #0f172a;
       color: #fff;
-      border-radius: 2.25rem;
-      padding: 4.5rem 2.5rem;
-      text-align: center;
-      box-shadow: var(--shadow-xl);
-      margin-bottom: 5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
-    .final-pitch-box h2 {
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      margin-bottom: 1rem;
+
+    .scroll-indicator-text {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      border-left: 1px solid rgba(15, 23, 42, 0.15);
+      padding-left: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
     }
-    .final-pitch-box p {
-      color: #94a3b8;
-      max-width: 640px;
-      margin: 0 auto 2.25rem auto;
-      line-height: 1.65;
+    .mouse-wheel-icon {
+      font-size: 1rem;
+      animation: wheelBounce 1.5s infinite ease-in-out;
+    }
+    @keyframes wheelBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(3px); }
     }
   </style>
 </head>
@@ -601,7 +464,7 @@
 
   <div class="bg-grid"></div>
 
-  <!-- Header Nav -->
+  <!-- Top App Navigation -->
   <header class="top-bar">
     <a href="#" class="brand-link">
       <span>🧱</span>
@@ -610,273 +473,110 @@
     </a>
 
     <div class="nav-actions">
-      <button class="btn-action" id="soundBtn" onclick="toggleAudio()" title="Sound SFX (M)">
+      <button class="btn-nav" id="soundBtn" onclick="toggleAudio()" title="Sound SFX (M)">
         <span id="soundIcon">🔊</span>
         <span>Sound</span>
       </button>
-      <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-action">
+      <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-nav">
         <span>GitHub (MIT)</span>
       </a>
-      <a href="http://localhost:5180" target="_blank" class="btn-action btn-action-primary">
+      <a href="http://localhost:5180" target="_blank" class="btn-nav btn-nav-primary">
         <span>Launch App ↗</span>
       </a>
     </div>
   </header>
 
-  <!-- Side Section Navigation Rail (Naturally Tracks Scroll) -->
-  <div class="section-rail">
-    <a href="#stage-1" class="rail-step active" id="rail-1">
-      <div class="rail-dot"></div>
-      <span class="rail-text">01 Смартфон</span>
-    </a>
-    <a href="#stage-2" class="rail-step" id="rail-2">
-      <div class="rail-dot"></div>
-      <span class="rail-text">02 Приложение</span>
-    </a>
-    <a href="#stage-3" class="rail-step" id="rail-3">
-      <div class="rail-dot"></div>
-      <span class="rail-text">03 Детальный Робот</span>
-    </a>
-    <a href="#stage-4" class="rail-step" id="rail-4">
-      <div class="rail-dot"></div>
-      <span class="rail-text">04 3D Схема</span>
-    </a>
-    <a href="#stage-5" class="rail-step" id="rail-5">
-      <div class="rail-dot"></div>
-      <span class="rail-text">05 Финал</span>
-    </a>
+  <!-- Full-Screen 3D Scene Viewport -->
+  <canvas id="spaceCanvas"></canvas>
+
+  <!-- Narrative Overlay (Top-Left) -->
+  <div class="narrative-card">
+    <span class="narrative-badge" id="hudBadge">01 // The Smartphone Brain</span>
+    <h1 class="narrative-title" id="hudTitle">Твой смартфон — мозг робота.</h1>
+    <p class="narrative-desc" id="hudDesc">
+      Вместо покупки контроллера за $400 мы используем обычный Android-телефон. Крутите колесо мыши вниз для погружения внутрь ↓
+    </p>
+  </div>
+
+  <!-- Stage 2 In-App Screen Overlay (Dives inside phone) -->
+  <div class="app-screen-frame hidden" id="appCockpit">
+    <div class="cockpit-top-bar">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+        <span style="font-weight: bold;">OMNIBRICK RUNTIME v2026</span>
+      </div>
+      <div style="display: flex; gap: 1.25rem; color: #94a3b8; font-family: var(--font-mono); font-size: 0.72rem;">
+        <span>BATTERY: 94%</span>
+        <span>SONAR: 120 cm</span>
+        <span style="color: #38bdf8;">LATENCY: 210ms</span>
+      </div>
+    </div>
+
+    <div class="cockpit-tabs">
+      <button class="cockpit-tab-item active" onclick="switchCockpitTab('face')">👁️ Эмоции и Голос</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('habits')">🧠 Память привычек</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('build')">🛠️ Build Studio</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('market')">🧱 RevenueCat</button>
+    </div>
+
+    <div class="cockpit-viewport-body" id="cockpitBody">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- Stage 3 Detailed Robot Part Inspection Chips -->
+  <div class="robot-chips-overlay" id="robotChips" style="display: none;">
+    <button class="chip-btn active" onclick="setRobotPartFocus('phone')">📱 Смартфон-голова</button>
+    <button class="chip-btn" onclick="setRobotPartFocus('hub')">🔲 Хаб LEGO 51515 (Пины и Порты)</button>
+    <button class="chip-btn" onclick="setRobotPartFocus('wheels')">⚙️ Колеса с протектором (A/B)</button>
+    <button class="chip-btn" onclick="setRobotPartFocus('sonar')">👁️ Сонар HC-SR04 (Порт C)</button>
+    <button class="chip-btn" onclick="setRobotPartFocus('all')">🔄 Полный робот 360°</button>
+  </div>
+
+  <!-- Stage 5 Final Pitch Overlay -->
+  <div class="final-stage-overlay hidden" id="finalOverlay">
+    <span style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.12em; display: block; margin-bottom: 0.5rem;">
+      Shipaton 2026 • Official Next Gen Award Candidate
+    </span>
+    <h2 style="font-size: clamp(2rem, 3.8vw, 3rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1rem;">
+      Готов к реальному миру.
+    </h2>
+    <p style="color: #94a3b8; max-width: 600px; margin: 0 auto 2rem auto; line-height: 1.65; font-size: 1rem;">
+      Создано Бекнуром (15 лет, Астана, Казахстан). Полностью открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515.
+    </p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <a href="http://localhost:5180" target="_blank" class="btn-nav btn-nav-primary" style="padding: 0.85rem 2.2rem; font-size: 0.95rem; background: #38bdf8; color: #000; border-color: #38bdf8;">
+        🚀 Запустить веб-студию OmniBrick
+      </a>
+      <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-nav" style="padding: 0.85rem 2.2rem; font-size: 0.95rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #fff;">
+        ⭐ Репозиторий на GitHub (MIT)
+      </a>
+    </div>
+  </div>
+
+  <!-- Bottom Floating 3D Space Scroll HUD Controller -->
+  <div class="space-scroll-hud">
+    <button class="scroll-arrow-btn" onclick="stepSpaceStage(-1)" title="Предыдущий этап (Вверх)">▲</button>
+    <div class="stage-dots-group">
+      <button class="stage-dot active" id="dot-0" onclick="jumpToSpaceStage(0)">1</button>
+      <button class="stage-dot" id="dot-1" onclick="jumpToSpaceStage(1)">2</button>
+      <button class="stage-dot" id="dot-2" onclick="jumpToSpaceStage(2)">3</button>
+      <button class="stage-dot" id="dot-3" onclick="jumpToSpaceStage(3)">4</button>
+      <button class="stage-dot" id="dot-4" onclick="jumpToSpaceStage(4)">5</button>
+    </div>
+    <button class="scroll-arrow-btn" onclick="stepSpaceStage(1)" title="Следующий этап (Вниз)">▼</button>
+
+    <div class="scroll-indicator-text">
+      <span class="mouse-wheel-icon">🖱️</span>
+      <span>Крутите скролл в 3D</span>
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════════════════════
-       MAIN NATURALLY FLOWING PRESENTATION TRACK
-       ══════════════════════════════════════════════════════════════════════════ -->
-  <main>
-
-    <!-- ─── STAGE 1: 3D PHONE FLOATING (THE SMARTPHONE BRAIN) ─── -->
-    <section class="story-stage" id="stage-1">
-      <span class="badge-pill">
-        <span>📱</span> 01 // The Smartphone Revolution
-      </span>
-      <h1 class="hero-title">
-        Твой смартфон — это мозг робота.
-      </h1>
-      <p class="stage-desc">
-        Вместо покупки устаревшего контроллера за $400 мы используем обычный Android-телефон из ящика стола. На экране работает живой ИИ-интерфейс OmniBrick с цифровыми глазами и 4K пространственным зрением.
-      </p>
-
-      <div class="card-3d-stage">
-        <canvas id="phoneCanvas"></canvas>
-        <div class="card-hint">
-          <span class="hint-dot"></span>
-          <span>Зажмите мышь, чтобы покрутить 3D-смартфон</span>
-        </div>
-      </div>
-
-      <!-- Transition to Stage 2 -->
-      <div class="transition-bridge">
-        <div class="transition-line"></div>
-        <a href="#stage-2" class="btn-transition">
-          <span>⚡ Погружаемся внутрь приложения</span>
-          <span>↓</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ─── STAGE 2: INSIDE THE APP (INTERACTIVE PHONE COCKPIT) ─── -->
-    <section class="story-stage" id="stage-2">
-      <span class="badge-pill">
-        <span>⚡</span> 02 // Inside The OmniBrick Application
-      </span>
-      <h2 class="stage-title">
-        Заходим внутрь приложения.
-      </h2>
-      <p class="stage-desc">
-        Мы ныряем прямо в экран смартфона. Попробуйте вкладки ниже: управляйте живыми эмоциями робота, проверяйте когнитивные привычки и смотрите маркетплейс чертежей.
-      </p>
-
-      <div class="app-cockpit-frame">
-        <!-- Top App Status Bar -->
-        <div class="cockpit-header">
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
-            <span style="font-weight: bold;">HUB 51515: CONNECTED (LWP3)</span>
-          </div>
-          <div style="display: flex; gap: 1.25rem; color: #94a3b8; font-family: var(--font-mono); font-size: 0.72rem;">
-            <span>BATTERY: 94%</span>
-            <span>SONAR: 120 cm</span>
-            <span style="color: #38bdf8;">LATENCY: 210ms</span>
-          </div>
-        </div>
-
-        <!-- In-App Navigation Tabs -->
-        <div class="cockpit-tabs-bar">
-          <button class="cockpit-tab-btn active" onclick="setCockpitTab('face')">👁️ Эмоции и Голос</button>
-          <button class="cockpit-tab-btn" onclick="setCockpitTab('habits')">🧠 Память привычек</button>
-          <button class="cockpit-tab-btn" onclick="setCockpitTab('build')">🛠️ Build Studio</button>
-          <button class="cockpit-tab-btn" onclick="setCockpitTab('market')">🧱 RevenueCat Маркетплейс</button>
-        </div>
-
-        <!-- App Screen Viewport -->
-        <div class="cockpit-viewport" id="cockpitViewport">
-          <!-- Dynamic Content Rendered by JS -->
-        </div>
-      </div>
-
-      <!-- Transition to Stage 3 -->
-      <div class="transition-bridge">
-        <div class="transition-line"></div>
-        <a href="#stage-3" class="btn-transition">
-          <span>🤖 Отдаляемся: этот телефон стоит на роботе!</span>
-          <span>↓</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ─── STAGE 3: THE HIGHLY DETAILED PHYSICAL LEGO ROBOT ─── -->
-    <section class="story-stage" id="stage-3">
-      <span class="badge-pill">
-        <span>🤖</span> 03 // The Physical Machine
-      </span>
-      <h2 class="stage-title">
-        Детализированный робот LEGO Mindstorms 51515.
-      </h2>
-      <p class="stage-desc">
-        Отдаляемся назад: этот самый работающий телефон закреплен на роботизированной базе! Рассмотрите хаб 51515, пины, резиновые колеса, провода к портам A/B и ультразвуковые глаза сонара на порту C.
-      </p>
-
-      <div class="robot-detailed-stage">
-        <canvas id="robotCanvas"></canvas>
-
-        <div class="robot-hud-card">
-          <div style="font-weight: 800; color: var(--text);">OMNIBRICK DETAILED CAD v3.0</div>
-          <div id="robotPartFocusText" style="color: var(--cyan); margin-top: 0.2rem;">FOCUS: SMARTPHONE COCKPIT HEAD</div>
-        </div>
-
-        <div class="robot-chips-bar">
-          <button class="chip active" onclick="focusRobotPart('phone')">📱 Смартфон-голова</button>
-          <button class="chip" onclick="focusRobotPart('hub')">🔲 Хаб LEGO 51515 (Пины и Порты)</button>
-          <button class="chip" onclick="focusRobotPart('wheels')">⚙️ Колеса с протектором (A/B)</button>
-          <button class="chip" onclick="focusRobotPart('sonar')">👁️ Сонар HC-SR04 (Порт C)</button>
-          <button class="chip" onclick="focusRobotPart('all')">🔄 Полный робот 360°</button>
-        </div>
-      </div>
-
-      <!-- Transition to Stage 4 -->
-      <div class="transition-bridge">
-        <div class="transition-line"></div>
-        <a href="#stage-4" class="btn-transition">
-          <span>📐 3D Схема работы архитектуры</span>
-          <span>↓</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ─── STAGE 4: 3D ARCHITECTURE DIAGRAM & MATRIX ─── -->
-    <section class="story-stage" id="stage-4">
-      <span class="badge-pill">
-        <span>📐</span> 04 // 3D Architecture Diagram
-      </span>
-      <h2 class="stage-title">
-        Схема сквозной работы системы.
-      </h2>
-      <p class="stage-desc">
-        Робот раскладывается на 3D-слои архитектуры: от захвата 4K камеры смартфона до вызова байткода LEGO LWP3 через Bluetooth без задержки речи.
-      </p>
-
-      <div class="diagram-stage">
-        <canvas id="diagramCanvas"></canvas>
-        <div class="diagram-cta-row">
-          <button class="btn-pulse-wave" onclick="triggerSignalPulse()">
-            <span>⚡ Запустить тестовый импульс (Drive +80 RPM)</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Specifications Table -->
-      <div class="tech-table-box">
-        <table class="tech-table">
-          <thead>
-            <tr>
-              <th>Слой архитектуры</th>
-              <th>Технология</th>
-              <th>Параметры</th>
-              <th>Роль в OmniBrick</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>1. Сенсорный шлем</strong></td>
-              <td>Камера телефона + Микрофон</td>
-              <td>4K Vision, 1 FPS Worker</td>
-              <td>Фоновое сканирование пространства без задержки речи</td>
-            </tr>
-            <tr>
-              <td><strong>2. Когнитивное ядро</strong></td>
-              <td>Google Gemini 2.5 Flash + Память</td>
-              <td>&lt; 240 мс отклик речи</td>
-              <td>Генерация команд, характер, юмор, привычки пилота</td>
-            </tr>
-            <tr>
-              <td><strong>3. Шина инструментов</strong></td>
-              <td>MCP (Model Context Protocol)</td>
-              <td>Typed JSON Schema</td>
-              <td>Безопасный вызов моторов, калибровка ламината</td>
-            </tr>
-            <tr>
-              <td><strong>4. Аппаратный драйвер</strong></td>
-              <td>LEGO Wireless Protocol v3 (LWP3)</td>
-              <td>UUID 0x1623, 20Hz</td>
-              <td>Прямая передача байткода на хаб 51515 без взлома</td>
-            </tr>
-            <tr>
-              <td><strong>5. Монетизация</strong></td>
-              <td>RevenueCat Purchases SDK</td>
-              <td>omnibrick_pro ($9.99/mo)</td>
-              <td>Подписки, валюта 🧱 Bricks, 70% роялти создателям</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Transition to Stage 5 -->
-      <div class="transition-bridge">
-        <div class="transition-line"></div>
-        <a href="#stage-5" class="btn-transition">
-          <span>🏆 Итоги и заявка на Next Gen Award</span>
-          <span>↓</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ─── STAGE 5: NEXT GEN SUBMISSION CTA ─── -->
-    <section class="story-stage" id="stage-5">
-      <div class="final-pitch-box">
-        <span style="font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; color: #38bdf8; letter-spacing: 0.12em; display: block; margin-bottom: 0.5rem;">
-          Shipaton 2026 • Official Next Gen Award Candidate
-        </span>
-        <h2>Готовы оживить своего робота?</h2>
-        <p>
-          Создано Бекнуром (15 лет, Астана, Казахстан). Полностью открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515.
-        </p>
-
-        <div style="display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap;">
-          <a href="http://localhost:5180" target="_blank" class="btn-action btn-action-primary" style="padding: 0.95rem 2.4rem; font-size: 0.95rem; background: #38bdf8; color: #000; border-color: #38bdf8;">
-            🚀 Запустить веб-студию OmniBrick
-          </a>
-          <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-action" style="padding: 0.95rem 2.4rem; font-size: 0.95rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #fff;">
-            ⭐ Репозиторий на GitHub (MIT)
-          </a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ══════════════════════════════════════════════════════════════════════════
-       CLIENT JAVASCRIPT: 3D RENDERERS & ACTIVE RAIL TRACKER
+       CLIENT 3D SPACE SCROLL ENGINE (INSTANT & SILKY SMOOTH)
        ══════════════════════════════════════════════════════════════════════════ -->
   <script>
-    // ─── AUDIO SYNTHESIZER ───
+    // ─── AUDIO ENGINE ───
     let audioCtx = null;
     let audioEnabled = true;
 
@@ -909,564 +609,482 @@
       if (audioEnabled) playTone(780, 'sine', 0.1);
     }
 
-    // ─── ACTIVE RAIL TRACKER ON SCROLL ───
-    window.addEventListener('scroll', () => {
-      const scrollPos = window.scrollY + window.innerHeight * 0.35;
-      for (let i = 1; i <= 5; i++) {
-        const section = document.getElementById(`stage-${i}`);
-        const rail = document.getElementById(`rail-${i}`);
-        if (section && rail) {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-          if (scrollPos >= top && scrollPos < top + height) {
-            document.querySelectorAll('.rail-step').forEach(r => r.classList.remove('active'));
-            rail.classList.add('active');
-          }
-        }
+    // ─── THE 5 STAGES OF 3D SPACE ───
+    const stages = [
+      {
+        badge: "01 // The Smartphone Brain",
+        title: "Твой смартфон — мозг робота.",
+        desc: "Вместо покупки контроллера за $400 мы используем обычный Android-телефон. Крутите колесо мыши вниз для погружения внутрь ↓",
+        yaw: 0.35, pitch: 0.25, zoom: 1.15, robotAlpha: 0.0, diagramAlpha: 0.0
+      },
+      {
+        badge: "02 // Inside The App Cockpit",
+        title: "Заходим внутрь приложения.",
+        desc: "Камера плавно нырнула в экран смартфона! Здесь пилот общается с роботом, настраивает промпты и видит статус сенсоров. Крутите дальше ↓",
+        yaw: 0.0, pitch: 0.0, zoom: 3.2, robotAlpha: 0.0, diagramAlpha: 0.0
+      },
+      {
+        badge: "03 // The Physical Robot",
+        title: "Детализированный робот LEGO 51515.",
+        desc: "Отдаляемся назад: этот телефон закреплен в изголовье роботизированной базы! Рассмотрите хаб 51515, пины, колеса A/B и сонар C. Крутите дальше ↓",
+        yaw: 0.55, pitch: 0.45, zoom: 1.15, robotAlpha: 1.0, diagramAlpha: 0.0
+      },
+      {
+        badge: "04 // 3D Architecture Diagram",
+        title: "Схема сквозной работы системы.",
+        desc: "Робот раскладывается на 3D-слои архитектуры: от захвата 4K камеры смартфона до вызова байткода LEGO LWP3 по Bluetooth. Крутите к финалу ↓",
+        yaw: 0.40, pitch: 0.60, zoom: 1.25, robotAlpha: 0.15, diagramAlpha: 1.0
+      },
+      {
+        badge: "05 // Next Gen Award Pitch",
+        title: "Готов к реальному миру.",
+        desc: "Финал: открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515.",
+        yaw: 0.50, pitch: 0.35, zoom: 1.10, robotAlpha: 0.8, diagramAlpha: 0.0
+      }
+    ];
+
+    // Smooth Kinetic Scroll Variables
+    let currentProgress = 0.0; // 0.0 to 4.0
+    let targetProgress = 0.0;
+    let currentStageIndex = 0;
+
+    // Interactive Drag Orbit
+    let manualYaw = 0;
+    let manualPitch = 0;
+    let isDragging = false;
+    let dragStart = { x: 0, y: 0 };
+    let robotFocus = 'phone';
+    let pulseCycle = 0;
+
+    // Canvas Setup
+    const canvas = document.getElementById('spaceCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // ─── INSTANT MOUSE WHEEL SCROLL IN 3D SPACE (DIRECT & SILKY) ───
+    window.addEventListener('wheel', (e) => {
+      // Direct wheel delta: 1 wheel notch moves camera smoothly
+      const speed = 0.0025;
+      const delta = Math.sign(e.deltaY) * Math.min(0.4, Math.abs(e.deltaY) * speed);
+      targetProgress = Math.max(0, Math.min(4.0, targetProgress + delta));
+    }, { passive: true });
+
+    // Touch swipe for Mobile
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    window.addEventListener('touchmove', (e) => {
+      const dy = touchStartY - e.touches[0].clientY;
+      targetProgress = Math.max(0, Math.min(4.0, targetProgress + dy * 0.004));
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    // Pointer Orbit Drag
+    canvas.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      dragStart = { x: e.clientX, y: e.clientY };
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStart.x;
+      const dy = e.clientY - dragStart.y;
+      manualYaw -= dx * 0.007;
+      manualPitch = Math.max(-0.5, Math.min(0.5, manualPitch - dy * 0.007));
+      dragStart = { x: e.clientX, y: e.clientY };
+    });
+    window.addEventListener('pointerup', () => { isDragging = false; });
+
+    // Keyboard support
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'Space') {
+        stepSpaceStage(1);
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        stepSpaceStage(-1);
       }
     });
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // 1. STAGE 1: 3D SMARTPHONE CANVAS
-    // ══════════════════════════════════════════════════════════════════════════
-    let phoneYaw = 0.35;
-    let phonePitch = 0.25;
-    let isPhoneDragging = false;
-    let phoneDragLast = { x: 0, y: 0 };
+    function jumpToSpaceStage(idx) {
+      targetProgress = idx;
+      playTone(520 + idx * 60, 'sine', 0.06);
+    }
 
-    function initPhoneCanvas() {
-      const cvs = document.getElementById('phoneCanvas');
-      if (!cvs) return;
-      const ctx = cvs.getContext('2d');
+    function stepSpaceStage(dir) {
+      const nextIdx = Math.max(0, Math.min(4, Math.round(targetProgress + dir)));
+      jumpToSpaceStage(nextIdx);
+    }
 
-      const resize = () => {
-        cvs.width = cvs.parentElement.clientWidth;
-        cvs.height = cvs.parentElement.clientHeight;
+    // ─── 3D PROJECTION MATH ───
+    function getCameraState() {
+      const p = Math.max(0, Math.min(4, currentProgress));
+      const idxA = Math.floor(p);
+      const idxB = Math.min(4, idxA + 1);
+      const fraction = p - idxA;
+      const ease = fraction * fraction * (3 - 2 * fraction); // smoothstep
+
+      const a = stages[idxA];
+      const b = stages[idxB];
+
+      return {
+        yaw: a.yaw + (b.yaw - a.yaw) * ease + manualYaw,
+        pitch: a.pitch + (b.pitch - a.pitch) * ease + manualPitch,
+        zoom: a.zoom + (b.zoom - a.zoom) * ease,
+        robotAlpha: a.robotAlpha + (b.robotAlpha - a.robotAlpha) * ease,
+        diagramAlpha: a.diagramAlpha + (b.diagramAlpha - a.diagramAlpha) * ease
       };
-      resize();
-      window.addEventListener('resize', resize);
+    }
 
-      cvs.addEventListener('pointerdown', (e) => {
-        isPhoneDragging = true;
-        phoneDragLast = { x: e.clientX, y: e.clientY };
-      });
-      window.addEventListener('pointermove', (e) => {
-        if (!isPhoneDragging) return;
-        const dx = e.clientX - phoneDragLast.x;
-        const dy = e.clientY - phoneDragLast.y;
-        phoneYaw -= dx * 0.008;
-        phonePitch = Math.max(-0.6, Math.min(0.6, phonePitch - dy * 0.008));
-        phoneDragLast = { x: e.clientX, y: e.clientY };
-      });
-      window.addEventListener('pointerup', () => { isPhoneDragging = false; });
+    function project3D(pt, cam) {
+      const cx = pt.x;
+      const cy = pt.y;
+      const cz = pt.z;
 
-      function renderPhone() {
-        const w = cvs.width;
-        const h = cvs.height;
-        ctx.clearRect(0, 0, w, h);
+      const cosY = Math.cos(cam.yaw), sinY = Math.sin(cam.yaw);
+      const x1 = cx * cosY - cz * sinY;
+      const z1 = cx * sinY + cz * cosY;
 
-        if (!isPhoneDragging) {
-          phoneYaw += 0.004; // subtle idle rotation
-        }
+      const cosP = Math.cos(cam.pitch), sinP = Math.sin(cam.pitch);
+      const y2 = cy * cosP - z1 * sinP;
+      const z2 = cy * sinP + z1 * cosP;
 
-        function proj(p) {
-          const cosY = Math.cos(phoneYaw), sinY = Math.sin(phoneYaw);
-          const x1 = p.x * cosY - p.z * sinY;
-          const z1 = p.x * sinY + p.z * cosY;
+      const dist = 600 / cam.zoom;
+      const scale = 540 / (z2 + dist);
+      return { x: canvas.width / 2 + x1 * scale, y: canvas.height / 2 - y2 * scale, scale, z: z2 };
+    }
 
-          const cosP = Math.cos(phonePitch), sinP = Math.sin(phonePitch);
-          const y2 = p.y * cosP - z1 * sinP;
-          const z2 = p.y * sinP + z1 * cosP;
+    function drawBox(center, size, stroke, fill, cam, alpha = 1.0) {
+      if (alpha <= 0.01) return;
+      const hx = size.x / 2, hy = size.y / 2, hz = size.z / 2;
+      const v = [
+        project3D({ x: center.x - hx, y: center.y - hy, z: center.z - hz }, cam),
+        project3D({ x: center.x + hx, y: center.y - hy, z: center.z - hz }, cam),
+        project3D({ x: center.x + hx, y: center.y + hy, z: center.z - hz }, cam),
+        project3D({ x: center.x - hx, y: center.y + hy, z: center.z - hz }, cam),
+        project3D({ x: center.x - hx, y: center.y - hy, z: center.z + hz }, cam),
+        project3D({ x: center.x + hx, y: center.y - hy, z: center.z + hz }, cam),
+        project3D({ x: center.x + hx, y: center.y + hy, z: center.z + hz }, cam),
+        project3D({ x: center.x - hx, y: center.y + hy, z: center.z + hz }, cam),
+      ];
 
-          const dist = 500;
-          const scale = 540 / (z2 + dist);
-          return { x: w / 2 + x1 * scale, y: h / 2 - y2 * scale, scale, z: z2 };
-        }
-
-        // Phone Dimensions
-        const pw = 120, ph = 210, pd = 14;
-        const vertices = [
-          { x: -pw/2, y: -ph/2, z: -pd/2 },
-          { x: pw/2, y: -ph/2, z: -pd/2 },
-          { x: pw/2, y: ph/2, z: -pd/2 },
-          { x: -pw/2, y: ph/2, z: -pd/2 },
-          { x: -pw/2, y: -ph/2, z: pd/2 },
-          { x: pw/2, y: -ph/2, z: pd/2 },
-          { x: pw/2, y: ph/2, z: pd/2 },
-          { x: -pw/2, y: ph/2, z: pd/2 },
-        ].map(proj);
-
-        // Ground shadow
-        const shadow = proj({ x: 0, y: -130, z: 0 });
-        const sGrad = ctx.createRadialGradient(shadow.x, shadow.y, 5, shadow.x, shadow.y, 140 * shadow.scale);
-        sGrad.addColorStop(0, 'rgba(15, 23, 42, 0.16)');
-        sGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = sGrad;
+      function poly(pts) {
         ctx.beginPath();
-        ctx.arc(shadow.x, shadow.y, 140 * shadow.scale, 0, Math.PI * 2);
-        ctx.fill();
-
-        function drawFace(indices, color, stroke = '#94a3b8') {
-          ctx.beginPath();
-          ctx.moveTo(vertices[indices[0]].x, vertices[indices[0]].y);
-          for (let i = 1; i < indices.length; i++) {
-            ctx.lineTo(vertices[indices[i]].x, vertices[indices[i]].y);
-          }
-          ctx.closePath();
-          ctx.fillStyle = color;
+        ctx.moveTo(v[pts[0]].x, v[pts[0]].y);
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(v[pts[i]].x, v[pts[i]].y);
+        ctx.closePath();
+        if (fill) {
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = fill;
           ctx.fill();
+          ctx.restore();
+        }
+        if (stroke) {
+          ctx.save();
+          ctx.globalAlpha = alpha;
           ctx.strokeStyle = stroke;
           ctx.lineWidth = 1.2;
           ctx.stroke();
+          ctx.restore();
         }
-
-        drawFace([0,1,2,3], '#cbd5e1'); // back
-        drawFace([0,4,7,3], '#94a3b8'); // left
-        drawFace([1,5,6,2], '#94a3b8'); // right
-        drawFace([3,2,6,7], '#64748b'); // top
-        drawFace([0,1,5,4], '#64748b'); // bottom
-        drawFace([4,5,6,7], '#0f172a', '#0284c7'); // front screen
-
-        // Glowing Robot Eyes on Screen
-        const eyeL = proj({ x: -28, y: 15, z: pd/2 + 1 });
-        const eyeR = proj({ x: 28, y: 15, z: pd/2 + 1 });
-        if (eyeL.z > -100) {
-          ctx.fillStyle = '#06b6d4';
-          ctx.shadowColor = '#06b6d4';
-          ctx.shadowBlur = 12;
-
-          ctx.beginPath();
-          ctx.arc(eyeL.x, eyeL.y, 14 * eyeL.scale, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.beginPath();
-          ctx.arc(eyeR.x, eyeR.y, 14 * eyeR.scale, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.shadowBlur = 0;
-        }
-
-        requestAnimationFrame(renderPhone);
       }
-      renderPhone();
+
+      poly([4,5,6,7]);
+      poly([3,2,6,7]);
+      poly([1,5,6,2]);
+      poly([0,4,7,3]);
+      poly([0,1,2,3]);
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // 2. STAGE 2: IN-APP COCKPIT TABS
-    // ══════════════════════════════════════════════════════════════════════════
-    function setCockpitTab(tab) {
-      document.querySelectorAll('.cockpit-tab-btn').forEach(b => b.classList.remove('active'));
-      const activeBtn = Array.from(document.querySelectorAll('.cockpit-tab-btn')).find(b => b.onclick.toString().includes(tab));
-      if (activeBtn) activeBtn.classList.add('active');
+    // ─── MAIN 60 FPS ANIMATION & RENDER LOOP ───
+    function renderLoop() {
+      // 1. Smooth Dampened Progress
+      currentProgress += (targetProgress - currentProgress) * 0.12;
 
-      playTone(640, 'sine', 0.06);
-      const viewport = document.getElementById('cockpitViewport');
-
-      if (tab === 'face') {
-        viewport.innerHTML = `
-          <div style="text-align: center;">
-            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8;">
-              STATUS: TRACKING PILOT • LATENCY &lt; 210 MS
-            </div>
-            <div class="robot-eyes-box">
-              <div class="robot-eye-item" id="cEyeL"></div>
-              <div class="robot-eye-item" id="cEyeR"></div>
-            </div>
-            <div style="background: rgba(255,255,255,0.06); padding: 0.9rem 1.25rem; border-radius: 0.85rem; max-width: 520px; margin: 0 auto; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5;">
-              «Бекнур, я вижу красную деталь LEGO на 35 см. Выполняю объезд по дуге 45° на пониженной мощности моторов.»
-            </div>
-            <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.25rem;">
-              <button class="chip active" onclick="changeEyeColor('#06b6d4', 'FOCUS')">Cyan Focus</button>
-              <button class="chip" onclick="changeEyeColor('#a855f7', 'ANTIGRAVITY 21:00')">Purple Habit</button>
-              <button class="chip" onclick="changeEyeColor('#ef4444', 'ALERT 25CM')">Red Watchdog</button>
-            </div>
-          </div>
-        `;
-      } else if (tab === 'habits') {
-        viewport.innerHTML = `
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div style="background: rgba(255,255,255,0.05); padding: 1rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <strong style="color: #c084fc;">💻 Вечерний кодинг в Antigravity IDE (21:00)</strong>
-                <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;">Проактивное напоминание пилоту, авто-открытие проекта</div>
-              </div>
-              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.25rem 0.5rem; border-radius: 4px;">ACTIVE</span>
-            </div>
-
-            <div style="background: rgba(255,255,255,0.05); padding: 1rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <strong style="color: #38bdf8;">📐 Калибровка ламината (Скольжение)</strong>
-                <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;">Ограничение крутящего момента моторов на -15%</div>
-              </div>
-              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.25rem 0.5rem; border-radius: 4px;">CALIBRATED</span>
-            </div>
-
-            <div style="background: rgba(255,255,255,0.05); padding: 1rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <strong style="color: #f87171;">🛡️ Сторож препятствий HC-SR04 (25 см)</strong>
-                <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem;">Аппаратный E-Stop тормоз моторов без задержки ИИ</div>
-              </div>
-              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; background: rgba(56,189,248,0.15); padding: 0.25rem 0.5rem; border-radius: 4px;">ARMED</span>
-            </div>
-          </div>
-        `;
-      } else if (tab === 'build') {
-        viewport.innerHTML = `
-          <div style="font-family: var(--font-mono); font-size: 0.78rem;">
-            <div style="color: #fbbf24; margin-bottom: 0.5rem; font-weight: bold;">[BUILD STUDIO // AI PERSONA & MCP TOOLS]:</div>
-            <div style="background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; color: #cbd5e1;">
-              <span style="color: #38bdf8;">role</span>: "Autonomous Assistant & Companion"<br>
-              <span style="color: #38bdf8;">vision_fps</span>: 1.0 (Async Background Thread)<br>
-              <span style="color: #38bdf8;">voice_tts</span>: "Sub-240ms Direct Synthesis"<br>
-              <span style="color: #38bdf8;">mcp_tools</span>: [<br>
-              &nbsp;&nbsp;"drive_differential(speed_rpm, angle)",<br>
-              &nbsp;&nbsp;"set_robot_eyes(mood, color)",<br>
-              &nbsp;&nbsp;"read_sonar_distance_cm()"<br>
-              ]
-            </div>
-          </div>
-        `;
-      } else if (tab === 'market') {
-        viewport.innerHTML = `
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-family: var(--font-mono);">
-            <div style="background: rgba(255,255,255,0.05); padding: 1.25rem; border-radius: 0.85rem; border: 1px solid rgba(56,189,248,0.3);">
-              <div style="color: #38bdf8; font-weight: bold; font-size: 0.85rem;">👑 Neural Nexus PRO</div>
-              <div style="font-size: 1.3rem; font-weight: 900; margin: 0.5rem 0; color: #fff;">$9.99 <span style="font-size: 0.75rem; color: #94a3b8;">/ мес</span></div>
-              <div style="font-size: 0.72rem; color: #94a3b8;">Gemini 2.5 Flash, 3D Арена, Entitlement: omnibrick_pro</div>
-            </div>
-
-            <div style="background: rgba(255,255,255,0.05); padding: 1.25rem; border-radius: 0.85rem; border: 1px solid rgba(245,158,11,0.3);">
-              <div style="color: #fbbf24; font-weight: bold; font-size: 0.85rem;">🧱 Маркетплейс чертежей</div>
-              <div style="font-size: 1.3rem; font-weight: 900; margin: 0.5rem 0; color: #fff;">500 – 5000 🧱</div>
-              <div style="font-size: 0.72rem; color: #94a3b8;">Покупка проверенных роботов. 70% роялти авторам!</div>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    function changeEyeColor(color, mood) {
-      playTone(880, 'sine', 0.08);
-      const l = document.getElementById('cEyeL');
-      const r = document.getElementById('cEyeR');
-      if (l && r) {
-        l.style.background = color;
-        r.style.background = color;
-        l.style.boxShadow = `0 0 35px ${color}`;
-        r.style.boxShadow = `0 0 35px ${color}`;
-      }
-    }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    // 3. STAGE 3: DETAILED LEGO ROBOT CAD CANVAS
-    // ══════════════════════════════════════════════════════════════════════════
-    let robotYaw = 0.5;
-    let robotPitch = 0.45;
-    let robotZoom = 1.15;
-    let isRobotDragging = false;
-    let robotDragLast = { x: 0, y: 0 };
-    let robotFocus = 'phone';
-
-    function initRobotCanvas() {
-      const cvs = document.getElementById('robotCanvas');
-      if (!cvs) return;
-      const ctx = cvs.getContext('2d');
-
-      const resize = () => {
-        cvs.width = cvs.parentElement.clientWidth;
-        cvs.height = cvs.parentElement.clientHeight;
-      };
-      resize();
-      window.addEventListener('resize', resize);
-
-      cvs.addEventListener('pointerdown', (e) => {
-        isRobotDragging = true;
-        robotDragLast = { x: e.clientX, y: e.clientY };
-      });
-      window.addEventListener('pointermove', (e) => {
-        if (!isRobotDragging) return;
-        const dx = e.clientX - robotDragLast.x;
-        const dy = e.clientY - robotDragLast.y;
-        robotYaw -= dx * 0.007;
-        robotPitch = Math.max(0.1, Math.min(1.3, robotPitch - dy * 0.007));
-        robotDragLast = { x: e.clientX, y: e.clientY };
-      });
-      window.addEventListener('pointerup', () => { isRobotDragging = false; });
-
-      function project3D(p) {
-        const cx = p.x;
-        const cy = p.y;
-        const cz = p.z;
-
-        const cosY = Math.cos(robotYaw), sinY = Math.sin(robotYaw);
-        const x1 = cx * cosY - cz * sinY;
-        const z1 = cx * sinY + cz * cosY;
-
-        const cosP = Math.cos(robotPitch), sinP = Math.sin(robotPitch);
-        const y2 = cy * cosP - z1 * sinP;
-        const z2 = cy * sinP + z1 * cosP;
-
-        const dist = 600 / robotZoom;
-        const scale = 540 / (z2 + dist);
-        return { x: cvs.width / 2 + x1 * scale, y: cvs.height / 2 - y2 * scale, scale, z: z2 };
+      // Update Active Stage Index
+      const activeIdx = Math.min(4, Math.max(0, Math.round(currentProgress)));
+      if (activeIdx !== currentStageIndex) {
+        currentStageIndex = activeIdx;
+        playTone(480 + currentStageIndex * 50, 'sine', 0.04);
       }
 
-      function drawBox(center, size, stroke, fill, lineWidth = 1.2) {
-        const hx = size.x / 2, hy = size.y / 2, hz = size.z / 2;
-        const v = [
-          project3D({ x: center.x - hx, y: center.y - hy, z: center.z - hz }),
-          project3D({ x: center.x + hx, y: center.y - hy, z: center.z - hz }),
-          project3D({ x: center.x + hx, y: center.y + hy, z: center.z - hz }),
-          project3D({ x: center.x - hx, y: center.y + hy, z: center.z - hz }),
-          project3D({ x: center.x - hx, y: center.y - hy, z: center.z + hz }),
-          project3D({ x: center.x + hx, y: center.y - hy, z: center.z + hz }),
-          project3D({ x: center.x + hx, y: center.y + hy, z: center.z + hz }),
-          project3D({ x: center.x - hx, y: center.y + hy, z: center.z + hz }),
-        ];
+      // Update Narrative Card
+      const st = stages[currentStageIndex];
+      document.getElementById('hudBadge').innerText = st.badge;
+      document.getElementById('hudTitle').innerText = st.title;
+      document.getElementById('hudDesc').innerText = st.desc;
 
-        function poly(pts) {
-          ctx.beginPath();
-          ctx.moveTo(v[pts[0]].x, v[pts[0]].y);
-          for (let i = 1; i < pts.length; i++) ctx.lineTo(v[pts[i]].x, v[pts[i]].y);
-          ctx.closePath();
-          if (fill) { ctx.fillStyle = fill; ctx.fill(); }
-          if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lineWidth; ctx.stroke(); }
-        }
-
-        poly([4,5,6,7]);
-        poly([3,2,6,7]);
-        poly([1,5,6,2]);
-        poly([0,4,7,3]);
-        poly([0,1,2,3]);
+      // Update Navigation Dots
+      for (let i = 0; i <= 4; i++) {
+        const dot = document.getElementById(`dot-${i}`);
+        if (dot) dot.classList.toggle('active', i === currentStageIndex);
       }
 
-      function renderDetailedRobot() {
-        const w = cvs.width;
-        const h = cvs.height;
-        ctx.clearRect(0, 0, w, h);
+      // 2. Toggle HTML Overlays based on 3D Space Progress
+      // Stage 2: In-App Cockpit
+      const cockpit = document.getElementById('appCockpit');
+      if (Math.abs(currentProgress - 1.0) < 0.45) {
+        cockpit.classList.remove('hidden');
+        cockpit.classList.add('visible');
+      } else {
+        cockpit.classList.remove('visible');
+        cockpit.classList.add('hidden');
+      }
 
-        if (!isRobotDragging) {
-          robotYaw += 0.002;
-        }
+      // Stage 3: Robot Part Chips
+      const chips = document.getElementById('robotChips');
+      chips.style.display = (Math.abs(currentProgress - 2.0) < 0.5) ? 'flex' : 'none';
 
-        // Ground Ambient Shadow
-        const gShadow = project3D({ x: 0, y: -75, z: 0 });
-        const sGrad = ctx.createRadialGradient(gShadow.x, gShadow.y, 10, gShadow.x, gShadow.y, 170 * gShadow.scale);
-        sGrad.addColorStop(0, 'rgba(15, 23, 42, 0.15)');
-        sGrad.addColorStop(1, 'transparent');
-        ctx.fillStyle = sGrad;
-        ctx.beginPath();
-        ctx.arc(gShadow.x, gShadow.y, 170 * gShadow.scale, 0, Math.PI * 2);
-        ctx.fill();
+      // Stage 5: Final Pitch Overlay
+      const finalCard = document.getElementById('finalOverlay');
+      if (currentProgress >= 3.6) {
+        finalCard.classList.remove('hidden');
+        finalCard.classList.add('visible');
+      } else {
+        finalCard.classList.remove('visible');
+        finalCard.classList.add('hidden');
+      }
 
-        // 1. Technic Chassis Frame
-        drawBox({ x: 0, y: -45, z: 0 }, { x: 80, y: 12, z: 130 }, '#334155', '#e2e8f0');
+      // 3. Clear and Render 3D Canvas
+      const cam = getCameraState();
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
 
-        // 2. LEGO Mindstorms 51515 Central Hub
+      if (!isDragging) {
+        manualYaw *= 0.95;
+        manualPitch *= 0.95;
+      }
+
+      // Ground Ambient Shadow
+      const shadow = project3D({ x: 0, y: -80, z: 0 }, cam);
+      const sGrad = ctx.createRadialGradient(shadow.x, shadow.y, 5, shadow.x, shadow.y, 160 * shadow.scale);
+      sGrad.addColorStop(0, 'rgba(15, 23, 42, 0.14)');
+      sGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = sGrad;
+      ctx.beginPath();
+      ctx.arc(shadow.x, shadow.y, 160 * shadow.scale, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 4. DETAILED PHYSICAL LEGO ROBOT (VISIBLE IN STAGES 3, 4, 5)
+      const rAlpha = cam.robotAlpha;
+      if (rAlpha > 0.01) {
+        // LEGO Mindstorms 51515 Central Hub Body
         const hubStroke = robotFocus === 'hub' ? '#7c3aed' : '#0284c7';
-        drawBox({ x: 0, y: -22, z: 0 }, { x: 96, y: 35, z: 125 }, hubStroke, '#ffffff');
+        drawBox({ x: 0, y: -24, z: 0 }, { x: 96, y: 35, z: 125 }, hubStroke, '#ffffff', cam, rAlpha);
 
-        // Round Studs on top of Hub
-        ctx.fillStyle = '#f1f5f9';
-        ctx.strokeStyle = '#cbd5e1';
+        // LEGO Round Studs on Hub Top
         for (let sx = -35; sx <= 35; sx += 24) {
           for (let sz = -45; sz <= 45; sz += 24) {
-            const studPos = project3D({ x: sx, y: -4, z: sz });
+            const studPos = project3D({ x: sx, y: -6, z: sz }, cam);
+            ctx.save();
+            ctx.globalAlpha = rAlpha;
+            ctx.fillStyle = '#f1f5f9';
+            ctx.strokeStyle = '#cbd5e1';
             ctx.beginPath();
             ctx.arc(studPos.x, studPos.y, 5 * studPos.scale, 0, Math.PI * 2);
             ctx.fill();
             ctx.stroke();
+            ctx.restore();
           }
         }
 
         // 5x5 LED Matrix Display
-        const ledCenter = project3D({ x: 0, y: -3, z: 0 });
+        const led = project3D({ x: 0, y: -5, z: 0 }, cam);
+        ctx.save();
+        ctx.globalAlpha = rAlpha;
         ctx.fillStyle = '#06b6d4';
         ctx.beginPath();
-        ctx.arc(ledCenter.x, ledCenter.y, 10 * ledCenter.scale, 0, Math.PI * 2);
+        ctx.arc(led.x, led.y, 10 * led.scale, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
 
-        // 3. Left Wheel & Motor (Port A)
+        // Left Wheel & Motor (Port A)
         const wheelStroke = robotFocus === 'wheels' ? '#059669' : '#1e293b';
-        drawBox({ x: -66, y: -40, z: 20 }, { x: 18, y: 64, z: 64 }, wheelStroke, '#1e293b');
-        drawBox({ x: -66, y: -40, z: 20 }, { x: 20, y: 28, z: 28 }, '#d97706', '#fbbf24');
+        drawBox({ x: -66, y: -40, z: 20 }, { x: 18, y: 64, z: 64 }, wheelStroke, '#1e293b', cam, rAlpha);
+        drawBox({ x: -66, y: -40, z: 20 }, { x: 20, y: 28, z: 28 }, '#d97706', '#fbbf24', cam, rAlpha);
 
         // Right Wheel & Motor (Port B)
-        drawBox({ x: 66, y: -40, z: 20 }, { x: 18, y: 64, z: 64 }, wheelStroke, '#1e293b');
-        drawBox({ x: 66, y: -40, z: 20 }, { x: 20, y: 28, z: 28 }, '#d97706', '#fbbf24');
+        drawBox({ x: 66, y: -40, z: 20 }, { x: 18, y: 64, z: 64 }, wheelStroke, '#1e293b', cam, rAlpha);
+        drawBox({ x: 66, y: -40, z: 20 }, { x: 20, y: 28, z: 28 }, '#d97706', '#fbbf24', cam, rAlpha);
 
-        // 4. Rear Swivel Caster
-        drawBox({ x: 0, y: -55, z: -50 }, { x: 22, y: 22, z: 22 }, '#64748b', '#cbd5e1');
+        // Rear Swivel Caster
+        drawBox({ x: 0, y: -55, z: -50 }, { x: 22, y: 22, z: 22 }, '#64748b', '#cbd5e1', cam, rAlpha);
 
-        // 5. Ultrasonic Sonar Eyes (HC-SR04 on Port C)
+        // Ultrasonic Sonar HC-SR04 Barrels (Port C)
         const sonarStroke = robotFocus === 'sonar' ? '#d97706' : '#64748b';
-        drawBox({ x: 0, y: -10, z: 75 }, { x: 50, y: 22, z: 18 }, sonarStroke, '#e2e8f0');
-        const sL = project3D({ x: -14, y: -10, z: 85 });
-        const sR = project3D({ x: 14, y: -10, z: 85 });
-        ctx.fillStyle = '#0284c7';
-        ctx.beginPath(); ctx.arc(sL.x, sL.y, 7 * sL.scale, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(sR.x, sR.y, 7 * sR.scale, 0, Math.PI * 2); ctx.fill();
+        drawBox({ x: 0, y: -10, z: 75 }, { x: 50, y: 22, z: 18 }, sonarStroke, '#e2e8f0', cam, rAlpha);
 
-        // 6. Technic Yellow Angled Mounting Brackets
-        drawBox({ x: -35, y: 15, z: 10 }, { x: 8, y: 50, z: 12 }, '#d97706', '#f59e0b');
-        drawBox({ x: 35, y: 15, z: 10 }, { x: 8, y: 50, z: 12 }, '#d97706', '#f59e0b');
+        // Yellow Technic Phone Mount Brackets
+        drawBox({ x: -35, y: 15, z: 10 }, { x: 8, y: 50, z: 12 }, '#d97706', '#f59e0b', cam, rAlpha);
+        drawBox({ x: 35, y: 15, z: 10 }, { x: 8, y: 50, z: 12 }, '#d97706', '#f59e0b', cam, rAlpha);
 
-        // 7. Docked Smartphone Cockpit Head (60° Angle)
-        const phoneBorder = robotFocus === 'phone' ? '#0ea5e9' : '#0284c7';
-        drawBox({ x: 0, y: 45, z: 20 }, { x: 86, y: 72, z: 14 }, phoneBorder, '#0f172a', 2.0);
-
-        // Digital Eyes on Phone
-        const pEyeL = project3D({ x: -18, y: 48, z: 28 });
-        const pEyeR = project3D({ x: 18, y: 48, z: 28 });
-        ctx.fillStyle = '#06b6d4';
-        ctx.shadowColor = '#06b6d4';
-        ctx.shadowBlur = 10;
-        ctx.beginPath(); ctx.arc(pEyeL.x, pEyeL.y, 7 * pEyeL.scale, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(pEyeR.x, pEyeR.y, 7 * pEyeR.scale, 0, Math.PI * 2); ctx.fill();
-        ctx.shadowBlur = 0;
-
-        // 8. Motor Cables
+        // Connection Cables to Motors
+        ctx.save();
+        ctx.globalAlpha = rAlpha;
         ctx.strokeStyle = '#0f172a';
         ctx.lineWidth = 2.5;
-        const portA = project3D({ x: -48, y: -25, z: 20 });
-        const motorA = project3D({ x: -64, y: -30, z: 20 });
+        const portA = project3D({ x: -48, y: -25, z: 20 }, cam);
+        const motorA = project3D({ x: -64, y: -30, z: 20 }, cam);
         ctx.beginPath();
         ctx.moveTo(portA.x, portA.y);
         ctx.quadraticCurveTo((portA.x + motorA.x)/2, portA.y - 20, motorA.x, motorA.y);
         ctx.stroke();
-
-        requestAnimationFrame(renderDetailedRobot);
+        ctx.restore();
       }
-      renderDetailedRobot();
-    }
 
-    function focusRobotPart(part) {
-      robotFocus = part;
-      playTone(700, 'sine', 0.06);
+      // 5. THE SMARTPHONE HEAD (IN STAGES 1, 2, 3)
+      const phoneP = Math.min(1.0, Math.max(0.0, currentProgress / 2.0));
+      const phoneCenter = { x: 0, y: 45 * phoneP, z: 20 * phoneP };
 
-      document.querySelectorAll('.robot-chips-bar .chip').forEach(c => c.classList.remove('active'));
-      const activeBtn = Array.from(document.querySelectorAll('.robot-chips-bar .chip')).find(b => b.onclick.toString().includes(part));
-      if (activeBtn) activeBtn.classList.add('active');
+      const phoneBorder = robotFocus === 'phone' ? '#0ea5e9' : '#0284c7';
+      drawBox(phoneCenter, { x: 86, y: 72, z: 14 }, phoneBorder, '#0f172a', cam);
 
-      const label = document.getElementById('robotPartFocusText');
-      if (part === 'phone') {
-        robotYaw = 0.35; robotPitch = 0.35; robotZoom = 1.35;
-        label.innerText = 'FOCUS: SMARTPHONE COCKPIT (12-TOPS NPU & 4K VISION)';
-        label.style.color = 'var(--cyan)';
-      } else if (part === 'hub') {
-        robotYaw = 0.85; robotPitch = 0.65; robotZoom = 1.45;
-        label.innerText = 'FOCUS: LEGO 51515 HUB (5x5 LED MATRIX & PORTS A-F)';
-        label.style.color = '#7c3aed';
-      } else if (part === 'wheels') {
-        robotYaw = 1.45; robotPitch = 0.40; robotZoom = 1.5;
-        label.innerText = 'FOCUS: DIFFERENTIAL DRIVE MOTORS (PORTS A & B)';
-        label.style.color = '#059669';
-      } else if (part === 'sonar') {
-        robotYaw = 0.05; robotPitch = 0.30; robotZoom = 1.6;
-        label.innerText = 'FOCUS: HC-SR04 ULTRASONIC WATCHDOG (PORT C)';
-        label.style.color = '#d97706';
-      } else {
-        robotYaw = 0.5; robotPitch = 0.45; robotZoom = 1.15;
-        label.innerText = 'FOCUS: FULL ASSEMBLED OMNIBRICK CHASSIS';
-        label.style.color = 'var(--text)';
+      // Digital Eyes on Phone Screen
+      const eyeL = project3D({ x: phoneCenter.x - 18, y: phoneCenter.y + 4, z: phoneCenter.z + 8 }, cam);
+      const eyeR = project3D({ x: phoneCenter.x + 18, y: phoneCenter.y + 4, z: phoneCenter.z + 8 }, cam);
+      if (eyeL.z > -100) {
+        ctx.fillStyle = '#06b6d4';
+        ctx.shadowColor = '#06b6d4';
+        ctx.shadowBlur = 10;
+        ctx.beginPath(); ctx.arc(eyeL.x, eyeL.y, 7 * eyeL.scale, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(eyeR.x, eyeR.y, 7 * eyeR.scale, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
       }
-    }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // 4. STAGE 4: 3D ARCHITECTURE DIAGRAM CANVAS
-    // ══════════════════════════════════════════════════════════════════════════
-    let pulseStep = -1;
+      // 6. STAGE 4: 3D ARCHITECTURE BLUEPRINT SLABS
+      const dAlpha = cam.diagramAlpha;
+      if (dAlpha > 0.01) {
+        pulseCycle = (pulseCycle + 0.04) % 5;
+        const currentActiveTier = Math.floor(pulseCycle);
 
-    function initDiagramCanvas() {
-      const cvs = document.getElementById('diagramCanvas');
-      if (!cvs) return;
-      const ctx = cvs.getContext('2d');
-
-      const resize = () => {
-        cvs.width = cvs.parentElement.clientWidth;
-        cvs.height = cvs.parentElement.clientHeight;
-      };
-      resize();
-      window.addEventListener('resize', resize);
-
-      function renderDiagram() {
-        const w = cvs.width;
-        const h = cvs.height;
-        ctx.clearRect(0, 0, w, h);
-
-        const layers = [
+        const tiers = [
           { name: "1. SENSORY INGESTION", tech: "Phone 4K Camera + Audio VAD", y: 70, color: "#0284c7" },
-          { name: "2. DUAL-CORE REASONING", tech: "Gemini 2.5 Flash + World Cache (<240ms)", y: 150, color: "#7c3aed" },
-          { name: "3. MCP TOOL DISPATCHER", tech: "drive_motors(75), speak_voice()", y: 230, color: "#059669" },
-          { name: "4. BLE LWP3 DISPATCH", tech: "LEGO GATT Characteristic: 08 00 81 00...", y: 310, color: "#d97706" },
-          { name: "5. PHYSICAL ACTUATORS", tech: "Hub 51515 Motors (Ports A/B) + HC-SR04", y: 390, color: "#0f172a" },
+          { name: "2. DUAL-CORE REASONING", tech: "Gemini 2.5 Flash + World Cache (<240ms)", y: 140, color: "#7c3aed" },
+          { name: "3. MCP TOOL BUS", tech: "drive_differential(75), speak_voice()", y: 210, color: "#059669" },
+          { name: "4. BLE LWP3 DISPATCH", tech: "LEGO GATT Characteristic: 08 00 81 00...", y: 280, color: "#d97706" },
+          { name: "5. PHYSICAL ACTUATORS", tech: "Hub 51515 Motors (Ports A/B) + HC-SR04", y: 350, color: "#0f172a" },
         ];
 
-        layers.forEach((layer, idx) => {
-          const isPulsed = pulseStep === idx;
-          const boxW = Math.min(680, w - 80);
-          const boxH = 48;
+        tiers.forEach((tier, idx) => {
+          const isPulsed = currentActiveTier === idx;
+          const boxW = Math.min(640, w - 80);
+          const boxH = 44;
           const startX = (w - boxW) / 2;
-          const startY = layer.y;
+          const startY = tier.y + 40;
 
-          // Shadow
-          ctx.fillStyle = 'rgba(15, 23, 42, 0.05)';
-          ctx.fillRect(startX + 6, startY + 6, boxW, boxH);
-
-          // Slab Body
-          ctx.fillStyle = isPulsed ? layer.color : '#ffffff';
-          ctx.strokeStyle = isPulsed ? '#0f172a' : 'rgba(15, 23, 42, 0.12)';
+          ctx.save();
+          ctx.globalAlpha = dAlpha;
+          ctx.fillStyle = isPulsed ? tier.color : '#ffffff';
+          ctx.strokeStyle = isPulsed ? '#0f172a' : 'rgba(15, 23, 42, 0.15)';
           ctx.lineWidth = isPulsed ? 2.5 : 1.2;
 
           ctx.beginPath();
-          ctx.roundRect(startX, startY, boxW, boxH, 12);
+          ctx.roundRect(startX, startY, boxW, boxH, 10);
           ctx.fill();
           ctx.stroke();
 
-          // Text inside Slab
-          ctx.font = 'bold 13px ui-monospace, monospace';
+          ctx.font = 'bold 12px ui-monospace, monospace';
           ctx.fillStyle = isPulsed ? '#ffffff' : '#0f172a';
-          ctx.fillText(layer.name, startX + 24, startY + 28);
+          ctx.fillText(tier.name, startX + 20, startY + 26);
 
-          ctx.font = '12px ui-monospace, monospace';
-          ctx.fillStyle = isPulsed ? '#f1f5f9' : '#64748b';
-          ctx.fillText(layer.tech, startX + 240, startY + 28);
-
-          // Connection Arrow down
-          if (idx < layers.length - 1) {
-            ctx.strokeStyle = isPulsed ? layer.color : 'rgba(15, 23, 42, 0.2)';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(w / 2, startY + boxH);
-            ctx.lineTo(w / 2, startY + boxH + 32);
-            ctx.stroke();
-          }
+          ctx.font = '11px ui-monospace, monospace';
+          ctx.fillStyle = isPulsed ? '#f8fafc' : '#64748b';
+          ctx.fillText(tier.tech, startX + 220, startY + 26);
+          ctx.restore();
         });
-
-        requestAnimationFrame(renderDiagram);
       }
-      renderDiagram();
+
+      requestAnimationFrame(renderLoop);
     }
 
-    function triggerSignalPulse() {
-      playTone(440, 'sine', 0.1);
-      const steps = [0, 1, 2, 3, 4];
-      steps.forEach((s, idx) => {
-        setTimeout(() => {
-          pulseStep = s;
-          playTone(440 + s * 140, 'sine', 0.08);
-        }, idx * 350);
-      });
-      setTimeout(() => {
-        pulseStep = -1;
-      }, steps.length * 350 + 400);
+    // ─── COCKPIT TABS LOGIC ───
+    function switchCockpitTab(tab) {
+      document.querySelectorAll('.cockpit-tab-item').forEach(t => t.classList.remove('active'));
+      const active = Array.from(document.querySelectorAll('.cockpit-tab-item')).find(b => b.onclick.toString().includes(tab));
+      if (active) active.classList.add('active');
+
+      playTone(640, 'sine', 0.05);
+      const body = document.getElementById('cockpitBody');
+
+      if (tab === 'face') {
+        body.innerHTML = `
+          <div style="text-align: center;">
+            <div style="font-family: var(--font-mono); font-size: 0.78rem; color: #38bdf8;">
+              STATUS: TRACKING PILOT • LATENCY &lt; 210 MS
+            </div>
+            <div class="app-robot-eyes">
+              <div class="app-eye-unit" id="eyeL"></div>
+              <div class="app-eye-unit" id="eyeR"></div>
+            </div>
+            <div style="background: rgba(255,255,255,0.06); padding: 0.85rem 1.25rem; border-radius: 0.85rem; max-width: 480px; margin: 0 auto; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5;">
+              «Бекнур, я вижу препятствие на 35 см. Выполняю объезд по дуге 45° на пониженной мощности моторов.»
+            </div>
+          </div>
+        `;
+      } else if (tab === 'habits') {
+        body.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="color: #c084fc;">💻 Вечерний кодинг в Antigravity IDE (21:00)</strong>
+                <div style="font-size: 0.72rem; color: #94a3b8;">Авто-напоминание пилоту и запуск проекта</div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.2rem 0.5rem; border-radius: 4px;">ACTIVE</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="color: #38bdf8;">📐 Калибровка ламината</strong>
+                <div style="font-size: 0.72rem; color: #94a3b8;">-15% мощности моторов при скольжении</div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.2rem 0.5rem; border-radius: 4px;">CALIBRATED</span>
+            </div>
+          </div>
+        `;
+      } else if (tab === 'build') {
+        body.innerHTML = `
+          <div style="font-family: var(--font-mono); font-size: 0.75rem; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; color: #cbd5e1;">
+            role: "Robotics Companion Pilot"<br>
+            personality: "Proactive, witty, safety-first"<br>
+            mcp_tools: [drive_differential, ultrasonic_ping, speak_voice]<br>
+            habit_antigravity: "true (active at 21:00)"
+          </div>
+        `;
+      } else if (tab === 'market') {
+        body.innerHTML = `
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-family: var(--font-mono);">
+            <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.85rem; border: 1px solid rgba(56,189,248,0.3);">
+              <div style="color: #38bdf8; font-weight: bold;">👑 Neural Nexus PRO</div>
+              <div style="font-size: 1.2rem; font-weight: 900; margin: 0.35rem 0;">$9.99 / mo</div>
+              <div style="font-size: 0.7rem; color: #94a3b8;">Gemini 2.5 Flash, 3D Арена</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.85rem; border: 1px solid rgba(245,158,11,0.3);">
+              <div style="color: #fbbf24; font-weight: bold;">🧱 Маркетплейс чертежей</div>
+              <div style="font-size: 1.2rem; font-weight: 900; margin: 0.35rem 0;">500 – 5000 🧱</div>
+              <div style="font-size: 0.7rem; color: #94a3b8;">70% роялти авторам!</div>
+            </div>
+          </div>
+        `;
+      }
     }
 
-    // Initialize all components on page load
+    function setRobotPartFocus(part) {
+      robotFocus = part;
+      playTone(700, 'sine', 0.05);
+      document.querySelectorAll('.chip-btn').forEach(c => c.classList.remove('active'));
+      const active = Array.from(document.querySelectorAll('.chip-btn')).find(b => b.onclick.toString().includes(part));
+      if (active) active.classList.add('active');
+    }
+
+    // Initialize on DOM Ready
     window.addEventListener('DOMContentLoaded', () => {
-      initPhoneCanvas();
-      setCockpitTab('face');
-      initRobotCanvas();
-      initDiagramCanvas();
+      switchCockpitTab('face');
+      renderLoop();
     });
   </script>
 </body>

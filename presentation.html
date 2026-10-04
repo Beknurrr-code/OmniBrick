@@ -3,26 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniBrick — Interactive 3D Scrollytelling Presentation</title>
+  <title>OmniBrick — Next-Gen AI Robot Brain | Official Interactive Showcase</title>
   <link rel="icon" type="image/svg+xml" href="/robot-icon.svg">
 
   <style>
-    /* ─── SYSTEM TOKENS (SWISS / MINIMAL INDUSTRIAL PALETTE) ─── */
+    /* ─── STUDIO LIGHT & CLEAN INDUSTRIAL DESIGN TOKENS ─── */
     :root {
-      --bg: #050811;
-      --bg-surface: rgba(10, 16, 30, 0.7);
-      --border: rgba(255, 255, 255, 0.12);
-      --border-focus: #38bdf8;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #475569;
-      --cyan: #06b6d4;
-      --cyan-bright: #22d3ee;
-      --accent: #f59e0b; /* LEGO Industrial Yellow */
-      --purple: #a855f7;
-      --emerald: #10b981;
+      --bg: #f8fafc;
+      --bg-alt: #f1f5f9;
+      --bg-surface: rgba(255, 255, 255, 0.88);
+      --bg-surface-solid: #ffffff;
+      --border: rgba(15, 23, 42, 0.1);
+      --border-bright: #38bdf8;
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      
+      --cyan: #0284c7;
+      --cyan-bright: #0ea5e9;
+      --cyan-soft: rgba(14, 165, 233, 0.12);
+      
+      --accent: #d97706; /* Industrial LEGO Amber/Orange */
+      --accent-soft: rgba(217, 119, 6, 0.12);
+      
+      --emerald: #059669;
+      --purple: #7c3aed;
+      --crimson: #dc2626;
+
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+      --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.12);
+      
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    /* Dark Mode Theme Overrides */
+    body.dark-mode {
+      --bg: #090d16;
+      --bg-alt: #0f172a;
+      --bg-surface: rgba(15, 23, 42, 0.88);
+      --bg-surface-solid: #0f172a;
+      --border: rgba(255, 255, 255, 0.12);
+      --border-bright: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --cyan: #38bdf8;
+      --cyan-bright: #38bdf8;
+      --cyan-soft: rgba(56, 189, 248, 0.15);
+      --accent: #f59e0b;
+      --accent-soft: rgba(245, 158, 11, 0.15);
+      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     }
 
     * {
@@ -34,10 +67,11 @@
 
     html, body {
       background-color: var(--bg);
-      color: var(--text);
+      color: var(--text-main);
       font-family: var(--font-sans);
       overflow-x: hidden;
       scroll-behavior: smooth;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* ─── FIXED 3D VIEWPORT BACKGROUND ─── */
@@ -61,43 +95,47 @@
       cursor: grabbing;
     }
 
-    /* Ambient Blueprint Grid */
-    .blueprint-grid {
+    /* Studio Blueprint Grid */
+    .studio-grid {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 2;
       background-image: 
-        linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
-      background-size: 64px 64px;
-      mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
-      -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+        radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px),
+        linear-gradient(to right, rgba(15, 23, 42, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.025) 1px, transparent 1px);
+      background-size: 32px 32px, 96px 96px, 96px 96px;
+      mask-image: radial-gradient(circle at center, black 50%, transparent 90%);
+      -webkit-mask-image: radial-gradient(circle at center, black 50%, transparent 90%);
+    }
+    body.dark-mode .studio-grid {
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     }
 
-    /* Vignette Overlay */
-    .vignette {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 2;
-      background: radial-gradient(circle at center, transparent 40%, rgba(5, 8, 17, 0.8) 100%);
-    }
-
-    /* ─── TOP MINIMAL NAV BAR ─── */
+    /* ─── TOP APP BAR HUD ─── */
     nav.top-bar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       height: 64px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.8);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 2.5rem;
       z-index: 100;
-      background: linear-gradient(to bottom, rgba(5, 8, 17, 0.9) 0%, transparent 100%);
-      pointer-events: auto;
+      transition: background 0.3s;
+    }
+    body.dark-mode nav.top-bar {
+      background: rgba(9, 13, 22, 0.85);
     }
 
     .brand-mark {
@@ -105,35 +143,36 @@
       align-items: center;
       gap: 0.85rem;
       text-decoration: none;
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.15rem;
-      letter-spacing: -0.03em;
+      color: var(--text-main);
+      font-weight: 900;
+      font-size: 1.2rem;
+      letter-spacing: -0.04em;
     }
     .brand-mark .brick-icon {
-      font-size: 1.3rem;
-      filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.5));
+      font-size: 1.35rem;
+      filter: drop-shadow(0 2px 6px rgba(217, 119, 6, 0.3));
     }
-    .brand-track {
+    .brand-pill {
       font-family: var(--font-mono);
       font-size: 0.68rem;
+      font-weight: 700;
       text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: var(--text-muted);
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(217, 119, 6, 0.3);
       letter-spacing: 0.05em;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
-    .btn-action {
-      padding: 0.5rem 1.1rem;
+    .btn-studio {
+      padding: 0.5rem 1.15rem;
       border-radius: 9999px;
       font-family: var(--font-mono);
       font-size: 0.78rem;
@@ -145,25 +184,90 @@
       gap: 0.5rem;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       border: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.7);
+      background: var(--bg-surface-solid);
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-studio:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-studio-primary {
+      background: #0f172a;
+      border-color: #0f172a;
       color: #fff;
     }
-    .btn-action:hover {
+    body.dark-mode .btn-studio-primary {
       background: #fff;
-      color: #000;
       border-color: #fff;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
-    }
-    .btn-primary {
-      background: #fff;
       color: #000;
-      border-color: #fff;
     }
-    .btn-primary:hover {
-      background: var(--cyan-bright);
-      border-color: var(--cyan-bright);
-      color: #000;
-      box-shadow: 0 0 25px rgba(6, 182, 212, 0.6);
+    .btn-studio-primary:hover {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-surface-solid);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .btn-icon:hover {
+      border-color: var(--cyan);
+      transform: scale(1.05);
+    }
+
+    /* ─── 3D MODEL SELECTOR HUD ─── */
+    .model-selector-bar {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      background: var(--bg-surface);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 0.35rem 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      box-shadow: var(--shadow-md);
+    }
+    .model-chip {
+      padding: 0.35rem 0.95rem;
+      border-radius: 9999px;
+      border: none;
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+    .model-chip:hover {
+      color: var(--text-main);
+    }
+    .model-chip.active {
+      background: var(--text-main);
+      color: var(--bg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
 
     /* ─── RIGHT SIDE PROGRESS RAIL ─── */
@@ -175,7 +279,7 @@
       z-index: 50;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1.1rem;
       pointer-events: auto;
     }
     .rail-step {
@@ -193,25 +297,25 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #fff;
+      background: var(--text-main);
       transition: all 0.3s;
     }
     .rail-step.active .rail-dot {
       width: 12px;
       height: 12px;
-      background: var(--cyan-bright);
-      box-shadow: 0 0 12px var(--cyan-bright);
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
     }
     .rail-label {
       font-family: var(--font-mono);
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-main);
       letter-spacing: 0.05em;
       text-transform: uppercase;
       display: none;
     }
-    @media (min-width: 1100px) {
+    @media (min-width: 1200px) {
       .rail-label { display: block; }
     }
 
@@ -223,44 +327,43 @@
     }
 
     .story-section {
-      min-height: 120vh;
+      min-height: 125vh;
       display: flex;
       align-items: center;
-      padding: 0 4rem;
+      padding: 0 4.5rem;
       box-sizing: border-box;
       pointer-events: none;
     }
     @media (max-width: 768px) {
-      .story-section { padding: 0 1.5rem; min-height: 100vh; }
+      .story-section { padding: 0 1.5rem; min-height: 110vh; }
     }
 
-    /* Alignment variations */
     .align-left { justify-content: flex-start; }
     .align-right { justify-content: flex-end; }
     .align-center { justify-content: center; text-align: center; }
 
-    /* Glass Narrative Card */
+    /* Studio Frosted Glass Narrative Card */
     .story-card {
       pointer-events: auto;
-      max-width: 520px;
+      max-width: 560px;
       background: var(--bg-surface);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
       border: 1px solid var(--border);
-      border-radius: 1.5rem;
-      padding: 2.5rem;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s;
+      border-radius: 1.75rem;
+      padding: 2.75rem;
+      box-shadow: var(--shadow-xl);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @media (max-width: 768px) {
       .story-card { padding: 1.75rem; }
     }
 
-    .story-chapter-badge {
+    .story-badge {
       font-family: var(--font-mono);
       font-size: 0.72rem;
       font-weight: 800;
-      color: var(--cyan-bright);
+      color: var(--cyan);
       text-transform: uppercase;
       letter-spacing: 0.1em;
       margin-bottom: 0.85rem;
@@ -268,36 +371,36 @@
     }
 
     h1.hero-statement {
-      font-size: clamp(2.8rem, 6vw, 4.8rem);
+      font-size: clamp(2.8rem, 5.5vw, 4.4rem);
       font-weight: 900;
       letter-spacing: -0.05em;
-      line-height: 0.98;
-      color: #fff;
+      line-height: 1.02;
+      color: var(--text-main);
       margin-bottom: 1.25rem;
     }
 
     h2.section-heading {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-size: clamp(1.8rem, 3.2vw, 2.7rem);
       font-weight: 850;
       letter-spacing: -0.04em;
       line-height: 1.1;
-      color: #fff;
+      color: var(--text-main);
       margin-bottom: 1rem;
     }
 
     p.lead-copy {
-      font-size: clamp(0.95rem, 1.4vw, 1.12rem);
-      line-height: 1.6;
+      font-size: clamp(0.95rem, 1.35vw, 1.12rem);
+      line-height: 1.65;
       color: var(--text-muted);
       margin-bottom: 1.5rem;
     }
 
-    .key-metric-row {
+    .metric-row {
       display: flex;
       gap: 2rem;
-      margin-top: 1.5rem;
+      margin-top: 1.75rem;
       padding-top: 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid var(--border);
     }
     .metric-item {
       display: flex;
@@ -305,49 +408,114 @@
     }
     .metric-val {
       font-family: var(--font-mono);
-      font-size: 1.8rem;
+      font-size: 1.85rem;
       font-weight: 900;
-      color: #fff;
+      color: var(--text-main);
     }
     .metric-val.highlight {
-      color: var(--cyan-bright);
+      color: var(--cyan);
     }
     .metric-label {
       font-family: var(--font-mono);
       font-size: 0.7rem;
       color: var(--text-dim);
       text-transform: uppercase;
-      margin-top: 0.2rem;
+      margin-top: 0.25rem;
     }
 
-    /* Interactive Buttons inside cards */
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      margin-top: 1rem;
+    /* ─── LIVE APP SIMULATOR PHONE MOCKUP (SECTION 3) ─── */
+    .app-showcase-box {
+      width: 100%;
+      background: var(--bg-surface-solid);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-top: 1.25rem;
     }
-    .btn-chip {
-      padding: 0.45rem 0.95rem;
-      border-radius: 9999px;
+
+    .app-tabs-header {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-alt);
+    }
+    .app-tab-btn {
+      flex: 1;
+      padding: 0.65rem 0.5rem;
       font-family: var(--font-mono);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 700;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #cbd5e1;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
       cursor: pointer;
       transition: all 0.2s;
+      text-align: center;
     }
-    .btn-chip:hover, .btn-chip.active {
-      background: var(--cyan-bright);
-      color: #000;
-      border-color: var(--cyan-bright);
-      box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+    .app-tab-btn.active {
+      background: var(--bg-surface-solid);
+      color: var(--text-main);
+      border-bottom: 2px solid var(--cyan);
     }
 
-    /* Live 3D Overlay Telemetry & Orbit Hint */
-    .hud-controls-hint {
+    .app-screen-content {
+      padding: 1.25rem;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ─── ARCHITECTURE PIPELINE SCHEMATIC (SECTION 4) ─── */
+    .pipeline-schematic {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    .pipeline-node {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.15rem;
+      border-radius: 0.9rem;
+      background: var(--bg-surface-solid);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: all 0.2s;
+    }
+    .pipeline-node.pulse {
+      border-color: var(--cyan);
+      box-shadow: 0 0 15px var(--cyan-soft);
+      transform: translateX(4px);
+    }
+    .node-step-badge {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--cyan-soft);
+      color: var(--cyan);
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .node-title {
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .node-sub {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+    }
+
+    /* ─── BOTTOM CONTROLS HINT ─── */
+    .hud-hint {
       position: fixed;
       bottom: 2rem;
       left: 2.5rem;
@@ -360,31 +528,13 @@
       gap: 0.75rem;
       pointer-events: none;
     }
-    .hud-key {
+    .keycap {
       padding: 0.2rem 0.5rem;
       border-radius: 6px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-    }
-
-    /* Live Audio Toggle */
-    #soundToggle {
-      background: none;
+      background: var(--bg-surface-solid);
       border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 38px;
-      height: 38px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    #soundToggle:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: #fff;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
     }
   </style>
 </head>
@@ -395,31 +545,46 @@
     <canvas id="stage3d"></canvas>
   </div>
 
-  <div class="blueprint-grid"></div>
-  <div class="vignette"></div>
+  <div class="studio-grid"></div>
 
-  <!-- Minimal Top Navigation -->
+  <!-- Top App Navigation -->
   <nav class="top-bar">
     <a href="#" class="brand-mark">
       <span class="brick-icon">🧱</span>
       <span>OmniBrick</span>
-      <span class="brand-track">Shipaton 2026</span>
+      <span class="brand-pill">Next Gen Award 2026</span>
     </a>
 
     <div class="nav-actions">
-      <button id="soundToggle" onclick="toggleAudio()" title="Sound On/Off">
+      <button class="btn-icon" id="themeBtn" onclick="toggleTheme()" title="Toggle Studio Light / Dark">
+        <span id="themeIcon">🌙</span>
+      </button>
+      <button class="btn-icon" id="soundBtn" onclick="toggleAudio()" title="Sound SFX (M)">
         <span id="soundIcon">🔊</span>
       </button>
-      <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-action">
-        <span>GitHub</span>
+      <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-studio">
+        <span>GitHub (MIT)</span>
       </a>
-      <a href="http://localhost:5180" target="_blank" class="btn-action btn-primary">
-        <span>Launch Web App ↗</span>
+      <a href="http://localhost:5180" target="_blank" class="btn-studio btn-studio-primary">
+        <span>Launch App ↗</span>
       </a>
     </div>
   </nav>
 
-  <!-- Side Navigation Rail for Scrollytelling -->
+  <!-- Interactive 3D Model Switcher Bar -->
+  <div class="model-selector-bar">
+    <button class="model-chip active" id="chip-rover" onclick="switchModel('rover')">
+      <span>🏎️ Rover 51515</span>
+    </button>
+    <button class="model-chip" id="chip-turret" onclick="switchModel('turret')">
+      <span>🔭 OmniTurret 360</span>
+    </button>
+    <button class="model-chip" id="chip-balance" onclick="switchModel('balance')">
+      <span>⚖️ BalanceBot</span>
+    </button>
+  </div>
+
+  <!-- Scrollytelling Progress Rail -->
   <div class="story-rail">
     <div class="rail-step active" onclick="scrollToSection(1)">
       <div class="rail-dot"></div>
@@ -427,184 +592,240 @@
     </div>
     <div class="rail-step" onclick="scrollToSection(2)">
       <div class="rail-dot"></div>
-      <span class="rail-label">02 Exploded CAD</span>
+      <span class="rail-label">02 Multiple Models</span>
     </div>
     <div class="rail-step" onclick="scrollToSection(3)">
       <div class="rail-dot"></div>
-      <span class="rail-label">03 Vision & Voice</span>
+      <span class="rail-label">03 Inside The App</span>
     </div>
     <div class="rail-step" onclick="scrollToSection(4)">
       <div class="rail-dot"></div>
-      <span class="rail-label">04 Bluetooth LWP3</span>
+      <span class="rail-label">04 How It Works</span>
     </div>
     <div class="rail-step" onclick="scrollToSection(5)">
       <div class="rail-dot"></div>
-      <span class="rail-label">05 Self-Learning</span>
+      <span class="rail-label">05 Memory & Habits</span>
     </div>
     <div class="rail-step" onclick="scrollToSection(6)">
       <div class="rail-dot"></div>
-      <span class="rail-label">06 RevenueCat</span>
+      <span class="rail-label">06 Revenue Engine</span>
     </div>
     <div class="rail-step" onclick="scrollToSection(7)">
       <div class="rail-dot"></div>
-      <span class="rail-label">07 Next Gen Award</span>
+      <span class="rail-label">07 Next Gen Story</span>
     </div>
   </div>
 
-  <!-- HUD Drag Hint -->
-  <div class="hud-controls-hint">
-    <span class="hud-key">DRAG</span>
-    <span>Орбита 3D модели</span>
-    <span class="hud-key">SCROLL</span>
-    <span>Кинематографический тур</span>
+  <!-- Bottom Interaction Hint -->
+  <div class="hud-hint">
+    <span class="keycap">DRAG 3D</span>
+    <span>Орбита модели</span>
+    <span class="keycap">SCROLL</span>
+    <span>Сценарный тур</span>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════════════════════
-       SCROLLYTELLING CONTENT TRACK
+       SCROLLYTELLING TRACK
        ══════════════════════════════════════════════════════════════════════════ -->
   <main id="content-track">
 
-    <!-- ─── SECTION 1: THE HERO AWAKENING ─── -->
+    <!-- ─── 01 // MANIFESTO ─── -->
     <section class="story-section align-left" id="sec-1">
       <div class="story-card">
-        <span class="story-chapter-badge">01 // The Core Manifesto</span>
+        <span class="story-badge">01 // The Core Idea</span>
         <h1 class="hero-statement">
           Смартфон — это мозг робота.
         </h1>
         <p class="lead-copy">
-          <strong>OmniBrick</strong> заменяет устаревшие образовательные микроконтроллеры за $400 на обычный смартфон из ящика стола. 4K пространственное зрение, мгновенная речь и управление LEGO 51515.
+          <strong>OmniBrick</strong> прекращает эру дорогих и глупых контроллеров. Мы превращаем телефон из ящика стола в 4K пространственный мозг, управляющий конструкторами LEGO Mindstorms 51515 и SPIKE Prime по чистому Bluetooth.
         </p>
 
-        <div class="key-metric-row">
+        <div class="metric-row">
           <div class="metric-item">
             <span class="metric-val highlight">$0</span>
-            <span class="metric-label">Затрат на чипы</span>
+            <span class="metric-label">Лишнего железа</span>
           </div>
           <div class="metric-item">
             <span class="metric-val">3.2B</span>
-            <span class="metric-label">Телефонов без дела</span>
+            <span class="metric-label">Телефонов в мире</span>
           </div>
           <div class="metric-item">
             <span class="metric-val highlight">&lt;240ms</span>
-            <span class="metric-label">Голосовой ответ</span>
+            <span class="metric-label">Отклик речи</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ─── SECTION 2: EXPLODED CAD ARCHITECTURE ─── -->
+    <!-- ─── 02 // MULTIPLE 3D ROBOT MODELS ─── -->
     <section class="story-section align-right" id="sec-2">
       <div class="story-card">
-        <span class="story-chapter-badge">02 // Exploded Anatomy</span>
+        <span class="story-badge">02 // Universal Kinematics</span>
         <h2 class="section-heading">
-          Инженерный срез. Разобран по слоям.
+          Один мозг. Множество роботов.
         </h2>
         <p class="lead-copy">
-          Посмотрите на 3D-модель в центре: телефон с 12-TOPS нейропроцессором взят за основу головы. Внизу — хаб LEGO 51515, два мотора привода на портах A и B, и сонар безопасности.
+          OmniBrick универсален. Телефон адаптирует свое зрение и расчёты под любую кинематическую схему LEGO — от колесного вездехода до панорамной турели и балансирующего робота.
         </p>
 
-        <div class="btn-group">
-          <button class="btn-chip active" onclick="setCadFocus('exploded')">Разборка 3D (Exploded)</button>
-          <button class="btn-chip" onclick="setCadFocus('chassis')">Хаб LEGO 51515</button>
-          <button class="btn-chip" onclick="setCadFocus('phone')">Голова (Смартфон)</button>
-        </div>
-
-        <div class="key-metric-row">
-          <div class="metric-item">
-            <span class="metric-val">12 TOPS</span>
-            <span class="metric-label">NPU телефона</span>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
+          <div style="background: var(--bg-alt); padding: 0.85rem 1rem; border-radius: 0.75rem; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong style="color: var(--text-main);">🏎️ Rover 51515:</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Дифференциальный привод, колесо-кастер, сонар HC-SR04</div>
+            </div>
+            <button class="btn-studio" onclick="switchModel('rover')">Показать в 3D</button>
           </div>
-          <div class="metric-item">
-            <span class="metric-val highlight">Ports A-F</span>
-            <span class="metric-label">Шина приводов</span>
+
+          <div style="background: var(--bg-alt); padding: 0.85rem 1rem; border-radius: 0.75rem; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong style="color: var(--text-main);">🔭 OmniTurret 360:</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Панорамная 2-осевая следящая станция распознавания лиц</div>
+            </div>
+            <button class="btn-studio" onclick="switchModel('turret')">Показать в 3D</button>
+          </div>
+
+          <div style="background: var(--bg-alt); padding: 0.85rem 1rem; border-radius: 0.75rem; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong style="color: var(--text-main);">⚖️ BalanceBot:</strong>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Двухколесный гиро-балансир с использованием гироскопа телефона</div>
+            </div>
+            <button class="btn-studio" onclick="switchModel('balance')">Показать в 3D</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ─── SECTION 3: VISION & REALTIME VOICE ─── -->
+    <!-- ─── 03 // INSIDE THE APP (APPLICATION SHOWCASE) ─── -->
     <section class="story-section align-left" id="sec-3">
-      <div class="story-card">
-        <span class="story-chapter-badge">03 // Cognitive Vision & Voice</span>
+      <div class="story-card" style="max-width: 600px;">
+        <span class="story-badge">03 // The Real Mobile App</span>
         <h2 class="section-heading">
-          Зрение и речь без неловких пауз.
+          Интерфейс пилота. Реальное приложение.
         </h2>
         <p class="lead-copy">
-          Обычные VLM-роботы заставляют ждать ответа по 2.5 секунды, пока грузится видеокадр. Архитектура OmniBrick разделяет потоки:
+          OmniBrick — это полноценное Android-приложение на React 19 и Capacitor. Попробуйте вкладки ниже, чтобы увидеть рабочие экраны системы:
         </p>
 
-        <p class="lead-copy" style="font-size: 0.92rem; border-left: 2px solid var(--cyan-bright); padding-left: 1rem;">
-          <strong>Фоновое зрение (1 FPS)</strong> обновляет пространственный кеш координат. <br>
-          <strong>Речевой синтез (&lt;240мс)</strong> отвечает мгновенно на естественном языке, заглядывая в готовый кеш!
-        </p>
+        <!-- Interactive Phone App Mockup Inside the Slide -->
+        <div class="app-showcase-box">
+          <div class="app-tabs-header">
+            <button class="app-tab-btn active" onclick="switchAppTab('face')">👁️ Лицо & Голос</button>
+            <button class="app-tab-btn" onclick="switchAppTab('build')">🛠️ Build Studio</button>
+            <button class="app-tab-btn" onclick="switchAppTab('dash')">📊 Дэшборд</button>
+            <button class="app-tab-btn" onclick="switchAppTab('market')">🧱 Маркетплейс</button>
+          </div>
 
-        <div class="btn-group">
-          <button class="btn-chip" onclick="triggerFaceEmotion('cute')">😊 Bionic Cute</button>
-          <button class="btn-chip" onclick="triggerFaceEmotion('focus')">⚡ Cyber Visor</button>
-          <button class="btn-chip" onclick="triggerFaceEmotion('alert')">🚨 Alert Watchdog</button>
+          <div class="app-screen-content" id="appScreenBody">
+            <!-- Screen 1: Face -->
+            <div style="text-align: center;">
+              <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+                <div style="width: 50px; height: 65px; background: var(--cyan); border-radius: 20px; box-shadow: 0 0 20px var(--cyan);"></div>
+                <div style="width: 50px; height: 65px; background: var(--cyan); border-radius: 20px; box-shadow: 0 0 20px var(--cyan);"></div>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">
+                «Бекнур, я вижу красную деталь LEGO впереди на 42 см. Повернуть налево?»
+              </div>
+              <div style="margin-top: 0.85rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--emerald); font-weight: bold;">
+                ● Голосовой слушатель активен • <240мс лаг
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ─── SECTION 4: HARDWARE HAL & BLUETOOTH LWP3 ─── -->
+    <!-- ─── 04 // HOW IT WORKS (ARCHITECTURE PIPELINE) ─── -->
     <section class="story-section align-right" id="sec-4">
-      <div class="story-card">
-        <span class="story-chapter-badge">04 // Hardware Protocol</span>
+      <div class="story-card" style="max-width: 600px;">
+        <span class="story-badge">04 // Engineering Pipeline</span>
         <h2 class="section-heading">
-          Чистый Bluetooth LWP3. Без модификаций.
+          Схема работы. От взгляда до моторов.
         </h2>
         <p class="lead-copy">
-          Никаких кастомных прошивок и сомнительных пайщиков. Мы общаемся с хабом по официальному протоколу LEGO Wireless Protocol v3 через GATT UUID <code>00001623</code>.
+          Как команда пользователя превращается во вращение колес за доли секунды. Нажмите <strong>«Пульс сигнала»</strong>, чтобы проследить путь команды:
         </p>
 
-        <div style="background: rgba(0,0,0,0.6); padding: 1rem; border-radius: 0.75rem; font-family: var(--font-mono); font-size: 0.78rem; margin: 1rem 0; border: 1px solid var(--border);">
-          <div style="color: var(--cyan-bright); margin-bottom: 0.25rem;">[BLE PACKET DISPATCH]:</div>
-          <div style="color: #fff;">08 00 81 00 11 51 00 50</div>
-          <div style="color: var(--text-dim); font-size: 0.7rem; margin-top: 0.4rem;">Port A: Speed +80 RPM • Mode 0 • Exec Immediate</div>
+        <div class="pipeline-schematic" id="pipelineFlow">
+          <div class="pipeline-node" id="pipe-1">
+            <span class="node-step-badge">1</span>
+            <div>
+              <div class="node-title">Камера телефона & Микрофон</div>
+              <div class="node-sub">4K зрение в фоновом воркере (1 FPS) + захват голоса пилота</div>
+            </div>
+          </div>
+
+          <div class="pipeline-node" id="pipe-2">
+            <span class="node-step-badge">2</span>
+            <div>
+              <div class="node-title">Google Gemini 2.5 Flash + World Cache</div>
+              <div class="node-sub">Мгновенный ответ без задержки кадра через пространственный кеш</div>
+            </div>
+          </div>
+
+          <div class="pipeline-node" id="pipe-3">
+            <span class="node-step-badge">3</span>
+            <div>
+              <div class="node-title">Шина MCP (Model Context Protocol)</div>
+              <div class="node-sub">Вызов инструментов: drive_motors(75, 45), speak_voice(), watchdog_check()</div>
+            </div>
+          </div>
+
+          <div class="pipeline-node" id="pipe-4">
+            <span class="node-step-badge">4</span>
+            <div>
+              <div class="node-title">LEGO Wireless Protocol v3 (LWP3)</div>
+              <div class="node-sub">Отправка GATT байткода 08 00 81... по Bluetooth на Hub 51515</div>
+            </div>
+          </div>
         </div>
 
-        <div class="key-metric-row">
-          <div class="metric-item">
-            <span class="metric-val highlight">20 Hz</span>
-            <span class="metric-label">Частота телеметрии</span>
-          </div>
-          <div class="metric-item">
-            <span class="metric-val">100%</span>
-            <span class="metric-label">Заводская гарантия</span>
-          </div>
-        </div>
+        <button class="btn-studio btn-studio-primary" onclick="pulsePipeline()" style="width: 100%; justify-content: center;">
+          ⚡ Запустить тестовый пульс сигнала
+        </button>
       </div>
     </section>
 
-    <!-- ─── SECTION 5: ADAPTIVE HABITS & SELF-LEARNING ─── -->
+    <!-- ─── 05 // MEMORY & HABITS ─── -->
     <section class="story-section align-left" id="sec-5">
       <div class="story-card">
-        <span class="story-chapter-badge">05 // Memory & Habits</span>
+        <span class="story-badge">05 // Continuous Learning</span>
         <h2 class="section-heading">
-          Робот, который помнит твоё расписание.
+          Самообучение и память пилота.
         </h2>
         <p class="lead-copy">
-          OmniBrick учится на лету. Создавайте задачи в билдере, общайтесь голосом в рантайме и следите за прогрессом на дэшборде:
+          Робот не сбрасывает память при выключении. Он запоминает ваш стиль общения, график работы и калибрует физику под поверхность:
         </p>
 
-        <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem;">
-          <div style="background: rgba(255,255,255,0.04); padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.88rem;">
-            <strong>💻 Antigravity IDE (21:00):</strong> Робот знает, когда Бекнур садится кодить, и проактивно предлагает открыть проект.
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <div style="background: var(--bg-alt); padding: 1rem; border-radius: 0.85rem; border: 1px solid var(--border);">
+            <div style="font-weight: 800; color: var(--purple);">💻 Antigravity IDE (21:00)</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Робот знает, что Бекнур садится программировать вечером. В 21:00 он проактивно напоминает голосом и предлагает открыть проект.
+            </div>
           </div>
-          <div style="background: rgba(255,255,255,0.04); padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.88rem;">
-            <strong>📐 Калибровка ламината:</strong> Автоматически снижает мощность моторов на 15% при проскальзывании.
+
+          <div style="background: var(--bg-alt); padding: 1rem; border-radius: 0.85rem; border: 1px solid var(--border);">
+            <div style="font-weight: 800; color: var(--cyan);">📐 Калибровка ламината</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Обнаружив проскальзывание колес, алгоритм автоматически снижает крутящий момент на 15%, обеспечивая четкие развороты на 90°.
+            </div>
           </div>
-          <div style="background: rgba(255,255,255,0.04); padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.88rem;">
-            <strong>🛡️ Сторож 25 см:</strong> Аппаратный тормоз сонара HC-SR04 спасает от столкновений.
+
+          <div style="background: var(--bg-alt); padding: 1rem; border-radius: 0.85rem; border: 1px solid var(--border);">
+            <div style="font-weight: 800; color: var(--crimson);">🛡️ Сторожевой рефлекс (25 см)</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+              Аппаратная блокировка моторов при приближении к препятствию ближе 25 см независимо от решений нейросети.
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ─── SECTION 6: REVENUECAT BUSINESS ARCHITECTURE ─── -->
+    <!-- ─── 06 // REVENUECAT BUSINESS MODEL ─── -->
     <section class="story-section align-right" id="sec-6">
       <div class="story-card">
-        <span class="story-chapter-badge">06 // Business & Marketplace</span>
+        <span class="story-badge">06 // Business Architecture</span>
         <h2 class="section-heading">
           Экономика на RevenueCat SDK.
         </h2>
@@ -612,35 +833,38 @@
           Подписки для профессионалов, виртуальная валюта чертежей (🧱 Bricks) и прямые выплаты 70% роялти молодым робототехникам:
         </p>
 
-        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.9rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.6rem; margin: 1.25rem 0;">
+          <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; background: var(--bg-alt); border: 1px solid var(--border); font-size: 0.88rem;">
             <span>Free Explorer</span>
-            <span style="font-family: var(--font-mono); color: var(--emerald);">$0 / мес</span>
+            <span style="font-family: var(--font-mono); color: var(--emerald); font-weight: bold;">$0 / мес</span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.9rem;">
-            <span style="color: var(--cyan-bright); font-weight: 750;">👑 Neural Nexus PRO</span>
-            <span style="font-family: var(--font-mono); color: var(--cyan-bright); font-weight: 750;">$9.99 / мес</span>
+
+          <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; background: var(--cyan-soft); border: 1px solid var(--cyan); font-size: 0.88rem;">
+            <span style="color: var(--cyan); font-weight: 800;">👑 Neural Nexus PRO (omnibrick_pro)</span>
+            <span style="font-family: var(--font-mono); color: var(--cyan); font-weight: bold;">$9.99 / мес</span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); font-size: 0.9rem;">
+
+          <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; background: var(--bg-alt); border: 1px solid var(--border); font-size: 0.88rem;">
             <span>🧱 Паки Бриксов (Консьюмаблы)</span>
-            <span style="font-family: var(--font-mono); color: var(--accent);">$2.99 – $19.99</span>
+            <span style="font-family: var(--font-mono); color: var(--accent); font-weight: bold;">$2.99 – $19.99</span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 0.6rem 0; font-size: 0.9rem;">
+
+          <div style="display: flex; justify-content: space-between; padding: 0.75rem 1rem; border-radius: 0.75rem; background: var(--bg-alt); border: 1px solid var(--border); font-size: 0.88rem;">
             <span>Пожизненный драйвер BLE LWP3</span>
-            <span style="font-family: var(--font-mono); color: var(--purple);">$14.99 навсегда</span>
+            <span style="font-family: var(--font-mono); color: var(--purple); font-weight: bold;">$14.99 навсегда</span>
           </div>
         </div>
 
         <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-dim);">
-          Entitlement ID: <code style="color: var(--cyan-bright);">omnibrick_pro</code> (Верифицирован в RevenueCat)
+          Публичный ключ SDK: <code style="color: var(--cyan);">test_IEtAtlxQzynZEHjHhGVpaJymjfM</code> (Верифицирован в RevenueCat)
         </div>
       </div>
     </section>
 
-    <!-- ─── SECTION 7: WHY WE WIN & CTA ─── -->
+    <!-- ─── 07 // NEXT GEN AWARD & FINAL PITCH ─── -->
     <section class="story-section align-center" id="sec-7">
       <div class="story-card" style="max-width: 680px;">
-        <span class="story-chapter-badge">07 // Next Gen Award</span>
+        <span class="story-badge">07 // Next Gen Award</span>
         <h2 class="section-heading" style="font-size: 2.5rem;">
           Готов к реальному миру.
         </h2>
@@ -649,10 +873,10 @@
         </p>
 
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
-          <a href="http://localhost:5180" target="_blank" class="btn-action btn-primary" style="padding: 0.85rem 2rem; font-size: 0.95rem;">
+          <a href="http://localhost:5180" target="_blank" class="btn-studio btn-studio-primary" style="padding: 0.85rem 2.2rem; font-size: 0.95rem;">
             🚀 Запустить OmniBrick Web
           </a>
-          <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-action" style="padding: 0.85rem 2rem; font-size: 0.95rem;">
+          <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-studio" style="padding: 0.85rem 2.2rem; font-size: 0.95rem;">
             ⭐ Репозиторий на GitHub
           </a>
         </div>
@@ -662,10 +886,10 @@
   </main>
 
   <!-- ══════════════════════════════════════════════════════════════════════════
-       3D CINEMATIC SCROLLYTELLING ENGINE (PURE CANVAS / ZERO DEPENDENCIES)
+       3D CINEMATIC ENGINE & INTERACTIVITY JAVASCRIPT
        ══════════════════════════════════════════════════════════════════════════ -->
   <script>
-    // ─── AUDIO ENGINE (Synthesized UI Feedback) ───
+    // ─── AUDIO SYNTHESIZER ───
     let audioCtx = null;
     let audioEnabled = true;
 
@@ -698,34 +922,66 @@
       if (audioEnabled) playTone(780, 'sine', 0.1);
     }
 
-    // ─── CAMERA TARGETS FOR EACH SCROLL SECTION ───
+    // ─── THEME TOGGLE (LIGHT / DARK) ───
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
+      playTone(isDark ? 880 : 540, 'sine', 0.06);
+    }
+
+    // ─── MULTIPLE 3D ROBOT MODELS STATE ───
+    let currentModel = 'rover'; // 'rover', 'turret', 'balance'
+
+    function switchModel(model) {
+      currentModel = model;
+      document.querySelectorAll('.model-chip').forEach(c => c.classList.remove('active'));
+      const activeBtn = document.getElementById(`chip-${model}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      playTone(600, 'triangle', 0.08);
+
+      // Model specific framing
+      if (model === 'rover') {
+        camState.targetZoom = 1.15;
+        camState.targetPitch = 0.35;
+      } else if (model === 'turret') {
+        camState.targetZoom = 1.35;
+        camState.targetPitch = 0.25;
+      } else if (model === 'balance') {
+        camState.targetZoom = 1.05;
+        camState.targetPitch = 0.45;
+      }
+    }
+
+    // ─── CAMERA WAYPOINTS FOR SCROLL SECTIONS ───
     const cameraWaypoints = [
-      { section: 1, yaw: 0.45, pitch: 0.35, zoom: 1.05, exploded: 0.0, targetY: 0 },
-      { section: 2, yaw: 0.85, pitch: 0.55, zoom: 1.35, exploded: 1.0, targetY: 20 },
-      { section: 3, yaw: 0.05, pitch: 0.20, zoom: 2.10, exploded: 0.2, targetY: 60 },
-      { section: 4, yaw: 1.45, pitch: 0.70, zoom: 1.55, exploded: 0.4, targetY: -20 },
-      { section: 5, yaw: -0.30, pitch: 0.30, zoom: 1.25, exploded: 0.1, targetY: 10 },
-      { section: 6, yaw: 0.65, pitch: 0.45, zoom: 1.20, exploded: 0.3, targetY: 0 },
-      { section: 7, yaw: 0.45, pitch: 0.35, zoom: 1.10, exploded: 0.0, targetY: 0 }
+      { section: 1, yaw: 0.45, pitch: 0.35, zoom: 1.15, exploded: 0.0, targetY: 0 },
+      { section: 2, yaw: 0.85, pitch: 0.45, zoom: 1.25, exploded: 0.3, targetY: 10 },
+      { section: 3, yaw: 0.05, pitch: 0.20, zoom: 1.90, exploded: 0.1, targetY: 45 },
+      { section: 4, yaw: 1.35, pitch: 0.65, zoom: 1.45, exploded: 0.3, targetY: -15 },
+      { section: 5, yaw: -0.25, pitch: 0.30, zoom: 1.25, exploded: 0.0, targetY: 10 },
+      { section: 6, yaw: 0.60, pitch: 0.40, zoom: 1.20, exploded: 0.2, targetY: 0 },
+      { section: 7, yaw: 0.45, pitch: 0.35, zoom: 1.15, exploded: 0.0, targetY: 0 }
     ];
 
-    // Current interpolated camera state
     let camState = {
       yaw: 0.45,
       pitch: 0.35,
-      zoom: 1.05,
+      zoom: 1.15,
       exploded: 0.0,
-      targetY: 0
+      targetY: 0,
+      targetZoom: 1.15,
+      targetPitch: 0.35
     };
 
-    // Manual orbit offsets when dragging
     let manualYaw = 0;
     let manualPitch = 0;
     let isDragging = false;
     let dragStart = { x: 0, y: 0 };
-    let robotEmotion = 'cute'; // 'cute', 'focus', 'alert'
+    let currentActiveSection = 1;
 
-    // ─── CANVAS 3D SETUP & RESIZE ───
+    // ─── CANVAS SETUP & RESIZE ───
     const canvas = document.getElementById('stage3d');
     const ctx = canvas.getContext('2d');
 
@@ -749,19 +1005,14 @@
       manualPitch = Math.max(-0.5, Math.min(0.5, manualPitch - dy * 0.006));
       dragStart = { x: e.clientX, y: e.clientY };
     });
-    window.addEventListener('pointerup', () => {
-      isDragging = false;
-    });
+    window.addEventListener('pointerup', () => { isDragging = false; });
 
-    // ─── SCROLLYTELLING INTERPOLATION ENGINE ───
-    let currentActiveSection = 1;
-
+    // ─── SCROLLYTELLING LOGIC ───
     function updateScrollProgress() {
       const scrollY = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = Math.max(0, Math.min(1, scrollY / (docHeight || 1)));
 
-      // Map progress to waypoint intervals (0 to 6)
       const maxIndex = cameraWaypoints.length - 1;
       const scaledProgress = progress * maxIndex;
       const indexA = Math.floor(scaledProgress);
@@ -770,70 +1021,41 @@
 
       const wpA = cameraWaypoints[indexA];
       const wpB = cameraWaypoints[indexB];
-
-      // Smooth step ease
       const ease = fraction * fraction * (3 - 2 * fraction);
 
-      // Target camera values
       const targetYaw = wpA.yaw + (wpB.yaw - wpA.yaw) * ease + manualYaw;
       const targetPitch = wpA.pitch + (wpB.pitch - wpA.pitch) * ease + manualPitch;
-      const targetZoom = wpA.zoom + (wpB.zoom - wpA.zoom) * ease;
+      const targetZoom = (wpA.zoom + (wpB.zoom - wpA.zoom) * ease) * (camState.targetZoom / 1.15);
       const targetExploded = wpA.exploded + (wpB.exploded - wpA.exploded) * ease;
       const targetY = wpA.targetY + (wpB.targetY - wpA.targetY) * ease;
 
-      // Dampened lerp
       camState.yaw += (targetYaw - camState.yaw) * 0.08;
       camState.pitch += (targetPitch - camState.pitch) * 0.08;
       camState.zoom += (targetZoom - camState.zoom) * 0.08;
       camState.exploded += (targetExploded - camState.exploded) * 0.08;
       camState.targetY += (targetY - camState.targetY) * 0.08;
 
-      // Gradually ease manual drag back towards story path
       if (!isDragging) {
         manualYaw *= 0.95;
         manualPitch *= 0.95;
       }
 
-      // Update active rail dot
       const newActive = Math.min(7, Math.max(1, Math.round(scaledProgress) + 1));
       if (newActive !== currentActiveSection) {
         currentActiveSection = newActive;
         document.querySelectorAll('.rail-step').forEach((el, idx) => {
           el.classList.toggle('active', idx + 1 === currentActiveSection);
         });
-        playTone(520 + currentActiveSection * 50, 'sine', 0.04);
+        playTone(520 + currentActiveSection * 40, 'sine', 0.04);
       }
     }
 
-    function scrollToSection(secNum) {
-      const el = document.getElementById(`sec-${secNum}`);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+    function scrollToSection(num) {
+      const el = document.getElementById(`sec-${num}`);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function setCadFocus(mode) {
-      if (mode === 'exploded') {
-        camState.exploded = 1.0;
-        camState.zoom = 1.35;
-      } else if (mode === 'chassis') {
-        camState.exploded = 0.2;
-        camState.zoom = 1.6;
-        camState.pitch = 0.6;
-      } else if (mode === 'phone') {
-        camState.exploded = 0.0;
-        camState.zoom = 2.0;
-        camState.pitch = 0.2;
-      }
-      playTone(680, 'sine', 0.06);
-    }
-
-    function triggerFaceEmotion(em) {
-      robotEmotion = em;
-      playTone(em === 'alert' ? 220 : 880, em === 'alert' ? 'sawtooth' : 'sine', 0.12);
-    }
-
-    // ─── 3D PROJECTION & RENDERING ───
+    // ─── 3D PROJECTION MATH ───
     function projectPoint(p, w, h) {
       const cx = p.x;
       const cy = p.y - camState.targetY;
@@ -863,7 +1085,6 @@
       };
     }
 
-    // Draw shaded polygon face
     function drawPoly(pts, strokeColor, fillColor = null, lineWidth = 1.2) {
       ctx.beginPath();
       let first = true;
@@ -885,7 +1106,6 @@
       }
     }
 
-    // Render Box with exploded offset support
     function renderBox(center, size, strokeColor, fillColor, explodeOffset = { x: 0, y: 0, z: 0 }) {
       const expl = camState.exploded;
       const cx = center.x + explodeOffset.x * expl;
@@ -900,29 +1120,25 @@
       const h = canvas.height;
 
       const v = [
-        projectPoint({ x: cx - hx, y: cy - hy, z: cz - hz }, w, h), // 0: back-bottom-left
-        projectPoint({ x: cx + hx, y: cy - hy, z: cz - hz }, w, h), // 1: back-bottom-right
-        projectPoint({ x: cx + hx, y: cy + hy, z: cz - hz }, w, h), // 2: back-top-right
-        projectPoint({ x: cx - hx, y: cy + hy, z: cz - hz }, w, h), // 3: back-top-left
-        projectPoint({ x: cx - hx, y: cy - hy, z: cz + hz }, w, h), // 4: front-bottom-left
-        projectPoint({ x: cx + hx, y: cy - hy, z: cz + hz }, w, h), // 5: front-bottom-right
-        projectPoint({ x: cx + hx, y: cy + hy, z: cz + hz }, w, h), // 6: front-top-right
-        projectPoint({ x: cx - hx, y: cy + hy, z: cz + hz }, w, h), // 7: front-top-left
+        projectPoint({ x: cx - hx, y: cy - hy, z: cz - hz }, w, h),
+        projectPoint({ x: cx + hx, y: cy - hy, z: cz - hz }, w, h),
+        projectPoint({ x: cx + hx, y: cy + hy, z: cz - hz }, w, h),
+        projectPoint({ x: cx - hx, y: cy + hy, z: cz - hz }, w, h),
+        projectPoint({ x: cx - hx, y: cy - hy, z: cz + hz }, w, h),
+        projectPoint({ x: cx + hx, y: cy - hy, z: cz + hz }, w, h),
+        projectPoint({ x: cx + hx, y: cy + hy, z: cz + hz }, w, h),
+        projectPoint({ x: cx - hx, y: cy + hy, z: cz + hz }, w, h),
       ];
 
-      // Front Face
+      // Draw cube faces
       drawPoly([v[4], v[5], v[6], v[7]], strokeColor, fillColor);
-      // Top Face
       drawPoly([v[3], v[2], v[6], v[7]], strokeColor, fillColor);
-      // Right Face
       drawPoly([v[1], v[5], v[6], v[2]], strokeColor, fillColor);
-      // Left Face
       drawPoly([v[0], v[4], v[7], v[3]], strokeColor, fillColor);
-      // Back Face
       drawPoly([v[0], v[1], v[2], v[3]], strokeColor, fillColor);
     }
 
-    // ─── MAIN 3D RENDER LOOP ───
+    // ─── 3D RENDER LOOP FOR ALL 3 MODELS ───
     function renderLoop() {
       updateScrollProgress();
 
@@ -930,9 +1146,34 @@
       const h = canvas.height;
       ctx.clearRect(0, 0, w, h);
 
-      // 1. Perspective Grid on the Ground
+      const isDark = document.body.classList.contains('dark-mode');
+      const gridStroke = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(15, 23, 42, 0.06)';
+      const hubFill = isDark ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)';
+      const hubStroke = isDark ? '#38bdf8' : '#0284c7';
+      const phoneFill = isDark ? 'rgba(14, 165, 233, 0.25)' : 'rgba(224, 242, 254, 0.85)';
+      const phoneStroke = isDark ? '#38bdf8' : '#0284c7';
+      const wheelStroke = '#10b981';
+      const wheelFill = isDark ? 'rgba(6, 78, 59, 0.4)' : 'rgba(209, 250, 229, 0.8)';
+      const accentStroke = '#d97706';
+
+      // 1. Perspective Ground Plane & Soft Shadow
+      const shadowCenter = projectPoint({ x: 0, y: -72, z: 0 }, w, h);
+      if (shadowCenter.visible) {
+        const shadowGrad = ctx.createRadialGradient(
+          shadowCenter.x, shadowCenter.y, 10,
+          shadowCenter.x, shadowCenter.y, 140 * shadowCenter.scale
+        );
+        shadowGrad.addColorStop(0, isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(15, 23, 42, 0.14)');
+        shadowGrad.addColorStop(1, 'transparent');
+        ctx.fillStyle = shadowGrad;
+        ctx.beginPath();
+        ctx.arc(shadowCenter.x, shadowCenter.y, 140 * shadowCenter.scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Ground Grid
       ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+      ctx.strokeStyle = gridStroke;
       const gSize = 280;
       const gStep = 40;
       for (let x = -gSize; x <= gSize; x += gStep) {
@@ -946,8 +1187,8 @@
         }
       }
       for (let z = -gSize; z <= gSize; z += gStep) {
-        const p1 = projectPoint({ x: -gSize, y: -75, z }, w, h);
-        const p2 = projectPoint({ x: gSize, y: -75, z }, w, h);
+        const p1 = projectPoint({ x, y: -75, z: -gSize }, w, h);
+        const p2 = projectPoint({ x, y: -75, z: gSize }, w, h);
         if (p1.visible && p2.visible) {
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
@@ -956,113 +1197,150 @@
         }
       }
 
-      // 2. Component: LEGO Hub 51515 Body
-      renderBox(
-        { x: 0, y: -25, z: 0 },
-        { x: 95, y: 34, z: 120 },
-        'rgba(168, 85, 247, 0.7)',
-        'rgba(15, 23, 42, 0.75)'
-      );
+      // 2. MODEL RENDERING BASED ON CURRENT SELECTED TYPE
+      if (currentModel === 'rover') {
+        // ─── MODEL A: ROVER 51515 ───
+        // Hub body
+        renderBox({ x: 0, y: -25, z: 0 }, { x: 95, y: 34, z: 120 }, hubStroke, hubFill);
+        // Left wheel
+        renderBox({ x: -64, y: -40, z: 20 }, { x: 18, y: 56, z: 56 }, wheelStroke, wheelFill, { x: -50, y: 0, z: 0 });
+        // Right wheel
+        renderBox({ x: 64, y: -40, z: 20 }, { x: 18, y: 56, z: 56 }, wheelStroke, wheelFill, { x: 50, y: 0, z: 0 });
+        // Caster wheel
+        renderBox({ x: 0, y: -52, z: -48 }, { x: 20, y: 20, z: 20 }, 'rgba(100, 116, 139, 0.6)', 'rgba(200, 200, 200, 0.2)', { x: 0, y: -30, z: -40 });
+        // Sonar eyes
+        renderBox({ x: 0, y: -12, z: 72 }, { x: 44, y: 20, z: 18 }, accentStroke, 'rgba(217, 119, 6, 0.2)', { x: 0, y: 0, z: 55 });
+        // Smartphone Head
+        renderBox({ x: 0, y: 38, z: 22 }, { x: 82, y: 72, z: 14 }, phoneStroke, phoneFill, { x: 0, y: 65, z: -35 });
 
-      // LEGO Ports Marker dots on hub side
-      [-30, 0, 30].forEach(pz => {
-        const pDotL = projectPoint({ x: -48, y: -25, z: pz }, w, h);
-        if (pDotL.visible) {
-          ctx.fillStyle = '#38bdf8';
+        // Eyes on phone
+        const expl = camState.exploded;
+        const phonePos = { x: 0, y: 38 + 65 * expl, z: 22 - 35 * expl };
+        const eyeL = projectPoint({ x: phonePos.x - 18, y: phonePos.y + 6, z: phonePos.z + 8 }, w, h);
+        const eyeR = projectPoint({ x: phonePos.x + 18, y: phonePos.y + 6, z: phonePos.z + 8 }, w, h);
+        if (eyeL.visible && eyeR.visible) {
+          ctx.fillStyle = '#0284c7';
           ctx.beginPath();
-          ctx.arc(pDotL.x, pDotL.y, 3 * pDotL.scale, 0, Math.PI * 2);
+          ctx.arc(eyeL.x, eyeL.y, 7 * eyeL.scale, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(eyeR.x, eyeR.y, 7 * eyeR.scale, 0, Math.PI * 2);
           ctx.fill();
         }
-      });
 
-      // 3. Component: Left Drive Wheel (Port A)
-      renderBox(
-        { x: -64, y: -40, z: 20 },
-        { x: 18, y: 56, z: 56 },
-        '#34d399',
-        'rgba(6, 78, 59, 0.4)',
-        { x: -50, y: 0, z: 0 }
-      );
+      } else if (currentModel === 'turret') {
+        // ─── MODEL B: OMNITURRET 360 ───
+        // Pedestal base
+        renderBox({ x: 0, y: -60, z: 0 }, { x: 110, y: 20, z: 110 }, hubStroke, hubFill);
+        // Turntable gear neck
+        renderBox({ x: 0, y: -35, z: 0 }, { x: 60, y: 30, z: 60 }, accentStroke, 'rgba(217, 119, 6, 0.2)');
+        // Hub attached vertically
+        renderBox({ x: 0, y: 5, z: -20 }, { x: 75, y: 50, z: 35 }, hubStroke, hubFill);
+        // Smartphone Pan-Tilt Head
+        renderBox({ x: 0, y: 50, z: 15 }, { x: 86, y: 65, z: 14 }, phoneStroke, phoneFill);
+        // Dual laser trackers
+        renderBox({ x: -50, y: 50, z: 15 }, { x: 12, y: 12, z: 30 }, '#10b981', 'rgba(16, 185, 129, 0.4)');
+        renderBox({ x: 50, y: 50, z: 15 }, { x: 12, y: 12, z: 30 }, '#10b981', 'rgba(16, 185, 129, 0.4)');
 
-      // 4. Component: Right Drive Wheel (Port B)
-      renderBox(
-        { x: 64, y: -40, z: 20 },
-        { x: 18, y: 56, z: 56 },
-        '#34d399',
-        'rgba(6, 78, 59, 0.4)',
-        { x: 50, y: 0, z: 0 }
-      );
-
-      // 5. Component: Rear Omnidirectional Caster Wheel
-      renderBox(
-        { x: 0, y: -52, z: -48 },
-        { x: 20, y: 20, z: 20 },
-        'rgba(255, 255, 255, 0.4)',
-        'rgba(255, 255, 255, 0.1)',
-        { x: 0, y: -30, z: -40 }
-      );
-
-      // 6. Component: Ultrasonic Sonar Eyes (HC-SR04 on Port C)
-      renderBox(
-        { x: 0, y: -12, z: 72 },
-        { x: 44, y: 20, z: 18 },
-        '#fbbf24',
-        'rgba(245, 158, 11, 0.25)',
-        { x: 0, y: 0, z: 55 }
-      );
-
-      // 7. Component: Docked Smartphone "Head & Face"
-      renderBox(
-        { x: 0, y: 38, z: 22 },
-        { x: 82, y: 72, z: 14 },
-        '#22d3ee',
-        'rgba(6, 182, 212, 0.25)',
-        { x: 0, y: 65, z: -35 }
-      );
-
-      // 8. Dynamic Digital Eyes rendered directly on the Phone Screen!
-      const eyeExpl = camState.exploded;
-      const phonePos = { x: 0, y: 38 + 65 * eyeExpl, z: 22 - 35 * eyeExpl };
-      const eyeL = projectPoint({ x: phonePos.x - 18, y: phonePos.y + 6, z: phonePos.z + 8 }, w, h);
-      const eyeR = projectPoint({ x: phonePos.x + 18, y: phonePos.y + 6, z: phonePos.z + 8 }, w, h);
-
-      if (eyeL.visible && eyeR.visible) {
-        const eyeColor = robotEmotion === 'alert' ? '#ef4444' : robotEmotion === 'focus' ? '#38bdf8' : '#22d3ee';
-        ctx.fillStyle = eyeColor;
-        ctx.shadowColor = eyeColor;
-        ctx.shadowBlur = 15;
-
-        // Left Eye
-        ctx.beginPath();
-        ctx.arc(eyeL.x, eyeL.y, 8 * eyeL.scale, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Right Eye
-        ctx.beginPath();
-        ctx.arc(eyeR.x, eyeR.y, 8 * eyeR.scale, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.shadowBlur = 0;
-      }
-
-      // 9. Exploded Mode: Laser connection guides
-      if (camState.exploded > 0.05) {
-        ctx.strokeStyle = `rgba(56, 189, 248, ${camState.exploded * 0.4})`;
-        ctx.lineWidth = 1;
-        ctx.setLineDash([4, 4]);
-
-        const hubTop = projectPoint({ x: 0, y: -8, z: 20 }, w, h);
-        const phoneBottom = projectPoint({ x: 0, y: 2 + 65 * eyeExpl, z: 22 - 35 * eyeExpl }, w, h);
-        if (hubTop.visible && phoneBottom.visible) {
-          ctx.beginPath();
-          ctx.moveTo(hubTop.x, hubTop.y);
-          ctx.lineTo(phoneBottom.x, phoneBottom.y);
-          ctx.stroke();
-        }
-        ctx.setLineDash([]);
+      } else if (currentModel === 'balance') {
+        // ─── MODEL C: BALANCEBOT ───
+        // Large Left Wheel
+        renderBox({ x: -55, y: -30, z: 0 }, { x: 16, y: 85, z: 85 }, wheelStroke, wheelFill);
+        // Large Right Wheel
+        renderBox({ x: 55, y: -30, z: 0 }, { x: 16, y: 85, z: 85 }, wheelStroke, wheelFill);
+        // Central Axle
+        renderBox({ x: 0, y: -30, z: 0 }, { x: 94, y: 16, z: 16 }, '#475569', 'rgba(100, 116, 139, 0.3)');
+        // Vertical Mast Spine
+        renderBox({ x: 0, y: 15, z: 0 }, { x: 45, y: 75, z: 35 }, hubStroke, hubFill);
+        // Top High-Perched Smartphone
+        renderBox({ x: 0, y: 75, z: 0 }, { x: 80, y: 65, z: 14 }, phoneStroke, phoneFill);
       }
 
       requestAnimationFrame(renderLoop);
+    }
+
+    // ─── APP MOCKUP TABS SWITCHER ───
+    function switchAppTab(tab) {
+      document.querySelectorAll('.app-tab-btn').forEach(b => b.classList.remove('active'));
+      const found = Array.from(document.querySelectorAll('.app-tab-btn')).find(b => b.onclick.toString().includes(tab));
+      if (found) found.classList.add('active');
+
+      playTone(640, 'sine', 0.05);
+      const body = document.getElementById('appScreenBody');
+
+      if (tab === 'face') {
+        body.innerHTML = `
+          <div style="text-align: center;">
+            <div style="display: flex; justify-content: center; gap: 2rem; margin: 1rem 0;">
+              <div style="width: 50px; height: 65px; background: var(--cyan); border-radius: 20px; box-shadow: 0 0 20px var(--cyan);"></div>
+              <div style="width: 50px; height: 65px; background: var(--cyan); border-radius: 20px; box-shadow: 0 0 20px var(--cyan);"></div>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">
+              «Бекнур, я вижу красную деталь LEGO впереди на 42 см. Повернуть налево?»
+            </div>
+            <div style="margin-top: 0.85rem; font-family: var(--font-mono); font-size: 0.72rem; color: var(--emerald); font-weight: bold;">
+              ● Голосовой слушатель активен • <240мс лаг
+            </div>
+          </div>
+        `;
+      } else if (tab === 'build') {
+        body.innerHTML = `
+          <div style="font-family: var(--font-mono); font-size: 0.75rem;">
+            <div style="color: var(--accent); font-weight: bold; margin-bottom: 0.4rem;">[SYSTEM PROMPT & HABITS BUILDER]:</div>
+            <div style="background: var(--bg-alt); padding: 0.75rem; border-radius: 0.5rem; line-height: 1.5; color: var(--text-main);">
+              role: "Robotics Companion Pilot"<br>
+              personality: "Proactive, witty, safety-first"<br>
+              mcp_tools: [drive_differential, ultrasonic_ping, speak_voice]<br>
+              habit_antigravity: "true (active at 21:00)"
+            </div>
+          </div>
+        `;
+      } else if (tab === 'dash') {
+        body.innerHTML = `
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem;">
+            <div style="background: var(--bg-alt); padding: 0.75rem; border-radius: 0.5rem;">
+              <span style="color: var(--text-dim); display: block;">COGNITIVE LEVEL</span>
+              <span style="font-size: 1.2rem; font-weight: 900; color: var(--cyan);">LVL 4 (920 XP)</span>
+            </div>
+            <div style="background: var(--bg-alt); padding: 0.75rem; border-radius: 0.5rem;">
+              <span style="color: var(--text-dim); display: block;">PORT TELEMETRY</span>
+              <span style="font-size: 1.2rem; font-weight: 900; color: var(--emerald);">A/B: 75 RPM</span>
+            </div>
+          </div>
+        `;
+      } else if (tab === 'market') {
+        body.innerHTML = `
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; background: var(--bg-alt); padding: 0.6rem 0.75rem; border-radius: 0.5rem;">
+              <span>🏎️ Autonomous Sorter v2</span>
+              <strong style="color: var(--accent);">250 🧱 Bricks</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; background: var(--bg-alt); padding: 0.6rem 0.75rem; border-radius: 0.5rem;">
+              <span>🔭 OmniTurret Aim Pro</span>
+              <strong style="color: var(--accent);">400 🧱 Bricks</strong>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // ─── PIPELINE PULSE ANIMATION (HOW IT WORKS) ───
+    function pulsePipeline() {
+      playTone(440, 'sine', 0.1);
+      const steps = [1, 2, 3, 4];
+      steps.forEach((s, idx) => {
+        setTimeout(() => {
+          document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('pulse'));
+          const node = document.getElementById(`pipe-${s}`);
+          if (node) {
+            node.classList.add('pulse');
+            playTone(440 + s * 120, 'sine', 0.08);
+          }
+        }, idx * 400);
+      });
+      setTimeout(() => {
+        document.querySelectorAll('.pipeline-node').forEach(n => n.classList.remove('pulse'));
+      }, 2000);
     }
 
     window.addEventListener('DOMContentLoaded', () => {

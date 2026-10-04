@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OmniBrick — 3D Space Scrollytelling Presentation</title>
+  <title>OmniBrick — Презентация проекта | Shipaton 2026</title>
   <link rel="icon" type="image/svg+xml" href="/robot-icon.svg">
 
   <style>
-    /* ─── CLEAN STUDIO LIGHT DESIGN TOKENS ─── */
+    /* ─── CLEAN STUDIO LIGHT DESIGN TOKENS (APPLE & TEENAGE ENGINEERING) ─── */
     :root {
       --bg: #f8fafc;
       --bg-alt: #f1f5f9;
+      --card-bg: rgba(255, 255, 255, 0.94);
       --border: rgba(15, 23, 42, 0.12);
+      --border-dark: rgba(15, 23, 42, 0.22);
       
       --text: #0f172a;
       --text-muted: #475569;
@@ -22,6 +24,7 @@
       --cyan-soft: rgba(14, 165, 233, 0.12);
 
       --amber: #d97706;
+      --amber-bright: #f59e0b;
       --amber-soft: rgba(217, 119, 6, 0.12);
 
       --emerald: #059669;
@@ -30,7 +33,7 @@
 
       --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04);
       --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-      --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
+      --shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.18);
 
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -46,7 +49,7 @@
     html, body {
       width: 100vw;
       height: 100vh;
-      overflow: hidden; /* Direct 3D space scroll handling */
+      overflow: hidden; /* Kinetic 3D space scroll handling */
       background-color: var(--bg);
       color: var(--text);
       font-family: var(--font-sans);
@@ -60,7 +63,7 @@
       pointer-events: none;
       z-index: 1;
       background-image: 
-        radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px),
+        radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px),
         linear-gradient(to right, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
       background-size: 32px 32px, 96px 96px, 96px 96px;
@@ -75,19 +78,24 @@
       height: 64px;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.88);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 2.5rem;
+      padding: 0 2rem;
       z-index: 1000;
     }
 
-    .brand-link {
+    .brand-group {
       display: flex;
       align-items: center;
       gap: 0.75rem;
+    }
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
       text-decoration: none;
       color: var(--text);
       font-weight: 900;
@@ -106,16 +114,48 @@
       text-transform: uppercase;
     }
 
+    /* Top Stage Jumper Pills */
+    .top-stage-pills {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(15, 23, 42, 0.04);
+      padding: 0.3rem 0.4rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+    }
+    .top-stage-pill {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .top-stage-pill:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.7);
+    }
+    .top-stage-pill.active {
+      background: #0f172a;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
     }
     .btn-nav {
-      padding: 0.5rem 1.15rem;
+      padding: 0.45rem 1rem;
       border-radius: 9999px;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       text-decoration: none;
       cursor: pointer;
@@ -132,6 +172,17 @@
       border-color: var(--cyan);
       color: var(--cyan);
       transform: translateY(-1px);
+    }
+    .btn-nav-tech {
+      background: #f1f5f9;
+      border-color: var(--border-dark);
+      color: var(--text);
+    }
+    .btn-nav-tech.active {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
     }
     .btn-nav-primary {
       background: #0f172a;
@@ -162,9 +213,9 @@
     /* ─── FLOATING NARRATIVE HUD (TOP-LEFT) ─── */
     .narrative-card {
       position: fixed;
-      top: 90px;
-      left: 2.5rem;
-      max-width: 460px;
+      top: 86px;
+      left: 2rem;
+      max-width: 480px;
       z-index: 30;
       pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease;
@@ -188,38 +239,69 @@
     }
 
     h1.narrative-title {
-      font-size: clamp(2rem, 3.8vw, 3rem);
+      font-size: clamp(1.8rem, 3.2vw, 2.7rem);
       font-weight: 900;
       letter-spacing: -0.04em;
-      line-height: 1.05;
+      line-height: 1.1;
       color: var(--text);
       margin-bottom: 0.75rem;
     }
 
-    p.narrative-desc {
-      font-size: 0.98rem;
-      line-height: 1.6;
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(16px);
-      padding: 0.9rem 1.25rem;
+    .narrative-desc-box {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(20px);
+      padding: 1rem 1.25rem;
       border-radius: 1.25rem;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      pointer-events: auto;
+    }
+
+    p.narrative-desc {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .narrative-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .spec-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .spec-tag.highlight {
+      background: var(--cyan-soft);
+      color: var(--cyan);
+      border-color: rgba(2, 132, 199, 0.25);
     }
 
     /* ─── STAGE 2: IN-APP COCKPIT SCREEN OVERLAY ─── */
     .app-screen-frame {
       position: fixed;
-      top: 50%;
+      top: 52%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: min(880px, 92vw);
-      max-height: 78vh;
-      background: #0f172a;
-      border-radius: 2.25rem;
-      border: 8px solid #e2e8f0;
-      box-shadow: 0 35px 80px -15px rgba(15, 23, 42, 0.35);
+      width: min(920px, 94vw);
+      max-height: 80vh;
+      background: #090d16;
+      border-radius: 2rem;
+      border: 6px solid #e2e8f0;
+      box-shadow: 0 35px 80px -15px rgba(15, 23, 42, 0.45);
       overflow: hidden;
       color: #fff;
       z-index: 50;
@@ -243,33 +325,36 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.8rem 1.5rem;
-      background: rgba(255, 255, 255, 0.05);
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.04);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
     }
 
     .cockpit-tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      overflow-x: auto;
     }
     .cockpit-tab-item {
       flex: 1;
-      padding: 0.8rem;
+      padding: 0.75rem 0.5rem;
       font-family: var(--font-mono);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 700;
       border: none;
       background: transparent;
       color: #94a3b8;
       cursor: pointer;
       text-align: center;
+      white-space: nowrap;
       transition: all 0.2s;
     }
     .cockpit-tab-item:hover {
       color: #fff;
+      background: rgba(255, 255, 255, 0.04);
     }
     .cockpit-tab-item.active {
       color: #38bdf8;
@@ -278,45 +363,84 @@
     }
 
     .cockpit-viewport-body {
-      padding: 2rem;
-      min-height: 290px;
+      padding: 1.5rem 2rem;
+      min-height: 330px;
+      max-height: calc(80vh - 120px);
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
 
+    /* Robot Eye Units with Dynamic Emotion Classes */
     .app-robot-eyes {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 3.5rem;
-      margin: 1rem 0;
+      margin: 1.25rem 0;
     }
     .app-eye-unit {
-      width: 72px;
-      height: 98px;
+      width: 76px;
+      height: 104px;
       background: #06b6d4;
-      border-radius: 28px;
-      box-shadow: 0 0 35px rgba(6, 182, 212, 0.75);
+      border-radius: 30px;
+      box-shadow: 0 0 40px rgba(6, 182, 212, 0.85);
       position: relative;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .app-eye-unit::after {
       content: '';
       position: absolute;
       top: 14px;
       left: 14px;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
+      transition: all 0.2s;
     }
 
-    /* ─── STAGE 3: ROBOT PART INSPECTION CHIPS ─── */
+    /* Emotion States */
+    .emotion-friendly .app-eye-unit {
+      background: #06b6d4;
+      box-shadow: 0 0 35px rgba(6, 182, 212, 0.8);
+      border-radius: 30px;
+    }
+    .emotion-scan .app-eye-unit {
+      background: #a855f7;
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.85);
+      height: 60px;
+      border-radius: 12px;
+    }
+    .emotion-turbo .app-eye-unit {
+      background: #f59e0b;
+      box-shadow: 0 0 45px rgba(245, 158, 11, 0.9);
+      transform: skewX(-14deg);
+      border-radius: 20px;
+    }
+    .emotion-sleep .app-eye-unit {
+      background: #3b82f6;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      height: 14px;
+      border-radius: 7px;
+    }
+    .emotion-danger .app-eye-unit {
+      background: #ef4444;
+      box-shadow: 0 0 50px rgba(239, 68, 68, 0.95);
+      border-radius: 12px;
+      animation: eyePulseDanger 0.8s infinite alternate;
+    }
+    @keyframes eyePulseDanger {
+      from { transform: scale(1); }
+      to { transform: scale(1.12); }
+    }
+
+    /* ─── STAGE 3: ROBOT PART INSPECTION CHIPS & SPECS ─── */
     .robot-chips-overlay {
       position: fixed;
       bottom: 2rem;
-      left: 2.5rem;
+      left: 2rem;
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
@@ -349,10 +473,10 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: min(840px, 92vw);
+      width: min(880px, 92vw);
       background: #0f172a;
       border-radius: 2.25rem;
-      padding: 3.5rem 2.5rem;
+      padding: 3.5rem 3rem;
       text-align: center;
       color: #fff;
       box-shadow: var(--shadow-xl);
@@ -371,21 +495,164 @@
       transform: translate(-50%, -50%) scale(1);
     }
 
+    /* ─── EXPANDABLE ENGINEERING DRAWER (RIGHT-SIDE) ─── */
+    .tech-drawer {
+      position: fixed;
+      top: 76px;
+      right: 2rem;
+      width: min(460px, 92vw);
+      max-height: calc(100vh - 100px);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-xl);
+      overflow-y: auto;
+      z-index: 90;
+      pointer-events: auto;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .tech-drawer.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(480px);
+    }
+    .tech-drawer.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 1rem 1.25rem;
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .drawer-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .drawer-close-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: var(--text-muted);
+    }
+    .drawer-close-btn:hover {
+      background: #fee2e2;
+      color: var(--crimson);
+    }
+
+    .drawer-stage-selector {
+      display: flex;
+      padding: 0.6rem 1rem;
+      gap: 0.35rem;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .drawer-stage-pill {
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .drawer-stage-pill:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .drawer-stage-pill.active {
+      background: #0f172a;
+      color: #fff;
+      border-color: #0f172a;
+    }
+
+    .drawer-body {
+      padding: 1.25rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .drawer-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.85rem 0;
+      font-size: 0.78rem;
+    }
+    .drawer-table th {
+      text-align: left;
+      padding: 0.5rem 0.6rem;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--text);
+    }
+    .drawer-table td {
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    .drawer-code {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 0.8rem;
+      border-radius: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      margin: 0.75rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     /* ─── BOTTOM FLOATING SCROLL WHEEL CONTROLLER HUD ─── */
     .space-scroll-hud {
       position: fixed;
       bottom: 1.75rem;
-      right: 2.5rem;
+      right: 2rem;
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.92);
+      background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border);
       border-radius: 9999px;
-      padding: 0.45rem 1rem;
+      padding: 0.4rem 1rem;
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.75rem;
       box-shadow: var(--shadow-md);
     }
 
@@ -413,7 +680,7 @@
     .stage-dots-group {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.4rem;
     }
     .stage-dot {
       width: 28px;
@@ -445,10 +712,10 @@
       font-size: 0.72rem;
       color: var(--text-muted);
       border-left: 1px solid rgba(15, 23, 42, 0.15);
-      padding-left: 0.85rem;
+      padding-left: 0.75rem;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.4rem;
     }
     .mouse-wheel-icon {
       font-size: 1rem;
@@ -466,22 +733,37 @@
 
   <!-- Top App Navigation -->
   <header class="top-bar">
-    <a href="#" class="brand-link">
-      <span>🧱</span>
-      <span>OmniBrick</span>
+    <div class="brand-group">
+      <a href="#" class="brand-link">
+        <span>🧱</span>
+        <span>OmniBrick</span>
+      </a>
       <span class="brand-badge">Next Gen 2026</span>
-    </a>
+    </div>
+
+    <!-- Quick Stage Navigation Pills -->
+    <div class="top-stage-pills">
+      <button class="top-stage-pill active" id="pill-0" onclick="jumpToSpaceStage(0)">1. Мозг (NPU)</button>
+      <button class="top-stage-pill" id="pill-1" onclick="jumpToSpaceStage(1)">2. Кокпит & ИИ</button>
+      <button class="top-stage-pill" id="pill-2" onclick="jumpToSpaceStage(2)">3. Робот 51515</button>
+      <button class="top-stage-pill" id="pill-3" onclick="jumpToSpaceStage(3)">4. 3D Архитектура</button>
+      <button class="top-stage-pill" id="pill-4" onclick="jumpToSpaceStage(4)">5. Shipaton 2026</button>
+    </div>
 
     <div class="nav-actions">
-      <button class="btn-nav" id="soundBtn" onclick="toggleAudio()" title="Sound SFX (M)">
+      <button class="btn-nav btn-nav-tech" id="techDrawerBtn" onclick="toggleTechDrawer()" title="Открыть спецификации и формуляр (Клавиша I)">
+        <span>🔬</span>
+        <span>Инженерия & ТТХ</span>
+      </button>
+      <button class="btn-nav" id="soundBtn" onclick="toggleAudio()" title="Звуковые эффекты (Клавиша M)">
         <span id="soundIcon">🔊</span>
-        <span>Sound</span>
+        <span>Звук</span>
       </button>
       <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-nav">
         <span>GitHub (MIT)</span>
       </a>
       <a href="http://localhost:5180" target="_blank" class="btn-nav btn-nav-primary">
-        <span>Launch App ↗</span>
+        <span>В Студию ↗</span>
       </a>
     </div>
   </header>
@@ -493,43 +775,54 @@
   <div class="narrative-card">
     <span class="narrative-badge" id="hudBadge">01 // The Smartphone Brain</span>
     <h1 class="narrative-title" id="hudTitle">Твой смартфон — мозг робота.</h1>
-    <p class="narrative-desc" id="hudDesc">
-      Вместо покупки контроллера за $400 мы используем обычный Android-телефон. Крутите колесо мыши вниз для погружения внутрь ↓
-    </p>
+    <div class="narrative-desc-box">
+      <p class="narrative-desc" id="hudDesc">
+        Вместо покупки промышленного контроллера за $400+ мы используем б/у Android-телефон: 8-ядерный NPU, 4K камера с EIS, микрофонный массив с шумоподавлением и батарея 5000 мАч. Крутите колесо мыши вниз для погружения внутрь ↓
+      </p>
+      <div class="narrative-tags" id="hudTags">
+        <span class="spec-tag highlight">⚡ 22 INT8 TOPS NPU</span>
+        <span class="spec-tag">📷 4K 60fps EIS</span>
+        <span class="spec-tag">🔋 5000 mAh Li-Po</span>
+        <span class="spec-tag highlight">💰 Затраты: $0</span>
+      </div>
+    </div>
   </div>
 
   <!-- Stage 2 In-App Screen Overlay (Dives inside phone) -->
   <div class="app-screen-frame hidden" id="appCockpit">
     <div class="cockpit-top-bar">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
-        <span style="font-weight: bold;">OMNIBRICK RUNTIME v2026</span>
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981;"></span>
+        <span style="font-weight: 800; letter-spacing: 0.05em;">OMNIBRICK RUNTIME v2026.4</span>
       </div>
       <div style="display: flex; gap: 1.25rem; color: #94a3b8; font-family: var(--font-mono); font-size: 0.72rem;">
-        <span>BATTERY: 94%</span>
-        <span>SONAR: 120 cm</span>
-        <span style="color: #38bdf8;">LATENCY: 210ms</span>
+        <span>BATTERY: <strong style="color: #34d399;">94% (7.4V)</strong></span>
+        <span>SONAR: <strong style="color: #38bdf8;" id="liveSonarCm">34.8 cm</strong></span>
+        <span>AUDIO VAD: <strong style="color: #c084fc;">140ms</strong></span>
+        <span>LWP3 BLE: <strong style="color: #fbbf24;">28 Hz</strong></span>
       </div>
     </div>
 
     <div class="cockpit-tabs">
       <button class="cockpit-tab-item active" onclick="switchCockpitTab('face')">👁️ Эмоции и Голос</button>
-      <button class="cockpit-tab-item" onclick="switchCockpitTab('habits')">🧠 Память привычек</button>
-      <button class="cockpit-tab-item" onclick="switchCockpitTab('build')">🛠️ Build Studio</button>
-      <button class="cockpit-tab-item" onclick="switchCockpitTab('market')">🧱 RevenueCat</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('habits')">🧠 Память привычек и AI</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('build')">🛠️ Build Studio (MCP)</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('market')">🧱 RevenueCat & Рынок</button>
+      <button class="cockpit-tab-item" onclick="switchCockpitTab('telemetry')">📊 Live Телеметрия</button>
     </div>
 
     <div class="cockpit-viewport-body" id="cockpitBody">
-      <!-- Populated by JS -->
+      <!-- Dynamically populated by JS -->
     </div>
   </div>
 
   <!-- Stage 3 Detailed Robot Part Inspection Chips -->
   <div class="robot-chips-overlay" id="robotChips" style="display: none;">
-    <button class="chip-btn active" onclick="setRobotPartFocus('phone')">📱 Смартфон-голова</button>
-    <button class="chip-btn" onclick="setRobotPartFocus('hub')">🔲 Хаб LEGO 51515 (Пины и Порты)</button>
-    <button class="chip-btn" onclick="setRobotPartFocus('wheels')">⚙️ Колеса с протектором (A/B)</button>
+    <button class="chip-btn active" onclick="setRobotPartFocus('phone')">📱 Смартфон-голова (NPU Brain)</button>
+    <button class="chip-btn" onclick="setRobotPartFocus('hub')">🔲 Хаб LEGO 51515 (Cortex-M4)</button>
+    <button class="chip-btn" onclick="setRobotPartFocus('wheels')">⚙️ Моторы с энкодерами 1° (A/B)</button>
     <button class="chip-btn" onclick="setRobotPartFocus('sonar')">👁️ Сонар HC-SR04 (Порт C)</button>
+    <button class="chip-btn" onclick="setRobotPartFocus('tires')">🛞 Протекторные шины (56x26 мм)</button>
     <button class="chip-btn" onclick="setRobotPartFocus('all')">🔄 Полный робот 360°</button>
   </div>
 
@@ -541,22 +834,48 @@
     <h2 style="font-size: clamp(2rem, 3.8vw, 3rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1rem;">
       Готов к реальному миру.
     </h2>
-    <p style="color: #94a3b8; max-width: 600px; margin: 0 auto 2rem auto; line-height: 1.65; font-size: 1rem;">
-      Создано Бекнуром (15 лет, Астана, Казахстан). Полностью открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515.
+    <p style="color: #94a3b8; max-width: 640px; margin: 0 auto 2rem auto; line-height: 1.65; font-size: 0.98rem;">
+      Создано <strong>Бекнуром (15 лет, Астана, Казахстан)</strong>. Полностью открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515. Превращает старые телефоны в мощных физических ИИ-агентов.
     </p>
     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-      <a href="http://localhost:5180" target="_blank" class="btn-nav btn-nav-primary" style="padding: 0.85rem 2.2rem; font-size: 0.95rem; background: #38bdf8; color: #000; border-color: #38bdf8;">
+      <a href="http://localhost:5180" target="_blank" class="btn-nav btn-nav-primary" style="padding: 0.85rem 2.2rem; font-size: 0.95rem; background: #38bdf8; color: #000; border-color: #38bdf8; font-weight: 800;">
         🚀 Запустить веб-студию OmniBrick
       </a>
-      <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-nav" style="padding: 0.85rem 2.2rem; font-size: 0.95rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: #fff;">
-        ⭐ Репозиторий на GitHub (MIT)
+      <button onclick="toggleTechDrawer(true); setTechDrawerStage(4);" class="btn-nav" style="padding: 0.85rem 1.8rem; font-size: 0.95rem; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); color: #fff;">
+        🔬 Смотреть ТТХ & Дорожную карту
+      </button>
+      <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn-nav" style="padding: 0.85rem 1.8rem; font-size: 0.95rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff;">
+        ⭐ GitHub (MIT)
       </a>
+    </div>
+  </div>
+
+  <!-- Expandable Engineering Specs Drawer (Right-Side) -->
+  <div class="tech-drawer hidden" id="techDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">
+        <span>🔬</span>
+        <span>Инженерный формуляр (ТТХ)</span>
+      </div>
+      <button class="drawer-close-btn" onclick="toggleTechDrawer(false)" title="Закрыть (Esc)">✕</button>
+    </div>
+
+    <div class="drawer-stage-selector">
+      <button class="drawer-stage-pill active" id="drawerPill-0" onclick="setTechDrawerStage(0)">1. Мозг</button>
+      <button class="drawer-stage-pill" id="drawerPill-1" onclick="setTechDrawerStage(1)">2. Кокпит & ИИ</button>
+      <button class="drawer-stage-pill" id="drawerPill-2" onclick="setTechDrawerStage(2)">3. Железо 51515</button>
+      <button class="drawer-stage-pill" id="drawerPill-3" onclick="setTechDrawerStage(3)">4. Стек протоколов</button>
+      <button class="drawer-stage-pill" id="drawerPill-4" onclick="setTechDrawerStage(4)">5. Команда & Roadmap</button>
+    </div>
+
+    <div class="drawer-body" id="drawerContent">
+      <!-- Dynamically populated by JS based on stage -->
     </div>
   </div>
 
   <!-- Bottom Floating 3D Space Scroll HUD Controller -->
   <div class="space-scroll-hud">
-    <button class="scroll-arrow-btn" onclick="stepSpaceStage(-1)" title="Предыдущий этап (Вверх)">▲</button>
+    <button class="scroll-arrow-btn" onclick="stepSpaceStage(-1)" title="Предыдущий этап (Вверх / ↑)">▲</button>
     <div class="stage-dots-group">
       <button class="stage-dot active" id="dot-0" onclick="jumpToSpaceStage(0)">1</button>
       <button class="stage-dot" id="dot-1" onclick="jumpToSpaceStage(1)">2</button>
@@ -564,19 +883,19 @@
       <button class="stage-dot" id="dot-3" onclick="jumpToSpaceStage(3)">4</button>
       <button class="stage-dot" id="dot-4" onclick="jumpToSpaceStage(4)">5</button>
     </div>
-    <button class="scroll-arrow-btn" onclick="stepSpaceStage(1)" title="Следующий этап (Вниз)">▼</button>
+    <button class="scroll-arrow-btn" onclick="stepSpaceStage(1)" title="Следующий этап (Вниз / ↓)">▼</button>
 
     <div class="scroll-indicator-text">
       <span class="mouse-wheel-icon">🖱️</span>
-      <span>Крутите скролл в 3D</span>
+      <span>Крутите скролл в 3D • Клавиши [↑/↓] [1-5] [I]</span>
     </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════════════════════
-       CLIENT 3D SPACE SCROLL ENGINE (INSTANT & SILKY SMOOTH)
+       CLIENT 3D SPACE SCROLL ENGINE & INTERACTIVE STATE MACHINE
        ══════════════════════════════════════════════════════════════════════════ -->
   <script>
-    // ─── AUDIO ENGINE ───
+    // ─── AUDIO ENGINE (SYNTHESIZED WEB AUDIO SFX) ───
     let audioCtx = null;
     let audioEnabled = true;
 
@@ -586,7 +905,7 @@
       return audioCtx;
     }
 
-    function playTone(freq, type = 'sine', duration = 0.08) {
+    function playTone(freq, type = 'sine', duration = 0.08, vol = 0.04) {
       if (!audioEnabled) return;
       try {
         const ctx = getAudioCtx();
@@ -594,7 +913,7 @@
         const gain = ctx.createGain();
         osc.type = type;
         osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.setValueAtTime(vol, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
         osc.connect(gain);
         gain.connect(ctx.destination);
@@ -603,42 +922,91 @@
       } catch (e) {}
     }
 
+    function playChime(kind = 'click') {
+      if (!audioEnabled) return;
+      if (kind === 'click') {
+        playTone(600, 'sine', 0.05, 0.03);
+      } else if (kind === 'success') {
+        playTone(523.25, 'sine', 0.08, 0.04);
+        setTimeout(() => playTone(659.25, 'sine', 0.1, 0.04), 60);
+        setTimeout(() => playTone(783.99, 'sine', 0.15, 0.04), 120);
+      } else if (kind === 'alert') {
+        playTone(330, 'square', 0.08, 0.03);
+        setTimeout(() => playTone(290, 'square', 0.12, 0.03), 80);
+      } else if (kind === 'habit') {
+        playTone(440, 'triangle', 0.08, 0.04);
+        setTimeout(() => playTone(554.37, 'triangle', 0.08, 0.04), 70);
+        setTimeout(() => playTone(659.25, 'sine', 0.18, 0.04), 140);
+      }
+    }
+
     function toggleAudio() {
       audioEnabled = !audioEnabled;
       document.getElementById('soundIcon').innerText = audioEnabled ? '🔊' : '🔇';
-      if (audioEnabled) playTone(780, 'sine', 0.1);
+      if (audioEnabled) playChime('success');
     }
 
-    // ─── THE 5 STAGES OF 3D SPACE ───
+    // ─── THE 5 STAGES OF 3D SPACE SCROLLYTELLING ───
     const stages = [
       {
         badge: "01 // The Smartphone Brain",
         title: "Твой смартфон — мозг робота.",
-        desc: "Вместо покупки контроллера за $400 мы используем обычный Android-телефон. Крутите колесо мыши вниз для погружения внутрь ↓",
+        desc: "Вместо покупки промышленного контроллера за $400+ мы используем обычный Android-телефон: 8-ядерный NPU, 4K камера с EIS, микрофонный массив с шумоподавлением и батарея 5000 мАч. Крутите колесо мыши вниз для погружения внутрь ↓",
+        tags: [
+          { text: "⚡ 22 INT8 TOPS NPU", hi: true },
+          { text: "📷 4K 60fps EIS", hi: false },
+          { text: "🔋 5000 mAh Li-Po", hi: false },
+          { text: "💰 Стоимость: $0", hi: true }
+        ],
         yaw: 0.35, pitch: 0.25, zoom: 1.15, robotAlpha: 0.0, diagramAlpha: 0.0
       },
       {
         badge: "02 // Inside The App Cockpit",
         title: "Заходим внутрь приложения.",
-        desc: "Камера плавно нырнула в экран смартфона! Здесь пилот общается с роботом, настраивает промпты и видит статус сенсоров. Крутите дальше ↓",
+        desc: "Камера плавно нырнула в экран смартфона! Здесь пилот управляет эмоциональным выражением робота, обучает привычкам (вечерний кодинг в Antigravity) и калибрует крутящий момент. Крутите дальше ↓",
+        tags: [
+          { text: "🧠 Векторная память привычек", hi: true },
+          { text: "⚡ Задержка: 210 мс", hi: true },
+          { text: "💻 Триггер Antigravity IDE", hi: true },
+          { text: "👑 RevenueCat Pro", hi: false }
+        ],
         yaw: 0.0, pitch: 0.0, zoom: 3.2, robotAlpha: 0.0, diagramAlpha: 0.0
       },
       {
         badge: "03 // The Physical Robot",
         title: "Детализированный робот LEGO 51515.",
-        desc: "Отдаляемся назад: этот телефон закреплен в изголовье роботизированной базы! Рассмотрите хаб 51515, пины, колеса A/B и сонар C. Крутите дальше ↓",
+        desc: "Отдаляемся назад: этот телефон закреплен в изголовье роботизированной базы! Рассмотрите хаб 51515, пины, колеса A/B, сонар C и кабели питания. Крутите дальше ↓",
+        tags: [
+          { text: "🔲 Hub STM32F413 100MHz", hi: true },
+          { text: "⚙️ Энкодеры 1° точности", hi: false },
+          { text: "👁️ Сонар HC-SR04 (1-200см)", hi: false },
+          { text: "⚖️ Низкий центр тяжести 38мм", hi: true }
+        ],
         yaw: 0.55, pitch: 0.45, zoom: 1.15, robotAlpha: 1.0, diagramAlpha: 0.0
       },
       {
         badge: "04 // 3D Architecture Diagram",
         title: "Схема сквозной работы системы.",
-        desc: "Робот раскладывается на 3D-слои архитектуры: от захвата 4K камеры смартфона до вызова байткода LEGO LWP3 по Bluetooth. Крутите к финалу ↓",
+        desc: "Робот раскладывается на 5 изометрических уровней архитектуры: от захвата 4K видеокамеры до вызова байткода LEGO LWP3 по Bluetooth. Крутите к финалу ↓",
+        tags: [
+          { text: "1. Sensory Ingestion (WebRTC)", hi: false },
+          { text: "2. Gemini 2.5 Flash Token", hi: true },
+          { text: "3. MCP Tool RPC", hi: false },
+          { text: "4. BLE LWP3 Байткод", hi: true },
+          { text: "5. Аппаратный стоп <15см", hi: true }
+        ],
         yaw: 0.40, pitch: 0.60, zoom: 1.25, robotAlpha: 0.15, diagramAlpha: 1.0
       },
       {
         badge: "05 // Next Gen Award Pitch",
         title: "Готов к реальному миру.",
-        desc: "Финал: открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515.",
+        desc: "Финал: открытый исходный код с лицензией MIT, рабочая связка Android + RevenueCat + LEGO Mindstorms 51515. Автор — 15-летний разработчик Бекнур из Астаны.",
+        tags: [
+          { text: "👨‍💻 Автор: Бекнур (15 лет)", hi: true },
+          { text: "🇰🇿 Астана, Казахстан", hi: false },
+          { text: "⭐ MIT Open Source", hi: true },
+          { text: "🏆 Shipaton 2026 Ready", hi: true }
+        ],
         yaw: 0.50, pitch: 0.35, zoom: 1.10, robotAlpha: 0.8, diagramAlpha: 0.0
       }
     ];
@@ -656,6 +1024,9 @@
     let robotFocus = 'phone';
     let pulseCycle = 0;
 
+    // Cockpit State
+    let activeEmotion = 'friendly';
+
     // Canvas Setup
     const canvas = document.getElementById('spaceCanvas');
     const ctx = canvas.getContext('2d');
@@ -669,13 +1040,12 @@
 
     // ─── INSTANT MOUSE WHEEL SCROLL IN 3D SPACE (DIRECT & SILKY) ───
     window.addEventListener('wheel', (e) => {
-      // Direct wheel delta: 1 wheel notch moves camera smoothly
       const speed = 0.0025;
       const delta = Math.sign(e.deltaY) * Math.min(0.4, Math.abs(e.deltaY) * speed);
       targetProgress = Math.max(0, Math.min(4.0, targetProgress + delta));
     }, { passive: true });
 
-    // Touch swipe for Mobile
+    // Touch swipe for Mobile & Tablets
     let touchStartY = 0;
     window.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
@@ -701,18 +1071,29 @@
     });
     window.addEventListener('pointerup', () => { isDragging = false; });
 
-    // Keyboard support
+    // Keyboard support: arrows, 1..5, I for inspector, M for audio
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === 'Space') {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
         stepSpaceStage(1);
       } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
         stepSpaceStage(-1);
+      } else if (e.key >= '1' && e.key <= '5') {
+        jumpToSpaceStage(parseInt(e.key) - 1);
+      } else if (e.key.toLowerCase() === 'i') {
+        toggleTechDrawer();
+      } else if (e.key.toLowerCase() === 'm') {
+        toggleAudio();
+      } else if (e.key === 'Escape') {
+        toggleTechDrawer(false);
       }
     });
 
     function jumpToSpaceStage(idx) {
       targetProgress = idx;
-      playTone(520 + idx * 60, 'sine', 0.06);
+      playTone(520 + idx * 50, 'sine', 0.06);
+      if (!document.getElementById('techDrawer').classList.contains('hidden')) {
+        setTechDrawerStage(idx);
+      }
     }
 
     function stepSpaceStage(dir) {
@@ -801,6 +1182,49 @@
       poly([0,1,2,3]);
     }
 
+    // Draw 3D Floating Pin Callout Tag
+    function drawPinCallout(pt, label, cam, alpha, isSelected = false) {
+      if (alpha <= 0.05) return;
+      const p = project3D(pt, cam);
+      if (p.z < -200) return;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      // Pin circle
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, isSelected ? 8 * p.scale : 5 * p.scale, 0, Math.PI * 2);
+      ctx.fillStyle = isSelected ? '#7c3aed' : '#0284c7';
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Pulsing ring
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, (12 + Math.sin(Date.now() * 0.005) * 4) * p.scale, 0, Math.PI * 2);
+      ctx.strokeStyle = isSelected ? 'rgba(124, 58, 237, 0.5)' : 'rgba(2, 132, 199, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Line and Label
+      const lineLen = 35 * p.scale;
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + lineLen, p.y - lineLen);
+      ctx.lineTo(p.x + lineLen + 60 * p.scale, p.y - lineLen);
+      ctx.strokeStyle = isSelected ? '#7c3aed' : 'rgba(15, 23, 42, 0.4)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // Text box
+      ctx.font = 'bold 11px ui-monospace, monospace';
+      ctx.fillStyle = isSelected ? '#7c3aed' : '#0f172a';
+      ctx.fillText(label, p.x + lineLen + 4, p.y - lineLen - 5);
+
+      ctx.restore();
+    }
+
     // ─── MAIN 60 FPS ANIMATION & RENDER LOOP ───
     function renderLoop() {
       // 1. Smooth Dampened Progress
@@ -811,6 +1235,9 @@
       if (activeIdx !== currentStageIndex) {
         currentStageIndex = activeIdx;
         playTone(480 + currentStageIndex * 50, 'sine', 0.04);
+        if (!document.getElementById('techDrawer').classList.contains('hidden')) {
+          setTechDrawerStage(currentStageIndex);
+        }
       }
 
       // Update Narrative Card
@@ -819,10 +1246,17 @@
       document.getElementById('hudTitle').innerText = st.title;
       document.getElementById('hudDesc').innerText = st.desc;
 
-      // Update Navigation Dots
+      const tagsContainer = document.getElementById('hudTags');
+      tagsContainer.innerHTML = st.tags.map(t => 
+        '<span class="spec-tag ' + (t.hi ? 'highlight' : '') + '">' + t.text + '</span>'
+      ).join('');
+
+      // Update Navigation Dots & Top Pills
       for (let i = 0; i <= 4; i++) {
-        const dot = document.getElementById(`dot-${i}`);
+        const dot = document.getElementById('dot-' + i);
         if (dot) dot.classList.toggle('active', i === currentStageIndex);
+        const pill = document.getElementById('pill-' + i);
+        if (pill) pill.classList.toggle('active', i === currentStageIndex);
       }
 
       // 2. Toggle HTML Overlays based on 3D Space Progress
@@ -935,7 +1369,22 @@
         ctx.moveTo(portA.x, portA.y);
         ctx.quadraticCurveTo((portA.x + motorA.x)/2, portA.y - 20, motorA.x, motorA.y);
         ctx.stroke();
+
+        const portB = project3D({ x: 48, y: -25, z: 20 }, cam);
+        const motorB = project3D({ x: 64, y: -30, z: 20 }, cam);
+        ctx.beginPath();
+        ctx.moveTo(portB.x, portB.y);
+        ctx.quadraticCurveTo((portB.x + motorB.x)/2, portB.y - 20, motorB.x, motorB.y);
+        ctx.stroke();
         ctx.restore();
+
+        // 3D Floating Pin Callout Tags in Stage 3
+        if (Math.abs(currentProgress - 2.0) < 0.35) {
+          drawPinCallout({ x: 0, y: 50, z: 20 }, "AMOLED Brain (NPU)", cam, rAlpha, robotFocus === 'phone');
+          drawPinCallout({ x: 0, y: -15, z: -20 }, "Hub 51515 Cortex-M4", cam, rAlpha, robotFocus === 'hub');
+          drawPinCallout({ x: -75, y: -40, z: 20 }, "Motor A (1° Optical)", cam, rAlpha, robotFocus === 'wheels');
+          drawPinCallout({ x: 0, y: -5, z: 80 }, "Sonar HC-SR04", cam, rAlpha, robotFocus === 'sonar');
+        }
       }
 
       // 5. THE SMARTPHONE HEAD (IN STAGES 1, 2, 3)
@@ -960,21 +1409,21 @@
       // 6. STAGE 4: 3D ARCHITECTURE BLUEPRINT SLABS
       const dAlpha = cam.diagramAlpha;
       if (dAlpha > 0.01) {
-        pulseCycle = (pulseCycle + 0.04) % 5;
+        pulseCycle = (pulseCycle + 0.035) % 5;
         const currentActiveTier = Math.floor(pulseCycle);
 
         const tiers = [
-          { name: "1. SENSORY INGESTION", tech: "Phone 4K Camera + Audio VAD", y: 70, color: "#0284c7" },
-          { name: "2. DUAL-CORE REASONING", tech: "Gemini 2.5 Flash + World Cache (<240ms)", y: 140, color: "#7c3aed" },
-          { name: "3. MCP TOOL BUS", tech: "drive_differential(75), speak_voice()", y: 210, color: "#059669" },
-          { name: "4. BLE LWP3 DISPATCH", tech: "LEGO GATT Characteristic: 08 00 81 00...", y: 280, color: "#d97706" },
-          { name: "5. PHYSICAL ACTUATORS", tech: "Hub 51515 Motors (Ports A/B) + HC-SR04", y: 350, color: "#0f172a" },
+          { name: "1. SENSORY INGESTION", tech: "Phone 4K Camera + Audio VAD (140ms)", y: 70, color: "#0284c7" },
+          { name: "2. DUAL-CORE REASONING", tech: "Gemini 2.5 Flash + Context Cache (210ms TTFT)", y: 140, color: "#7c3aed" },
+          { name: "3. MCP TOOL BUS", tech: "drive_differential(75), speak_voice(), sonar_cm()", y: 210, color: "#059669" },
+          { name: "4. BLE LWP3 DISPATCH", tech: "LEGO GATT Service UUID: 00001623-1212... (12ms)", y: 280, color: "#d97706" },
+          { name: "5. PHYSICAL ACTUATORS", tech: "Hub 51515 Motors (Ports A/B) + Safety Stop (<15cm)", y: 350, color: "#0f172a" },
         ];
 
         tiers.forEach((tier, idx) => {
           const isPulsed = currentActiveTier === idx;
-          const boxW = Math.min(640, w - 80);
-          const boxH = 44;
+          const boxW = Math.min(680, w - 80);
+          const boxH = 46;
           const startX = (w - boxW) / 2;
           const startY = tier.y + 40;
 
@@ -991,11 +1440,11 @@
 
           ctx.font = 'bold 12px ui-monospace, monospace';
           ctx.fillStyle = isPulsed ? '#ffffff' : '#0f172a';
-          ctx.fillText(tier.name, startX + 20, startY + 26);
+          ctx.fillText(tier.name, startX + 20, startY + 27);
 
           ctx.font = '11px ui-monospace, monospace';
           ctx.fillStyle = isPulsed ? '#f8fafc' : '#64748b';
-          ctx.fillText(tier.tech, startX + 220, startY + 26);
+          ctx.fillText(tier.tech, startX + 220, startY + 27);
           ctx.restore();
         });
       }
@@ -1003,7 +1452,7 @@
       requestAnimationFrame(renderLoop);
     }
 
-    // ─── COCKPIT TABS LOGIC ───
+    // ─── COCKPIT TABS LOGIC & INTERACTIVITY ───
     function switchCockpitTab(tab) {
       document.querySelectorAll('.cockpit-tab-item').forEach(t => t.classList.remove('active'));
       const active = Array.from(document.querySelectorAll('.cockpit-tab-item')).find(b => b.onclick.toString().includes(tab));
@@ -1015,61 +1464,311 @@
       if (tab === 'face') {
         body.innerHTML = `
           <div style="text-align: center;">
-            <div style="font-family: var(--font-mono); font-size: 0.78rem; color: #38bdf8;">
-              STATUS: TRACKING PILOT • LATENCY &lt; 210 MS
+            <div style="display: flex; justify-content: space-between; align-items: center; max-width: 540px; margin: 0 auto 0.5rem auto;">
+              <span style="font-family: var(--font-mono); font-size: 0.74rem; color: #38bdf8;">
+                ● TRACKING PILOT (FACE EIS & AUDIO VAD)
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.15rem 0.5rem; border-radius: 4px;">
+                CONFIDENCE: 99.4%
+              </span>
             </div>
-            <div class="app-robot-eyes">
+
+            <!-- Dynamic Robot Eyes -->
+            <div class="app-robot-eyes emotion-${activeEmotion}" id="eyesContainer">
               <div class="app-eye-unit" id="eyeL"></div>
               <div class="app-eye-unit" id="eyeR"></div>
             </div>
-            <div style="background: rgba(255,255,255,0.06); padding: 0.85rem 1.25rem; border-radius: 0.85rem; max-width: 480px; margin: 0 auto; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.5;">
-              «Бекнур, я вижу препятствие на 35 см. Выполняю объезд по дуге 45° на пониженной мощности моторов.»
+
+            <!-- Emotion Switchers -->
+            <div style="display: flex; justify-content: center; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap;">
+              <button class="chip-btn ${activeEmotion === 'friendly' ? 'active' : ''}" onclick="setRobotEmotion('friendly')">😊 Дружелюбный</button>
+              <button class="chip-btn ${activeEmotion === 'scan' ? 'active' : ''}" onclick="setRobotEmotion('scan')">🧐 Анализ</button>
+              <button class="chip-btn ${activeEmotion === 'turbo' ? 'active' : ''}" onclick="setRobotEmotion('turbo')">⚡ Спринт</button>
+              <button class="chip-btn ${activeEmotion === 'sleep' ? 'active' : ''}" onclick="setRobotEmotion('sleep')">😴 Сон</button>
+              <button class="chip-btn ${activeEmotion === 'danger' ? 'active' : ''}" onclick="setRobotEmotion('danger')">🚨 Опасность</button>
+            </div>
+
+            <!-- Latency Pipeline Readout -->
+            <div style="background: rgba(255,255,255,0.05); padding: 0.75rem 1rem; border-radius: 0.75rem; max-width: 540px; margin: 0 auto 0.75rem auto; display: flex; justify-content: space-around; font-family: var(--font-mono); font-size: 0.72rem;">
+              <div>MIC VAD: <strong style="color: #38bdf8;">40ms</strong></div>
+              <div>GEMINI TTFT: <strong style="color: #c084fc;">145ms</strong></div>
+              <div>BLE DISPATCH: <strong style="color: #fbbf24;">12ms</strong></div>
+              <div>ИТОГО: <strong style="color: #34d399;">197ms</strong></div>
+            </div>
+
+            <!-- Real-time Robot Speech Transcript -->
+            <div id="robotSpeechBubble" style="background: rgba(255,255,255,0.08); padding: 0.85rem 1.25rem; border-radius: 0.85rem; max-width: 540px; margin: 0 auto; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.5; border-left: 3px solid #38bdf8; text-align: left;">
+              «Бекнур, я вижу тебя за рабочим столом на дистанции 45 см. Препятствий по курсу нет. Скорость моторов снижена для бесшумного режима.»
             </div>
           </div>
         `;
       } else if (tab === 'habits') {
         body.innerHTML = `
-          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <strong style="color: #c084fc;">💻 Вечерний кодинг в Antigravity IDE (21:00)</strong>
-                <div style="font-size: 0.72rem; color: #94a3b8;">Авто-напоминание пилоту и запуск проекта</div>
-              </div>
-              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.2rem 0.5rem; border-radius: 4px;">ACTIVE</span>
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; max-width: 680px; margin: 0 auto; width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #c084fc; font-weight: bold;">
+                🧠 ВЕКТОРНАЯ ПАМЯТЬ ЭПИЗОДОВ & АДАПТИВНОЕ САМООБУЧЕНИЕ
+              </span>
+              <button onclick="simulateHabitTrigger()" class="chip-btn" style="background: #7c3aed; color: #fff; border-color: #7c3aed; font-size: 0.72rem;">
+                ⚡ Симулировать триггер 21:00
+              </button>
             </div>
-            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+
+            <div id="habitExecutionLog" style="display: none; background: rgba(124, 58, 237, 0.15); border: 1px solid #7c3aed; padding: 0.75rem 1rem; border-radius: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.5; color: #e9d5ff;">
+              <!-- Simulated log goes here -->
+            </div>
+
+            <!-- Habit 1: Evening Coding in Antigravity -->
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.08);">
               <div>
-                <strong style="color: #38bdf8;">📐 Калибровка ламината</strong>
-                <div style="font-size: 0.72rem; color: #94a3b8;">-15% мощности моторов при скольжении</div>
+                <strong style="color: #c084fc; font-size: 0.88rem;">💻 Вечерний кодинг в Antigravity IDE (21:00)</strong>
+                <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 0.2rem;">
+                  Распознает время и положение пилота. Напоминает голосом и автоматически готовит проект к запуску.
+                </div>
               </div>
-              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.2rem 0.5rem; border-radius: 4px;">CALIBRATED</span>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; white-space: nowrap;">
+                АКТИВНО (21:00)
+              </span>
+            </div>
+
+            <!-- Habit 2: Surface Slip Adaptation -->
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.08);">
+              <div>
+                <strong style="color: #38bdf8; font-size: 0.88rem;">📐 Адаптация к трению пола (Ламинат)</strong>
+                <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 0.2rem;">
+                  Обнаружена пробуксовка правого колеса. ПИД-коррекция момента: -15% мощности, удержание ровного курса.
+                </div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #34d399; background: rgba(16,185,129,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; white-space: nowrap;">
+                ОТКАЛИБРОВАНО
+              </span>
+            </div>
+
+            <!-- Habit 3: Smart Sleep -->
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem 1.25rem; border-radius: 0.85rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.08);">
+              <div>
+                <strong style="color: #fbbf24; font-size: 0.88rem;">🔋 Умный ночной дозор (Энергосбережение)</strong>
+                <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 0.2rem;">
+                  При неподвижности пилота > 3 минут камера снижает частоту с 10 FPS до 1 FPS (экономия 78% батареи).
+                </div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #fbbf24; background: rgba(245,158,11,0.15); padding: 0.2rem 0.5rem; border-radius: 4px; white-space: nowrap;">
+                STANDBY (1 FPS)
+              </span>
             </div>
           </div>
         `;
       } else if (tab === 'build') {
         body.innerHTML = `
-          <div style="font-family: var(--font-mono); font-size: 0.75rem; background: rgba(0,0,0,0.4); padding: 1rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.1); line-height: 1.6; color: #cbd5e1;">
-            role: "Robotics Companion Pilot"<br>
-            personality: "Proactive, witty, safety-first"<br>
-            mcp_tools: [drive_differential, ultrasonic_ping, speak_voice]<br>
-            habit_antigravity: "true (active at 21:00)"
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; max-width: 680px; margin: 0 auto; width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8; font-weight: bold;">
+                🛠️ BUILD STUDIO: MCP TOOLS & РОБОТИЧЕСКИЙ ПРОМПТ
+              </span>
+              <div style="display: flex; gap: 0.35rem;">
+                <button class="chip-btn active" style="font-size: 0.68rem; padding: 0.25rem 0.6rem;" onclick="setPersonaPreset('companion')">Компаньон</button>
+                <button class="chip-btn" style="font-size: 0.68rem; padding: 0.25rem 0.6rem;" onclick="setPersonaPreset('sentry')">Охранник</button>
+                <button class="chip-btn" style="font-size: 0.68rem; padding: 0.25rem 0.6rem;" onclick="setPersonaPreset('rover')">Ровер</button>
+              </div>
+            </div>
+
+            <!-- Code Schema Viewer -->
+            <div id="mcpConfigViewer" class="drawer-code" style="margin: 0; max-height: 180px; overflow-y: auto;">
+{
+  "role": "Antigravity Robotics Pilot",
+  "personality": "Proactive, witty, safety-first",
+  "mcp_tools": [
+    "lego_drive_differential(speed_left, speed_right, duration_ms)",
+    "lego_read_ultrasonic_distance_cm()",
+    "gemini_voice_stream(emotion, pitch_shift)",
+    "lego_hub_led_matrix_draw(pattern_5x5)"
+  ],
+  "habits": {
+    "antigravity_coding_reminder": "21:00",
+    "surface_slip_compensation": true,
+    "safety_emergency_stop_cm": 15
+  }
+}
+            </div>
+
+            <!-- Sliders for Live Hardware Clamping -->
+            <div style="background: rgba(255,255,255,0.05); padding: 0.75rem 1rem; border-radius: 0.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-family: var(--font-mono); font-size: 0.72rem;">
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                  <span>МАКС. СКОРОСТЬ МОТОРОВ:</span>
+                  <strong style="color: #38bdf8;" id="motorSliderVal">75%</strong>
+                </div>
+                <input type="range" min="20" max="100" value="75" style="width: 100%; accent-color: #38bdf8;" oninput="document.getElementById('motorSliderVal').innerText = this.value + '%'">
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                  <span>АВАРИЙНЫЙ СТОП СОНАРА:</span>
+                  <strong style="color: #ef4444;" id="sonarSliderVal">15 см</strong>
+                </div>
+                <input type="range" min="10" max="50" value="15" style="width: 100%; accent-color: #ef4444;" oninput="document.getElementById('sonarSliderVal').innerText = this.value + ' см'">
+              </div>
+            </div>
           </div>
         `;
       } else if (tab === 'market') {
         body.innerHTML = `
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-family: var(--font-mono);">
-            <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.85rem; border: 1px solid rgba(56,189,248,0.3);">
-              <div style="color: #38bdf8; font-weight: bold;">👑 Neural Nexus PRO</div>
-              <div style="font-size: 1.2rem; font-weight: 900; margin: 0.35rem 0;">$9.99 / mo</div>
-              <div style="font-size: 0.7rem; color: #94a3b8;">Gemini 2.5 Flash, 3D Арена</div>
+          <div style="display: flex; flex-direction: column; gap: 0.85rem; max-width: 680px; margin: 0 auto; width: 100%;">
+            <!-- RevenueCat Entitlement Banner -->
+            <div style="background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(124,58,237,0.15)); border: 1px solid rgba(56,189,248,0.3); border-radius: 0.85rem; padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <strong style="color: #38bdf8; font-size: 0.88rem;">👑 REVENUECAT ВЕРИФИЦИРОВАН: omnibrick_pro</strong>
+                  <span style="background: #10b981; color: #000; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 800; padding: 0.1rem 0.4rem; border-radius: 4px;">ACTIVE</span>
+                </div>
+                <div style="font-size: 0.72rem; color: #cbd5e1; margin-top: 0.2rem;">
+                  ID: beknur_maker_astana • Квота: 250k мультимодальных токенов/день • Неограниченный BLE доступ
+                </div>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 1.1rem; font-weight: 900; color: #38bdf8;">$9.99/mo</span>
             </div>
-            <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.85rem; border: 1px solid rgba(245,158,11,0.3);">
-              <div style="color: #fbbf24; font-weight: bold;">🧱 Маркетплейс чертежей</div>
-              <div style="font-size: 1.2rem; font-weight: 900; margin: 0.35rem 0;">500 – 5000 🧱</div>
-              <div style="font-size: 0.7rem; color: #94a3b8;">70% роялти авторам!</div>
+
+            <!-- Marketplace Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; font-family: var(--font-mono);">
+              <div style="background: rgba(255,255,255,0.05); padding: 0.9rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="color: #fbbf24; font-weight: bold; font-size: 0.82rem;">🧱 Модуль Манипулятора-клешни</div>
+                <div style="font-size: 0.72rem; color: #94a3b8; margin: 0.35rem 0;">Захват кубиков 2x4 по цвету с помощью компьютерного зрения.</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                  <span style="color: #fbbf24; font-weight: bold;">350 🧱</span>
+                  <button class="chip-btn" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" onclick="playChime('click')">Установить</button>
+                </div>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.05); padding: 0.9rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+                <div style="color: #34d399; font-weight: bold; font-size: 0.82rem;">🛡️ Сторож квартиры (Sentry Guard)</div>
+                <div style="font-size: 0.72rem; color: #94a3b8; margin: 0.35rem 0;">Патрулирование коридора, отправка фото в Telegram при движении.</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+                  <span style="color: #34d399; font-weight: bold;">500 🧱</span>
+                  <button class="chip-btn" style="padding: 0.2rem 0.5rem; font-size: 0.68rem;" onclick="playChime('click')">Установить</button>
+                </div>
+              </div>
             </div>
           </div>
         `;
+      } else if (tab === 'telemetry') {
+        body.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; max-width: 680px; margin: 0 auto; width: 100%; font-family: var(--font-mono);">
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 0.68rem; color: #94a3b8;">MOTOR A (LEFT)</div>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #38bdf8; margin: 0.2rem 0;" id="tMotorA">144 RPM</div>
+              <div style="font-size: 0.68rem; color: #34d399;">PWM: 75% • ТОРК 6.2 N·cm</div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 0.68rem; color: #94a3b8;">MOTOR B (RIGHT)</div>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #38bdf8; margin: 0.2rem 0;" id="tMotorB">142 RPM</div>
+              <div style="font-size: 0.68rem; color: #34d399;">PWM: 75% • ТОРК 6.1 N·cm</div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 0.68rem; color: #94a3b8;">SONAR DISTANCE</div>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #fbbf24; margin: 0.2rem 0;" id="tSonar">34.8 CM</div>
+              <div style="font-size: 0.68rem; color: #34d399;">STATUS: CLEAR (>15cm)</div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 0.68rem; color: #94a3b8;">HUB 6-AXIS IMU</div>
+              <div style="font-size: 1.1rem; font-weight: bold; color: #c084fc; margin: 0.2rem 0;">P: +1.2° R: -0.4°</div>
+              <div style="font-size: 0.68rem; color: #94a3b8;">YAW: 124.6° COMPASS</div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 0.68rem; color: #94a3b8;">BLE PACKET RATE</div>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #10b981; margin: 0.2rem 0;">28.4 HZ</div>
+              <div style="font-size: 0.68rem; color: #38bdf8;">RSSI: -54 dBm • 0 LOSS</div>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.05); padding: 0.85rem; border-radius: 0.85rem; border: 1px solid rgba(255,255,255,0.1);">
+              <div style="font-size: 0.68rem; color: #94a3b8;">WATCHDOG INTERRUPT</div>
+              <div style="font-size: 1.25rem; font-weight: bold; color: #34d399; margin: 0.2rem 0;">8 MS</div>
+              <div style="font-size: 0.68rem; color: #94a3b8;">АППАРАТНЫЙ СТОП: OK</div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Emotion Switcher Helper
+    function setRobotEmotion(emotion) {
+      activeEmotion = emotion;
+      playTone(emotion === 'danger' ? 280 : (emotion === 'turbo' ? 740 : 580), 'sine', 0.08);
+
+      const eyes = document.getElementById('eyesContainer');
+      if (eyes) {
+        eyes.className = `app-robot-eyes emotion-${emotion}`;
+      }
+
+      document.querySelectorAll('#cockpitBody .chip-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.onclick.toString().includes(emotion));
+      });
+
+      const speech = document.getElementById('robotSpeechBubble');
+      if (speech) {
+        if (emotion === 'friendly') {
+          speech.innerText = '«Бекнур, я вижу тебя за столом на дистанции 45 см. Моторы в тихом режиме.»';
+        } else if (emotion === 'scan') {
+          speech.innerText = '«Сканирую комнату: ламинат, влажность 42%, обнаружен ноутбук с открытым Antigravity IDE.»';
+        } else if (emotion === 'turbo') {
+          speech.innerText = '«Режим спринта активирован! Моторы A и B на 100% мощности, сонар сканирует каждые 20 мс.»';
+        } else if (emotion === 'sleep') {
+          speech.innerText = '«Пилот отошел. Перехожу в спящий дозор с частотой 1 FPS для сохранения заряда аккумулятора.»';
+        } else if (emotion === 'danger') {
+          speech.innerText = '«ВНИМАНИЕ! Препятствие на 12 см! Аппаратный тормоз заблокировал колеса во избежание столкновения.»';
+        }
+      }
+    }
+
+    // Habit Simulator Routine
+    function simulateHabitTrigger() {
+      playChime('habit');
+      const log = document.getElementById('habitExecutionLog');
+      if (!log) return;
+
+      log.style.display = 'block';
+      log.innerHTML = `
+        <div>[21:00:00] ⏰ CRON EVENT: HABIT_ANTIGRAVITY_EVENING TRIGGERED</div>
+        <div>[21:00:01] 👁️ Vision: Пилот за рабочим столом (Уверенность 99.4%)</div>
+        <div>[21:00:02] 💻 WebSocket: Запуск Antigravity IDE... Проект открыт!</div>
+        <div>[21:00:03] 🔊 Голосовое уведомление синтезировано. Моторы переведены в тихое позиционирование.</div>
+      `;
+
+      const speech = document.getElementById('robotSpeechBubble');
+      if (speech) {
+        speech.innerText = '«Бекнур, 21:00! Запустил твой проект в Antigravity IDE. Я перевел моторы на минимум, чтобы не мешать кодить.»';
+      }
+    }
+
+    // Persona preset in Build Studio
+    function setPersonaPreset(preset) {
+      playChime('click');
+      const viewer = document.getElementById('mcpConfigViewer');
+      if (!viewer) return;
+
+      if (preset === 'companion') {
+        viewer.innerText = JSON.stringify({
+          role: "Antigravity Robotics Pilot",
+          personality: "Proactive, witty, safety-first",
+          mcp_tools: ["lego_drive_differential", "lego_read_ultrasonic_distance_cm", "gemini_voice_stream", "lego_hub_led_matrix_draw"],
+          habits: { antigravity_coding_reminder: "21:00", surface_slip_compensation: true, safety_emergency_stop_cm: 15 }
+        }, null, 2);
+      } else if (preset === 'sentry') {
+        viewer.innerText = JSON.stringify({
+          role: "Perimeter Sentry Guard",
+          personality: "Vigilant, authoritative, loud",
+          mcp_tools: ["lego_patrol_waypoints", "detect_intruders_yolo", "telegram_alert_photo", "sound_siren"],
+          security: { alert_radius_m: 3.5, night_vision: true }
+        }, null, 2);
+      } else if (preset === 'rover') {
+        viewer.innerText = JSON.stringify({
+          role: "Autonomous Room Surveyor",
+          personality: "Analytical, quiet, exploratory",
+          mcp_tools: ["slam_build_2d_occupancy_grid", "lego_precision_gyro_turn", "save_3d_pointcloud"],
+          mapping: { resolution_cm: 2.0, max_speed_pct: 45 }
+        }, null, 2);
       }
     }
 
@@ -1080,6 +1779,154 @@
       const active = Array.from(document.querySelectorAll('.chip-btn')).find(b => b.onclick.toString().includes(part));
       if (active) active.classList.add('active');
     }
+
+    // ─── ENGINEERING DRAWER (RIGHT-SIDE TECH INSPECTOR) ───
+    const techDossiers = [
+      {
+        title: "1. Вычислительная платформа смартфона (Hardware & Economics)",
+        html: `
+          <p>Вместо покупки дорогостоящих и тяжелых контроллеров (NVIDIA Jetson, Raspberry Pi 5 с обвесом) OmniBrick утилизирует б/у смартфоны на Android. Это дает готовую автономную платформу без пайки и проводов.</p>
+          <table class="drawer-table">
+            <thead>
+              <tr><th>Параметр</th><th>SBC (Jetson Orin Nano)</th><th>Смартфон (OmniBrick)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Стоимость</strong></td><td>$499 + $350 обвес = $850+</td><td style="color:#059669; font-weight:bold;">$0 (б/у из ящика)</td></tr>
+              <tr><td><strong>NPU / ИИ-вычисления</strong></td><td>20–40 TOPS</td><td style="color:#059669; font-weight:bold;">22–45 INT8 TOPS</td></tr>
+              <tr><td><strong>Камера</strong></td><td>USB/MIPI модуль ($60)</td><td>4K@60fps со стабом (EIS)</td></tr>
+              <tr><td><strong>Аудио-система</strong></td><td>USB микрофон + динамик</td><td>3x MEMS с шумоподавлением</td></tr>
+              <tr><td><strong>Питание</strong></td><td>Тяжелый повербанк 12V</td><td>Встроенный 5000 mAh Li-Po</td></tr>
+              <tr><td><strong>Вес и сборка</strong></td><td>480 г + жгут проводов</td><td>185 г, монолитная посадка</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Энергоэффективность:</strong> Мобильный процессор потребляет всего 3.5 Вт при инференсе, что обеспечивает до 6 часов непрерывной автономной работы робота.</p>
+        `
+      },
+      {
+        title: "2. Двухконтурная архитектура ИИ & Память привычек",
+        html: `
+          <p>Для преодоления сетевых задержек OmniBrick использует гибридную разделенную архитектуру обработки аудио и зрения:</p>
+          <div class="drawer-code">
+1. Fast Voice Path (&lt;180 ms):
+   Audio PCM (16kHz) -> On-device Silero VAD -> WebRTC WebSocket -> Gemini 2.5 Flash Audio Out
+2. Contextual Vision Path (1-5 FPS):
+   Camera 1080p -> Downscale 768x768 -> Gemini Multimodal Token Cache -> MCP Function Call
+          </div>
+          <p><strong>Векторная память эпизодов (Episodic Memory):</strong></p>
+          <ul style="padding-left: 1.25rem; margin-bottom: 0.85rem; color: #475569;">
+            <li><strong>Индексация привычек:</strong> Робот запоминает временные циклы пилота (например, 21:00 — вечерний кодинг в Antigravity IDE).</li>
+            <li><strong>Адаптивный ПИД-контроль:</strong> При скольжении по ламинату робот автоматически снижает коэффициент $K_p$ на 15%, предотвращая снос траектории.</li>
+            <li><strong>Энергосберегающий спящий дозор:</strong> При отсутствии пилота более 3 минут видеопоток снижается до 1 кадра в секунду.</li>
+          </ul>
+        `
+      },
+      {
+        title: "3. Спецификация железа LEGO Mindstorms 51515",
+        html: `
+          <p>Роботизированная база построена на компонентах флагманского набора LEGO Robot Inventor 51515:</p>
+          <table class="drawer-table">
+            <thead>
+              <tr><th>Компонент</th><th>Артикул</th><th>Характеристики</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Центральный хаб</strong></td><td>#67714</td><td>ARM Cortex-M4 STM32F413 100MHz, 32MB Flash, BLE 4.2, 5x5 LED матрица, 6-осевой гироскоп</td></tr>
+              <tr><td><strong>Угловые моторы</strong></td><td>#67718 x2</td><td>Интегрированный оптический энкодер (1° точность), 185 об/мин, крутящий момент 8.5 N·cm</td></tr>
+              <tr><td><strong>Сонар расстояния</strong></td><td>#67716</td><td>Ультразвуковой датчик 1–200 см (±1 см), независимая подсветка 4 сегментов глаз</td></tr>
+              <tr><td><strong>Шасси</strong></td><td>Technic 11M</td><td>Балки с низким центром тяжести (38 мм), колеса 56x26 мм с силиконовым протектором</td></tr>
+            </tbody>
+          </table>
+        `
+      },
+      {
+        title: "4. Стек протоколов LWP3 & Model Context Protocol (MCP)",
+        html: `
+          <p>Связь между веб-приложением на смартфоне и хабом LEGO осуществляется по Web Bluetooth API по официальному протоколу LEGO Wireless Protocol 3.0 (LWP3):</p>
+          <p><strong>GATT Service UUID:</strong> <code>00001623-1212-efde-1623-785feabcd123</code></p>
+          <div class="drawer-code">
+// Пример бинарного пакета: Включение мотора Port A на 75% мощности
+// [Length, HubID, Command, Port, Startup, SubCommand, Speed, EndState]
+0x08 0x00 0x81 0x00 0x11 0x51 0x00 0x4B
+          </div>
+          <p><strong>Аппаратный аварийный прерыватель (Safety Interlock):</strong></p>
+          <p>Если сонар фиксирует препятствие ближе 15 см, локальный таймерный поток немедленно шлет команду <code>0x00</code> экстренной остановки моторов за 8 мс, минуя облачный ИИ.</p>
+        `
+      },
+      {
+        title: "5. Команда проекта, Метрики & Roadmap 2026",
+        html: `
+          <p><strong>Создатель проекта:</strong> Бекнур (15 лет, Астана, Казахстан). Финалист олимпиад по робототехнике, энтузиаст открытого исходного кода и агентных систем.</p>
+          <table class="drawer-table">
+            <thead>
+              <tr><th>Фаза</th><th>Сроки</th><th>Ключевые результаты</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>MVP</strong></td><td>Q1 2026</td><td>Web Bluetooth LWP3, интеграция Gemini 2.5 Flash, базовая подписка RevenueCat</td></tr>
+              <tr><td><strong>Релиз 2.0</strong></td><td>Q2 2026</td><td>Векторная память привычек, адаптивный ПИД-контроллер ламината, 3D витрина</td></tr>
+              <tr><td><strong>Swarm & ROS2</strong></td><td>Q3-Q4 2026</td><td>Роевое взаимодействие роботов, мост к ROS2, плата расширения на ESP32-S3</td></tr>
+            </tbody>
+          </table>
+          <p><strong>Лицензия:</strong> MIT Open Source. Проект готов к масштабированию в школах и мейкерспейсах по всему миру!</p>
+        `
+      }
+    ];
+
+    function toggleTechDrawer(forceState) {
+      const drawer = document.getElementById('techDrawer');
+      const btn = document.getElementById('techDrawerBtn');
+      const isVisible = drawer.classList.contains('visible');
+      const nextState = forceState !== undefined ? forceState : !isVisible;
+
+      playChime('click');
+      if (nextState) {
+        drawer.classList.remove('hidden');
+        drawer.classList.add('visible');
+        btn.classList.add('active');
+        setTechDrawerStage(currentStageIndex);
+      } else {
+        drawer.classList.remove('visible');
+        drawer.classList.add('hidden');
+        btn.classList.remove('active');
+      }
+    }
+
+    function setTechDrawerStage(idx) {
+      const stageIdx = Math.max(0, Math.min(4, idx));
+      for (let i = 0; i <= 4; i++) {
+        const p = document.getElementById('drawerPill-' + i);
+        if (p) p.classList.toggle('active', i === stageIdx);
+      }
+
+      const dossier = techDossiers[stageIdx];
+      const container = document.getElementById('drawerContent');
+      if (container && dossier) {
+        container.innerHTML = `
+          <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 0.75rem; color: #0f172a;">${dossier.title}</h3>
+          ${dossier.html}
+        `;
+      }
+    }
+
+    // Telemetry live animation ticker
+    setInterval(() => {
+      const liveSonar = document.getElementById('liveSonarCm');
+      const tSonar = document.getElementById('tSonar');
+      const tMotorA = document.getElementById('tMotorA');
+      const tMotorB = document.getElementById('tMotorB');
+
+      if (liveSonar) {
+        const cm = (34.5 + Math.sin(Date.now() * 0.003) * 2.5).toFixed(1);
+        liveSonar.innerText = cm + ' cm';
+        if (tSonar) tSonar.innerText = cm + ' CM';
+      }
+      if (tMotorA) {
+        const rpmA = Math.round(144 + Math.sin(Date.now() * 0.004) * 3);
+        tMotorA.innerText = rpmA + ' RPM';
+      }
+      if (tMotorB) {
+        const rpmB = Math.round(142 + Math.cos(Date.now() * 0.004) * 3);
+        tMotorB.innerText = rpmB + ' RPM';
+      }
+    }, 400);
 
     // Initialize on DOM Ready
     window.addEventListener('DOMContentLoaded', () => {

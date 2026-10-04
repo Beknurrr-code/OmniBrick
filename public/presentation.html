@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniBrick (Brain Brick) — AI Robot Brain Presentation</title>
+  <link rel="icon" type="image/svg+xml" href="/robot-icon.svg">
+  <style>
+    :root {
+      --bg: #030712;
+      --card-bg: rgba(15, 23, 42, 0.75);
+      --card-border: rgba(51, 65, 85, 0.6);
+      --cyan: #06b6d4;
+      --cyan-glow: rgba(6, 182, 212, 0.4);
+      --purple: #a855f7;
+      --purple-glow: rgba(168, 85, 247, 0.4);
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Background Ambient Gradients */
+    .bg-glow-1 {
+      position: fixed;
+      top: -10vw;
+      left: -10vw;
+      width: 50vw;
+      height: 50vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+    }
+    .bg-glow-2 {
+      position: fixed;
+      bottom: -10vw;
+      right: -10vw;
+      width: 50vw;
+      height: 50vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+    }
+
+    /* Header Nav */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      backdrop-filter: blur(16px);
+      background: rgba(3, 7, 18, 0.8);
+      border-bottom: 1px solid rgba(30, 41, 59, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 900;
+      font-size: 1.15rem;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 9999px;
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: var(--cyan);
+      font-family: monospace;
+      text-transform: uppercase;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .btn-outline {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+    }
+    .btn-outline:hover {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: var(--cyan);
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), #3b82f6);
+      color: #030712;
+      box-shadow: 0 4px 14px var(--cyan-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--cyan-glow);
+    }
+
+    /* Slide Deck Presentation Engine */
+    main {
+      flex: 1;
+      margin-top: 64px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .slide-progress {
+      position: fixed;
+      top: 63px;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      z-index: 101;
+      transition: width 0.3s ease;
+    }
+
+    .slide-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 7rem 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide {
+      display: none;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Deck Floating Controls */
+    .deck-bar {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 100;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .deck-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    .deck-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .deck-indicators {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(148, 163, 184, 0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dot.active {
+      width: 24px;
+      border-radius: 9999px;
+      background: var(--cyan);
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    /* Typography & Cards */
+    .title-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: monospace;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+    .pill-purple {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #c084fc;
+    }
+    .pill-cyan {
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: #22d3ee;
+    }
+    .pill-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    h1.hero-title {
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+    }
+
+    .gradient-text-cyan {
+      background: linear-gradient(135deg, #fff 30%, var(--cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gradient-text-purple {
+      background: linear-gradient(135deg, #fff 30%, var(--purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.hero-desc {
+      font-size: clamp(1rem, 1.8vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 750px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* Grid & Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .card:hover {
+      border-color: rgba(6, 182, 212, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-top-strip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+    .strip-cyan { background: linear-gradient(90deg, transparent, var(--cyan), transparent); }
+    .strip-purple { background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+    .strip-emerald { background: linear-gradient(90deg, transparent, var(--emerald), transparent); }
+
+    .card h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      margin: 0.75rem 0 0.5rem 0;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .icon-cyan {
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: var(--cyan);
+    }
+    .icon-purple {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: var(--purple);
+    }
+    .icon-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: var(--emerald);
+    }
+
+    /* Architecture Stack Flow */
+    .stack-step {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1.25rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 0.85rem;
+      margin-bottom: 0.75rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+    .stack-step span.step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(6, 182, 212, 0.2);
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    /* Interactive Demo Box in Presentation */
+    .demo-box {
+      background: #000;
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 0 0 40px rgba(6, 182, 212, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .robot-face-preview {
+      height: 140px;
+      background: radial-gradient(circle at center, #090d16 0%, #02040a 100%);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+
+    .robot-eye {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: var(--cyan);
+      box-shadow: 0 0 25px var(--cyan);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .demo-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .demo-btn {
+      padding: 0.5rem 0.9rem;
+      font-size: 0.75rem;
+      font-family: monospace;
+      font-weight: bold;
+      border-radius: 0.6rem;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .demo-btn:hover, .demo-btn.active {
+      border-color: var(--cyan);
+      color: #fff;
+      background: rgba(6, 182, 212, 0.15);
+    }
+
+    .terminal-console {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: #38bdf8;
+      height: 90px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    /* Table */
+    table.pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+    table.pricing-table th, table.pricing-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    table.pricing-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Key Shortcuts Footer */
+    .deck-keys-help {
+      font-size: 0.7rem;
+      color: #64748b;
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .key-badge {
+      background: #1e293b;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+    }
+
+    @media (max-width: 768px) {
+      header { padding: 0 1rem; }
+      .slide-container { padding-top: 1.5rem; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+  <div class="slide-progress" id="progressBar"></div>
+
+  <!-- Header -->
+  <header>
+    <a href="#" class="brand">
+      <span>🧱 OmniBrick</span>
+      <span class="brand-badge">Next Gen Award</span>
+    </a>
+    <div class="nav-controls">
+      <a href="http://localhost:5180" target="_blank" class="btn btn-outline">
+        <span>Открыть веб-приложение</span>
+      </a>
+      <a href="https://revenuecat-shipaton-2026.devpost.com" target="_blank" class="btn btn-primary">
+        <span>Shipaton 2026</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Slide Deck Main -->
+  <main>
+    <div class="slide-container">
+
+      <!-- SLIDE 1: HERO & PITCH -->
+      <section class="slide active" id="slide-1">
+        <div class="title-pill pill-cyan">
+          🚀 RevenueCat Shipaton 2026 • Official Project Presentation
+        </div>
+        <h1 class="hero-title">
+          Превращаем любой смартфон в <br>
+          <span class="gradient-text-cyan">Воплощённый ИИ-мозг робота</span>
+        </h1>
+        <p class="hero-desc">
+          <strong>OmniBrick</strong> (ранее BrainBrick) — первая мобильная платформа, заменяющая устаревшие робототехнические контроллеры за $300 на старый смартфон из ящика стола. Компьютерное зрение, быстрая речь, память привычек и прямое управление LEGO 51515 по Bluetooth LWP3.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-top-strip strip-cyan"></div>
+            <div class="icon-box icon-cyan">📱</div>
+            <h3>$0 на спец-железо</h3>
+            <p>Смартфон уже имеет 8-ядерный NPU, 4K камеру, микрофон, динамик и дисплей. Мы используем его на 100% как голову робота.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-top-strip strip-purple"></div>
+            <div class="icon-box icon-purple">🧠</div>
+            <h3>Мультимодальный ИИ</h3>
+            <p>Параллельная микстура: мгновенный голос (&lt;250мс) + фоновое зрение Gemini Robotics-ER 2 и открытая модель Gemma 4 31B.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-top-strip strip-emerald"></div>
+            <div class="icon-box icon-emerald">💰</div>
+            <h3>RevenueCat SDK</h3>
+            <p>Проверенная 3-уровневая монетизация: Pro-подписки, маркетплейс чертежей за Бриксы (🧱 Bricks) и пожизненная лицензия BLE.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="goToSlide(2)">Далее: Проблема и Решение →</button>
+          <span style="font-size: 0.8rem; color: #64748b; font-family: monospace;">
+            Создатель: Бекнур (15 лет, Астана) • Номинация: Next Gen Award
+          </span>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: THE PROBLEM VS SOLUTION -->
+      <section class="slide" id="slide-2">
+        <div class="title-pill pill-purple">
+          ⚡ Инженерный парадокс 2026 года
+        </div>
+        <h1 class="hero-title">
+          Робототехника застряла в <br>
+          <span class="gradient-text-purple">2010 году. Мы это меняем.</span>
+        </h1>
+        <p class="hero-desc">
+          Миллионы школьников и мейкеров по всему миру собирают LEGO Mindstorms 51515 и SPIKE Prime, но программно роботы остаются слепыми и глухими калькуляторами.
+        </p>
+
+        <div class="grid-2">
+          <div class="card" style="border-color: rgba(239, 68, 68, 0.4);">
+            <div class="card-top-strip" style="background: #ef4444;"></div>
+            <h3 style="color: #f87171;">❌ Как у всех (Старый подход)</h3>
+            <ul style="list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; color: #cbd5e1;">
+              <li>• <strong>Слепые роботы:</strong> Примитивные датчики цвета/линий, ноль пространственного зрения.</li>
+              <li>• <strong>Примитивный Scratch:</strong> Однообразные блоки «крути мотор 2 секунды» без рассуждений.</li>
+              <li>• <strong>Дороговизна:</strong> Платы с ИИ (Raspberry Pi 5 + Coral TPU) стоят более $200–$300.</li>
+              <li>• <strong>Изолированность:</strong> Нет экосистемы, нет магазина чертежей и связи с миром.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="border-color: rgba(16, 185, 129, 0.4);">
+            <div class="card-top-strip strip-emerald"></div>
+            <h3 style="color: #34d399;">✅ OmniBrick (Новый подход)</h3>
+            <ul style="list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem; color: #cbd5e1;">
+              <li>• <strong>Старый смартфон на роботе:</strong> Камера видит объекты, распознает препятствия в 3D.</li>
+              <li>• <strong>Голос и эмоции:</strong> Робот строит глазки на экране телефона и говорит вслух без задержек.</li>
+              <li>• <strong>$0 на контроллер:</strong> Прямое подключение по Web Bluetooth LWP3 без перепрошивки LEGO-хаба!</li>
+              <li>• <strong>Самообучение:</strong> Робот запоминает привычки пилота (Antigravity IDE, калибровка пола).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+          <button class="btn btn-outline" onclick="goToSlide(1)">← Назад</button>
+          <button class="btn btn-primary" onclick="goToSlide(3)">Далее: Архитектура стека →</button>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: ARCHITECTURE & 5-LAYER STACK -->
+      <section class="slide" id="slide-3">
+        <div class="title-pill pill-cyan">
+          🏗️ 5-Уровневая модульная архитектура
+        </div>
+        <h1 class="hero-title">
+          Сквозной пайплайн: <br>
+          <span class="gradient-text-cyan">От взгляда камеры до шестерёнок</span>
+        </h1>
+        <p class="hero-desc">
+          OmniBrick построен по стандартам промышленной робототехники: строгое разделение интерфейса, когнитивного ядра ИИ, шины памяти и аппаратной абстракции HAL.
+        </p>
+
+        <div class="grid-2">
+          <div>
+            <div class="stack-step">
+              <span class="step-num">L1</span>
+              <div>
+                <strong style="color: #38bdf8;">Mobile Touch Cockpit:</strong> React 19 + Tailwind v4 (60 FPS, нативный Capacitor)
+              </div>
+            </div>
+            <div class="stack-step">
+              <span class="step-num">L2</span>
+              <div>
+                <strong style="color: #c084fc;">State & Monetization:</strong> RevenueCat Purchases SDK (Entitlements, Bricks)
+              </div>
+            </div>
+            <div class="stack-step">
+              <span class="step-num">L3</span>
+              <div>
+                <strong style="color: #818cf8;">Cognitive Core & Memory:</strong> Асинхронное зрение + Память привычек пилота
+              </div>
+            </div>
+            <div class="stack-step">
+              <span class="step-num">L4</span>
+              <div>
+                <strong style="color: #f472b6;">MCP Protocol:</strong> Model Context Protocol (вызов инструментов drive, turn, speak)
+              </div>
+            </div>
+            <div class="stack-step">
+              <span class="step-num">L5</span>
+              <div>
+                <strong style="color: #34d399;">Robotics HAL:</strong> LEGO LWP3 Bluetooth (UUID 1623) & 20Hz симулятор
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-top-strip strip-cyan"></div>
+            <h3>⚡ Решение задержки: Dual-Core Async</h3>
+            <p style="margin-bottom: 1rem;">
+              Мы устранили 2-секундный лаг классических VLM-моделей:
+            </p>
+            <div style="background: rgba(2, 6, 23, 0.8); padding: 1rem; border-radius: 0.75rem; border: 1px solid #1e293b; font-family: monospace; font-size: 0.78rem; line-height: 1.6;">
+              <span style="color: #a855f7;">[1. Vision Core (1 FPS)]</span> Фоновое сканирование пространства ➔ обновление World Cache.<br>
+              <span style="color: #06b6d4;">[2. Fast Voice (&lt;250ms)]</span> Мгновенный ответ голосом с использованием уже готового кеша зрительного мира!
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+          <button class="btn btn-outline" onclick="goToSlide(2)">← Назад</button>
+          <button class="btn btn-primary" onclick="goToSlide(4)">Далее: Самообучение и Память →</button>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: ADAPTIVE MEMORY & HABITS -->
+      <section class="slide" id="slide-4">
+        <div class="title-pill pill-purple">
+          🧠 Эволюция и Долговременная память
+        </div>
+        <h1 class="hero-title">
+          Робот, который учится <br>
+          <span class="gradient-text-purple">Твоим привычкам и расписанию</span>
+        </h1>
+        <p class="hero-desc">
+          Связка <strong>Build ➔ AI Runtime ➔ Dashboard</strong>: вы задаёте характер и задачи в билдере, робот общается с вами и калибрует физику, а на Дэшборде видна вся когнитивная память.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-top-strip strip-purple"></div>
+            <div class="icon-box icon-purple">💻</div>
+            <h3>Antigravity IDE Память</h3>
+            <p>Робот знает, что Бекнур программирует по вечерам (21:00–23:00). Он сам проактивно напоминает голосом и предлагает открыть проект.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-top-strip strip-cyan"></div>
+            <div class="icon-box icon-cyan">🧱</div>
+            <h3>Самокалибровка пола</h3>
+            <p>На гладком ламинате колеса LEGO проскальзывают. Робот автоматически снижает мощность моторов A/B на 15% при поворотах.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-top-strip strip-emerald"></div>
+            <div class="icon-box icon-emerald">🛡️</div>
+            <h3>Сторожевой рефлекс</h3>
+            <p>Ультразвуковой датчик HC-SR04 останавливает моторы за 25 см до любого препятствия независимо от команды ИИ.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+          <button class="btn btn-outline" onclick="goToSlide(3)">← Назад</button>
+          <button class="btn btn-primary" onclick="goToSlide(5)">Далее: Интерактивное Демо →</button>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: INTERACTIVE DEMO COCKPIT -->
+      <section class="slide" id="slide-5">
+        <div class="title-pill pill-cyan">
+          🎮 Живой интерактивный прототип
+        </div>
+        <h1 class="hero-title">
+          Попробуй OmniBrick <br>
+          <span class="gradient-text-cyan">Прямо в презентации</span>
+        </h1>
+        <p class="hero-desc">
+          Нажимай кнопки команд ниже, чтобы проверить эмоции глаз робота, кинематику дифференциального привода и сторожевой тормоз:
+        </p>
+
+        <div class="grid-2">
+          <!-- Interactive Robot Face Preview -->
+          <div class="demo-box">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-family: monospace; color: #94a3b8;">
+              <span>📱 PHONE SCREEN HEAD (ANDROID)</span>
+              <span id="demoMoodBadge" style="color: #22d3ee;">MOOD: FOCUSED</span>
+            </div>
+
+            <div class="robot-face-preview">
+              <div class="robot-eye" id="eyeLeft"></div>
+              <div class="robot-eye" id="eyeRight"></div>
+            </div>
+
+            <div class="demo-controls">
+              <button class="demo-btn" onclick="triggerRobotDemo('antigravity')">💻 Вечер Antigravity</button>
+              <button class="demo-btn" onclick="triggerRobotDemo('obstacle')">🚨 Препятствие 18см</button>
+              <button class="demo-btn" onclick="triggerRobotDemo('arcTurn')">🔄 Дуга 90° (Ламинат)</button>
+              <button class="demo-btn" onclick="triggerRobotDemo('happy')">😄 Счастливый робот</button>
+            </div>
+          </div>
+
+          <!-- Console & Hardware telemetry -->
+          <div class="demo-box">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-family: monospace; color: #94a3b8;">
+              <span>📡 LIVE TELEMETRY & BLE LWP3</span>
+              <span style="color: #34d399;">● CONNECTED</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; text-align: center; font-family: monospace; font-size: 0.75rem;">
+              <div style="background: #0f172a; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #1e293b;">
+                <span style="color: #64748b; display: block; font-size: 0.65rem;">BATTERY</span>
+                <span style="color: #34d399; font-weight: bold;">94%</span>
+              </div>
+              <div style="background: #0f172a; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #1e293b;">
+                <span style="color: #64748b; display: block; font-size: 0.65rem;">SONAR</span>
+                <span id="demoSonarVal" style="color: #38bdf8; font-weight: bold;">120 cm</span>
+              </div>
+              <div style="background: #0f172a; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #1e293b;">
+                <span style="color: #64748b; display: block; font-size: 0.65rem;">MOTORS A/B</span>
+                <span id="demoMotorVal" style="color: #c084fc; font-weight: bold;">0 / 0 rpm</span>
+              </div>
+            </div>
+
+            <div class="terminal-console" id="demoConsole">
+              [SYSTEM]: OmniBrick Cognitive Engine v2026 initialized.<br>
+              [BLE LWP3]: LEGO Mindstorms 51515 Hub GATT ready on port A/B.<br>
+              [MEMORY]: Habit 'Antigravity IDE' loaded (98% confidence).
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+          <button class="btn btn-outline" onclick="goToSlide(4)">← Назад</button>
+          <button class="btn btn-primary" onclick="goToSlide(6)">Далее: Модель RevenueCat →</button>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: REVENUECAT BUSINESS MODEL -->
+      <section class="slide" id="slide-6">
+        <div class="title-pill pill-emerald">
+          💰 Монетизация и Экономика
+        </div>
+        <h1 class="hero-title">
+          Бизнес-модель на базе <br>
+          <span class="gradient-text-cyan">RevenueCat SDK</span>
+        </h1>
+        <p class="hero-desc">
+          OmniBrick построен вокруг проверенной высококонверсионной модели монетизации с поддержкой подписок, виртуальной валюты чертежей и пожизненного анлока драйверов.
+        </p>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <table class="pricing-table">
+            <thead>
+              <tr style="background: rgba(15, 23, 42, 0.9);">
+                <th>Тариф / Продукт</th>
+                <th>Тип в RevenueCat</th>
+                <th>Цена</th>
+                <th>Что входит</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Free Explorer</strong></td>
+                <td><span style="font-family: monospace; color: #94a3b8;">Free Tier</span></td>
+                <td><strong style="color: #34d399;">$0 / мес</strong></td>
+                <td>Gemma 4 31B (14,400 RPD), 2D-симулятор, стандартные инструменты управления</td>
+              </tr>
+              <tr style="background: rgba(6, 182, 212, 0.05);">
+                <td><strong>👑 Neural Nexus PRO</strong></td>
+                <td><span style="font-family: monospace; color: #22d3ee;">omnibrick_pro</span></td>
+                <td><strong style="color: #22d3ee;">$9.99 / мес</strong></td>
+                <td>Gemini 2.5 Flash & Robotics-ER 2, 3D Арена, приоритетная шина команд, +500 🧱 бонус</td>
+              </tr>
+              <tr>
+                <td><strong>🧱 Паки Бриксов (500–5000)</strong></td>
+                <td><span style="font-family: monospace; color: #f59e0b;">Consumables</span></td>
+                <td><strong>$2.99 – $19.99</strong></td>
+                <td>Покупка готовых проверенных роботов на Маркетплейсе (авторы получают 70% роялти)</td>
+              </tr>
+              <tr>
+                <td><strong>LEGO LWP3 License</strong></td>
+                <td><span style="font-family: monospace; color: #a855f7;">Non-Consumable</span></td>
+                <td><strong>$14.99</strong></td>
+                <td>Пожизненный Bluetooth-драйвер для LEGO 51515 и SPIKE без ежемесячной подписки</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+          <button class="btn btn-outline" onclick="goToSlide(5)">← Назад</button>
+          <button class="btn btn-primary" onclick="goToSlide(7)">Далее: Итоги и Сабмит →</button>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: WHY WE WIN NEXT GEN AWARD -->
+      <section class="slide" id="slide-7">
+        <div class="title-pill pill-cyan">
+          🏆 Shipaton 2026: Next Gen Award
+        </div>
+        <h1 class="hero-title">
+          Почему OmniBrick — <br>
+          <span class="gradient-text-cyan">Победитель Next Gen Award</span>
+        </h1>
+        <p class="hero-desc">
+          Проект решает реальную глобальную проблему доступности образовательной робототехники с помощью элегантной синергии смартфона, Google Gemini и RevenueCat.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-top-strip strip-cyan"></div>
+            <div class="icon-box icon-cyan">🎯</div>
+            <h3>Реальный запуск</h3>
+            <p>Никаких презентаций на салфетке: готовое рабочее Android-приложение, скомпилированный APK, LWP3 драйвер и чистая MIT лицензия.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-top-strip strip-purple"></div>
+            <div class="icon-box icon-purple">⚡</div>
+            <h3>Живой RevenueCat</h3>
+            <p>Право доступа <code>omnibrick_pro</code> подтверждено через REST API (ответ 201 SUCCESS), SDK синхронизировано в нативном бандле.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-top-strip strip-emerald"></div>
+            <div class="icon-box icon-emerald">🌍</div>
+            <h3>Миллионы пользователей</h3>
+            <p>Превращает пылящиеся в ящиках старые телефоны в продвинутых роботов-компаньонов для школьников от Астаны до Сан-Франциско.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 2.5rem; padding: 2rem; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 1.25rem; display: flex; flex-direction: column; gap: 1rem; align-items: center; text-align: center;">
+          <h2 style="font-size: 1.5rem; font-weight: 900; color: #fff;">Готовы испытать OmniBrick в действии?</h2>
+          <p style="color: #94a3b8; max-width: 600px; font-size: 0.95rem;">
+            Запустите локальное веб-приложение или подключите хаб LEGO 51515 по Web Bluetooth прямо из браузера.
+          </p>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem;">
+            <a href="http://localhost:5180" target="_blank" class="btn btn-primary" style="padding: 0.75rem 1.75rem; font-size: 0.9rem;">
+              🚀 Открыть OmniBrick Studio
+            </a>
+            <a href="https://github.com/Beknurrr-code/OmniBrick" target="_blank" class="btn btn-outline" style="padding: 0.75rem 1.75rem; font-size: 0.9rem;">
+              ⭐ GitHub Репозиторий
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Deck Floating Navigation Bar -->
+  <div class="deck-bar">
+    <button class="deck-btn" id="prevBtn" onclick="prevSlide()" title="Предыдущий слайд (←)">
+      ◀
+    </button>
+    
+    <div class="deck-indicators" id="deckIndicators"></div>
+
+    <button class="deck-btn" id="nextBtn" onclick="nextSlide()" title="Следующий слайд (→)">
+      ▶
+    </button>
+
+    <div style="height: 18px; width: 1px; background: rgba(255,255,255,0.2);"></div>
+
+    <div class="deck-keys-help">
+      <span class="key-badge">←</span>
+      <span class="key-badge">→</span>
+      <span>Стрелки для навигации</span>
+    </div>
+  </div>
+
+  <script>
+    const totalSlides = 7;
+    let currentSlide = 1;
+
+    // Web Audio Synthesizer for High-Tech UI Clicks
+    let audioCtx = null;
+    function playBeep(freq = 600, duration = 0.06, type = "sine") {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    function initDeck() {
+      const container = document.getElementById("deckIndicators");
+      container.innerHTML = "";
+      for (let i = 1; i <= totalSlides; i++) {
+        const dot = document.createElement("div");
+        dot.className = `dot ${i === currentSlide ? "active" : ""}`;
+        dot.onclick = () => goToSlide(i);
+        container.appendChild(dot);
+      }
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const progress = (currentSlide / totalSlides) * 100;
+      document.getElementById("progressBar").style.width = progress + "%";
+    }
+
+    function goToSlide(slideNum) {
+      if (slideNum < 1 || slideNum > totalSlides) return;
+      playBeep(480 + slideNum * 40, 0.05);
+
+      document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
+      document.getElementById(`slide-${slideNum}`).classList.add("active");
+      
+      currentSlide = slideNum;
+      
+      document.querySelectorAll(".dot").forEach((d, idx) => {
+        d.classList.toggle("active", idx + 1 === currentSlide);
+      });
+
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) goToSlide(currentSlide - 1);
+    }
+
+    // Keyboard Navigation
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === "Space") {
+        nextSlide();
+      } else if (e.key === "ArrowLeft") {
+        prevSlide();
+      }
+    });
+
+    // Interactive Demo Simulation
+    function triggerRobotDemo(action) {
+      const eyeL = document.getElementById("eyeLeft");
+      const eyeR = document.getElementById("eyeRight");
+      const moodBadge = document.getElementById("demoMoodBadge");
+      const consoleEl = document.getElementById("demoConsole");
+      const sonarVal = document.getElementById("demoSonarVal");
+      const motorVal = document.getElementById("demoMotorVal");
+
+      if (action === "antigravity") {
+        playBeep(880, 0.1);
+        eyeL.style.background = "#a855f7";
+        eyeR.style.background = "#a855f7";
+        eyeL.style.boxShadow = "0 0 25px #a855f7";
+        eyeR.style.boxShadow = "0 0 25px #a855f7";
+        eyeL.style.transform = "scaleY(1.1)";
+        eyeR.style.transform = "scaleY(1.1)";
+        moodBadge.innerText = "MOOD: PROACTIVE (ANTIGRAVITY)";
+        moodBadge.style.color = "#c084fc";
+        sonarVal.innerText = "85 cm";
+        motorVal.innerText = "0 / 0 rpm (Stationary)";
+        appendLog("[HABIT TRIGGER]: 21:00 detected. Pilot at desk. Speaking: 'Привет, Бекнур! Открываю Antigravity IDE.'");
+      } 
+      else if (action === "obstacle") {
+        playBeep(240, 0.2, "sawtooth");
+        eyeL.style.background = "#ef4444";
+        eyeR.style.background = "#ef4444";
+        eyeL.style.boxShadow = "0 0 25px #ef4444";
+        eyeR.style.boxShadow = "0 0 25px #ef4444";
+        eyeL.style.transform = "scaleY(0.6)";
+        eyeR.style.transform = "scaleY(0.6)";
+        moodBadge.innerText = "MOOD: ALERT (EMERGENCY BRAKE)";
+        moodBadge.style.color = "#f87171";
+        sonarVal.innerText = "18 cm (CRITICAL)";
+        motorVal.innerText = "0 / 0 rpm [E-STOP]";
+        appendLog("[WATCHDOG]: Obstacle < 25cm. Hardware reflex triggered. Motors locked. Eye alarm red.");
+      }
+      else if (action === "arcTurn") {
+        playBeep(640, 0.08);
+        eyeL.style.background = "#06b6d4";
+        eyeR.style.background = "#06b6d4";
+        eyeL.style.boxShadow = "0 0 25px #06b6d4";
+        eyeR.style.boxShadow = "0 0 25px #06b6d4";
+        eyeL.style.transform = "translateX(-8px)";
+        eyeR.style.transform = "translateX(-8px)";
+        moodBadge.innerText = "MOOD: CALCULATING ARC";
+        moodBadge.style.color = "#22d3ee";
+        sonarVal.innerText = "140 cm";
+        motorVal.innerText = "M1: 45% • M2: -45%";
+        appendLog("[KINEMATICS]: Arc 90° turn. Floor calibration: Laminate detected. Speed attenuated by -15%.");
+      }
+      else if (action === "happy") {
+        playBeep(980, 0.12);
+        eyeL.style.background = "#10b981";
+        eyeR.style.background = "#10b981";
+        eyeL.style.boxShadow = "0 0 25px #10b981";
+        eyeR.style.boxShadow = "0 0 25px #10b981";
+        eyeL.style.transform = "scale(1.15)";
+        eyeR.style.transform = "scale(1.15)";
+        moodBadge.innerText = "MOOD: JOYFUL";
+        moodBadge.style.color = "#34d399";
+        sonarVal.innerText = "180 cm";
+        motorVal.innerText = "Idle";
+        appendLog("[EMOTIVE]: Pilot greeting received. Chirp audio emitted. Face expression set to Joy.");
+      }
+    }
+
+    function appendLog(text) {
+      const consoleEl = document.getElementById("demoConsole");
+      const line = document.createElement("div");
+      line.innerHTML = text;
+      consoleEl.appendChild(line);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+
+    // Initialize
+    initDeck();
+  </script>
+</body>
+</html>

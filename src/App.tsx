@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { SubscriptionProvider } from "./context/SubscriptionContext";
 import { RobotProvider } from "./context/RobotContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -65,7 +65,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <ThemeProvider>
         <SubscriptionProvider>
           <RobotProvider>
@@ -73,6 +73,6 @@ export default function App() {
           </RobotProvider>
         </SubscriptionProvider>
       </ThemeProvider>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

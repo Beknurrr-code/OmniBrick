@@ -109,6 +109,16 @@ export default function Navbar() {
             <PlusCircle className="w-3 h-3 text-amber-400/60 group-hover:text-amber-300 transition-colors" />
           </button>
 
+          {/* 3D Presentation Link */}
+          <a
+            href="./presentation.html"
+            title="Открыть интерактивную 3D-презентацию"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-all cursor-pointer shadow-sm group"
+          >
+            <span className="text-xs">📐</span>
+            <span className="hidden md:inline text-[11px] font-bold">3D Презентация</span>
+          </a>
+
           {/* LEGO Assembly Guide Quick-Trigger */}
           <button
             onClick={() => setLegoGuideOpen(true)}
